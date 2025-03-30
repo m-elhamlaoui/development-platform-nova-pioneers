@@ -1,11 +1,10 @@
-version: "3.8"
 services:
   db:
     image: postgres:17
     environment:
-      POSTGRES_USER: your_user
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database
+      POSTGRES_USER: pioneer
+      POSTGRES_PASSWORD: nova25!X
+      POSTGRES_DB: novadb
     ports:
       - "5431:5432"   ##avoids conflict with running local postgresql db
     volumes:
@@ -13,13 +12,13 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8080:8080"
+      - "8090:8080"
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/your_database
-      SPRING_DATASOURCE_USERNAME: your_user
-      SPRING_DATASOURCE_PASSWORD: your_password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
   frontend:
     build: ./frontend
     ports:
