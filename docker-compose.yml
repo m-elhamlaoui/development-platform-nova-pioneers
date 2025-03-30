@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  vite-app:
+    container_name: vite-react-dev
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app  # Syncs local files with the container
+      - /app/node_modules  # Prevents overwriting node_modules
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true  # Fixes file watching issues
+      - CHOKIDAR_USEPOLLING=1  # Ensures changes are detected in Docker
+      - VITE_PORT=5173
+    command: ["npm", "run", "dev", "--", "--host"]
