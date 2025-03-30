@@ -1,5 +1,5 @@
 # Backend .gitignore (Moved from backend/ directory)
-!backend/
+!backend
 backend/target/
 !backend/.mvn/wrapper/maven-wrapper.jar
 !backend/**/src/main/**/target/
