@@ -7,7 +7,7 @@ WORKDIR /app
 COPY target/backend-*.jar backend.jar
 
 # Expose the port Spring Boot will run on
-EXPOSE 8080
+EXPOSE 9090
 
 
 ENTRYPOINT ["java", "-jar", "backend.jar"]
