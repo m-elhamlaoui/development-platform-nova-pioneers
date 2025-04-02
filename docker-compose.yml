@@ -22,7 +22,7 @@ services:
   frontend:
     container_name: nova-pioneers-front-end
     build:
-      context: ./Front-end
+      context: ./front-end
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
