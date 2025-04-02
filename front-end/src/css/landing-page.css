@@ -1,0 +1,122 @@
+.landing-page .header-nav {
+    position: fixed;
+    position: -webkit-sticky;
+    top: 0; /* required */
+    width: 100%;
+    z-index: 10;
+    
+    backdrop-filter: blur(10px); /* Adjust the blur intensity as needed */
+    background-color: rgba(255, 255, 255, 0.5); /* Optional: adds a slight transparent background */
+}
+
+
+.pic-of-day img {
+    width: 500px;
+    height: 500px;
+    background-size:contain;
+    border: 4px solid #0B3D91;    
+    border-radius: 50%;
+}
+.pic-of-day{
+    position: relative; 
+}
+.main-hero{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    flex-wrap: wrap;
+}
+.main-hero button{
+    background: red;
+    padding: 7px;
+    border-radius: 20px;
+    color: white;
+    position: absolute;
+    top: 96%;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: all;
+    cursor: pointer;
+}
+.teammate-card{
+    background: #0B3D91;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 25px;
+    height: 330px;
+}
+
+.teammate-name{
+    font-weight: bold;
+}
+.teammate-title{
+    color: rgba(14, 189, 233, 0.904);
+}
+.teammate-social{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+.teammate-social a{
+    display: inline-block;
+}
+.team-pres{
+    display: flex;
+    /* margin: auto; */
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.about-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* gap: 10px; */
+    margin-bottom: 40px;
+}
+.about-title p {
+    font-family: 'Barriecito', system-ui;
+    font-size: 40px;
+    font-weight: 800;
+    color: #9333EA;
+}
+.mission{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    width: 1255px;
+    padding: 30px 50px 0 50px;
+    background: #0B3D91;
+    border-radius: 10px;
+    margin: 30px auto;
+    color: white;
+}
+.mission-text p:nth-child(1){
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+.mission-text p:nth-child(2){
+    font-weight: light;
+    font-size: 14px;
+   color: rgba(255, 255, 255, 0.822);
+}
+.contact-form input, textarea, button{
+    padding: 7px 10px;
+    /* margin: 5px; */
+}
+.contact-form input, textarea{
+    border-color: #0B3D91;
+}

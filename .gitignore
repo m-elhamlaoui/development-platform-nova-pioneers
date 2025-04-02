@@ -46,18 +46,18 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-frontend/node_modules
-frontend/dist
-frontend/dist-ssr
-frontend/*.local
+front-end/node_modules
+front-end/dist
+front-end/dist-ssr
+front-end/*.local
 
 # Editor directories and files
-frontend/.vscode/*
-!frontend/.vscode/extensions.json
-frontend/.idea
-frontend/.DS_Store
-frontend/*.suo
-frontend/*.ntvs*
-frontend/*.njsproj
-frontend/*.sln
-frontend/*.sw?
+front-end/.vscode/*
+!front-end/.vscode/extensions.json
+front-end/.idea
+front-end/.DS_Store
+front-end/*.suo
+front-end/*.ntvs*
+front-end/*.njsproj
+front-end/*.sln
+front-end/*.sw?

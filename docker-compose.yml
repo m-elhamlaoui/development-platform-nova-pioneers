@@ -20,13 +20,21 @@ services:
       SPRING_DATASOURCE_USERNAME: pioneer
       SPRING_DATASOURCE_PASSWORD: nova25!X
   frontend:
-    build: ./frontend
+    container_name: nova-pioneers-front-end
+    build:
+      context: ./Front-end
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
-    depends_on:
-      - backend
+    volumes:
+      - ./front-end:/app  # Syncs frontend files
+      - /app/node_modules  # Prevents overwriting node_modules
     environment:
-      VITE_BACKEND_URL: "http://backend:8080"
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true  # Fixes file watching issues
+      - CHOKIDAR_USEPOLLING=1  # Ensures changes are detected in Docker
+      - VITE_PORT=5173
+    command: [ "npm", "run", "dev", "--", "--host" ]
 volumes:
   postgres-data:
 
