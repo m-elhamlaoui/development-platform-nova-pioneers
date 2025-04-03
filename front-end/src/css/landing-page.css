@@ -10,13 +10,6 @@
 }
 
 
-.pic-of-day img {
-    width: 500px;
-    height: 500px;
-    background-size:contain;
-    border: 4px solid #0B3D91;    
-    border-radius: 50%;
-}
 .pic-of-day{
     position: relative; 
 }
@@ -29,16 +22,18 @@
     flex-wrap: wrap;
 }
 .main-hero button{
-    background: red;
-    padding: 7px;
-    border-radius: 20px;
+    background: #0B3D91;
+    padding: 5px 10px;
+    border-radius: 5px;
     color: white;
     position: absolute;
-    top: 96%;
+    bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
     pointer-events: all;
     cursor: pointer;
+    /* z-index: 100; */
+
 }
 .teammate-card{
     background: #0B3D91;
