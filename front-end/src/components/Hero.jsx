@@ -5,7 +5,7 @@ import vector from '../assets/vector.png'
 import { Expand, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion";
-
+import np_logo from "../assets/np-logo.png"
 export default function Hero(){
     const [isExpanded, setIsExpanded] = useState(false);
     const [apodData, setApodData] = useState(null);
@@ -75,7 +75,9 @@ export default function Hero(){
                 padding: "10px 20px",
 
             }} className="header-nav">
-                <div className="logo" style={{fontFamily: "'Fascinate Inline', system-ui", color: "#0B3D91", fontWeight : "bold", fontSize: "24px"}}>NOVA PIONEERS </div>
+                <div className="logo" style={{fontFamily: "'Fascinate Inline', system-ui", color: "#0B3D91", fontWeight : "bold", fontSize: "24px"}}>
+                <img src={np_logo} alt="" style={{width: "50px", height: "50px", borderRadius: "50%"}} />
+                 </div>
             <Nav></Nav>
                 <div className="login-sign-up">
                     <Link to={{pathname: "/login"}} style={{display: "inline-block", fontWeight: "bold", color: "#0B3D91", padding: "7px 25px", margin: "0 10px", border: "2px solid #0B3D91", borderRadius: "20px 0 20px 0"}} className=" px-7 py-4">Login</Link>
