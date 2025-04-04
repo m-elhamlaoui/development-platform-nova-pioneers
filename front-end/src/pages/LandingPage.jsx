@@ -16,7 +16,7 @@ export default function NovaLandingPage() {
                 <img src={np_logo} alt="" style={{width: "50px", height: "50px", borderRadius: "20%"}} />
                   
                    </div>
-                <p style={{fontSize: "13px", fontWeight: "normal", color: "white"}}>copyright@2025 - Nova pioneers</p>
+                   <p style={{fontSize: "13px", fontWeight: "normal", color: "white"}}>&#169; 2025 - Nova pioneers</p>
 
                 </div>
         </div>
