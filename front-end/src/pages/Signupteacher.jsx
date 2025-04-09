@@ -1,4 +1,4 @@
-import "../css/signup.css";
+import "../css/signupteacher.css";
 import React, { useState } from 'react';
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
@@ -12,10 +12,9 @@ const Signupteacher = () => {
   ];
 
   const[showpsswd,setshowpsswd]=useState(false);
-   const toggleshowPassword = () => {
-    setshowpsswd((prev) => !prev);
-   }
-
+ const toggleshowPassword = () => {
+  setshowpsswd((prev) => !prev);
+ }
 
   const defaultIndex = menuItems.findIndex(item => item.path === location.pathname);
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
@@ -64,24 +63,37 @@ const Signupteacher = () => {
               </ul>
             </nav>
 
-    
-    
-
-<div className="flex space-x-4">
-                            <input type="text" placeholder="Last Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginRight: "5px"}} />
-                            <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <div className="flex space-x-4">
+                    <input type="text" placeholder="Last Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginRight: "5px"}} />
+                      <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                         </div>
                         <input type="email" placeholder="Email" className="w-full block p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginTop: "5px"}} />
                         
-                        
-                                               <div className="relative w-full mt-2">
-                                                   <input type={ showpsswd ? "text" : "password"}
-                                                              placeholder="Enter password" className="w-full p-3 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"  />
-                         <span onClick={toggleshowPassword} className="absolute right-4 top-6 transform -translate-y-1/2 text-gray-600 cursor-pointer">
-                           {showpsswd ? <FaEyeSlash/> :<FaEye/>}
-                         </span>
-                         
-                       </div>
+                        <div className="relative w-full mt-2">
+                            <input type={ showpsswd ? "text" : "password"}
+                                       placeholder="Enter password" className="w-full p-3 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"  />
+  <span onClick={toggleshowPassword} className="absolute right-4 top-6 transform -translate-y-1/2 text-gray-600 cursor-pointer">
+    {showpsswd ? <FaEyeSlash/> :<FaEye/>}
+  </span>
+  
+</div>
+<div className="w-full max-w-md mx-auto">
+      <span
+        htmlFor="file-upload"
+        className="flex  items-center justify-center w-full  p-7 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginTop: "2px",
+            padding:"8px",
+            marginBottom:"10px",
+        }}
+      >
+        📎 Attach a certification proof
+      </span>
+      <input
+        id="file-upload"
+        type="file"
+        className="hidden"
+        onChange={(e) => console.log(e.target.files[0])}
+      />
+    </div>
                        
 </form>
             
@@ -89,7 +101,7 @@ const Signupteacher = () => {
           <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2  w-xs px-4 rounded-2xl">Sign up</button>
           </div>
 
-        <div class="gotosignin">
+        <div class="gotosigninteacher">
           <span >
             Already have an account? <Link to="/Login" className="font-bold text-red-500 ">Sign in</Link>
           </span>
