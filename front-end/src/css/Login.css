@@ -1,0 +1,50 @@
+  
+  label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  input {
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+  }
+  
+  input:focus {
+    border-color: #666;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.1);
+  }
+  
+  
+  button:hover {
+    background-color:#c1b5b5;
+  }
+  h1{
+    margin-top:10px;
+  }
+  h2{
+    margin-bottom:30px;
+    margin-top:6px;
+  }
+.gotosignup{
+  margin-top:50px;
+  font-size: small;
+}
+.blockrem{
+  font-size: 13px;
+  margin-left: 6px;
+  position: relative;
+  bottom:1px;
+}
+.forgotpswd {
+  font-size: 14px;
+  color: rgb(19, 19, 143);
+  text-decoration: underline;
+  margin-left: 20px;
+ /* Show "..." if too long */
+  display: block;             /* Ensures text-overflow works */
+}
+
