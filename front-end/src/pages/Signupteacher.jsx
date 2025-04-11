@@ -7,7 +7,7 @@ const Signupteacher = () => {
   const location = useLocation();
 
   const menuItems = [
-    { label: "Parent", path: "/SignUp" },
+    { label: "Parent", path: "/sign-up" },
     { label: "Teacher", path: "/Signupteacher" }
   ];
 
@@ -78,6 +78,13 @@ const Signupteacher = () => {
   
 </div>
 <div className="w-full max-w-md mx-auto">
+      
+      <input
+        id="file-upload"
+        type="file"
+        className="hidden"
+        onChange={(e) => console.log(e.target.files[0])}
+      />
       <span
         htmlFor="file-upload"
         className="flex  items-center justify-center w-full  p-7 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginTop: "2px",
@@ -87,12 +94,6 @@ const Signupteacher = () => {
       >
         📎 Attach a certification proof
       </span>
-      <input
-        id="file-upload"
-        type="file"
-        className="hidden"
-        onChange={(e) => console.log(e.target.files[0])}
-      />
     </div>
                        
 </form>

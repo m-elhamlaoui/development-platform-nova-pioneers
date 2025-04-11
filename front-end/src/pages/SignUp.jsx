@@ -7,7 +7,7 @@ const Signupteacher = () => {
   const location = useLocation();
 
   const menuItems = [
-    { label: "Parent", path: "/SignUp" },
+    { label: "Parent", path: "/sign-up" },
     { label: "Teacher", path: "/Signupteacher" }
   ];
 
