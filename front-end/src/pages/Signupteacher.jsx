@@ -78,22 +78,22 @@ const Signupteacher = () => {
   
 </div>
 <div className="w-full max-w-md mx-auto">
-      
-      <input
-        id="file-upload"
-        type="file"
-        className="hidden"
-        onChange={(e) => console.log(e.target.files[0])}
-      />
-      <span
-        htmlFor="file-upload"
-        className="flex  items-center justify-center w-full  p-7 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginTop: "2px",
-            padding:"8px",
-            marginBottom:"10px",
-        }}
-      >
-        📎 Attach a certification proof
-      </span>
+ 
+<label
+  htmlFor="file-upload"
+  className="cursor-pointer bg-white border border-gray-300 text-lg text-center rounded-lg focus:ring-blue-500 block w-full p-2.5"
+
+>
+  Attach your certification
+</label>
+
+<input
+  id="file-upload"
+  type="file"
+  className="hidden"
+  onChange={(e) => console.log(e.target.files[0])}
+/>
+
     </div>
                        
 </form>
