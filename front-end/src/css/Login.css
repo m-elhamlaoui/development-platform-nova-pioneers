@@ -1,31 +1,31 @@
   
-  label {
+  .signinl {
     margin-bottom: 8px;
     font-weight: 600;
     color: #333;
   }
   
-  input {
+  .signin {
     padding: 10px 14px;
     font-size: 14px;
     transition: border-color 0.3s, box-shadow 0.3s;
     margin-bottom: 20px;
   }
   
-  input:focus {
+  .signin:focus {
     border-color: #666;
     outline: none;
     box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.1);
   }
   
-  
-  button:hover {
+.btnsignin:hover {
     background-color:#c1b5b5;
   }
-  h1{
+
+ .honesignin{
     margin-top:10px;
   }
-  h2{
+  .htwosignin{
     margin-bottom:30px;
     margin-top:6px;
   }

@@ -23,8 +23,8 @@ const Signupteacher = () => {
     <div className="h-[100vh] flex justify-center items-center bg-[url('./assets/space.jpg')] bg-no-repeat">
       <div className="w-4xl rounded-2xl border border-gray-400 bg-[url('./assets/astronaut.png')] bg-no-repeat bg-right">
         <div className="bg-white h-[70vh] flex flex-col items-center justify-center shadow-xl rounded-2xl border-2 border-gray-300 w-lg">
-          <h1 className="text-3xl text-blue-900 font-bold text-center">CREATE YOUR ACCOUNT</h1>
-          <h2 className="font-light text-sm text-center flex justify-center h-2 text-black mt-2">
+          <h1 className="text-3xl text-blue-900 honetech font-bold text-center">CREATE YOUR ACCOUNT</h1>
+          <h2 className="font-light text-sm text-center htwotech flex justify-center h-2 text-black mt-2">
             Choose a status and fill the infos below.
           </h2>
 
@@ -64,16 +64,16 @@ const Signupteacher = () => {
             </nav>
 
                   <div className="flex space-x-4">
-                    <input type="text" placeholder="Last Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginRight: "5px"}} />
-                      <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    <input type="text" placeholder="Last Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 signteach focus:ring-indigo-500" style={{marginRight: "5px"}} />
+                      <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 signteach focus:ring-indigo-500" />
                         </div>
-                        <input type="email" placeholder="Email" className="w-full block p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" style={{marginTop: "5px"}} />
+                        <input type="email" placeholder="Email" className="w-full block p-3 border rounded-lg focus:outline-none focus:ring-2 signteach focus:ring-indigo-500" style={{marginTop: "5px"}} />
                         
                         <div className="relative w-full mt-2">
                             <input type={ showpsswd ? "text" : "password"}
-                                       placeholder="Enter password" className="w-full p-3 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"  />
+                                       placeholder="Enter password" className="w-full p-3 pr-10 border rounded-lg signteach focus:outline-none focus:ring-2 focus:ring-indigo-500"  />
   <span onClick={toggleshowPassword} className="absolute right-4 top-6 transform -translate-y-1/2 text-gray-600 cursor-pointer">
-    {showpsswd ? <FaEyeSlash/> :<FaEye/>}
+    {showpsswd ? <FaEye/> :<FaEyeSlash/>}
   </span>
   
 </div>
@@ -81,7 +81,7 @@ const Signupteacher = () => {
  
 <label
   htmlFor="file-upload"
-  className="cursor-pointer bg-white border border-gray-300 text-lg text-center rounded-lg focus:ring-blue-500 block w-full p-2.5"
+  className="cursor-pointer bg-white border signteachl border-gray-300 text-lg text-center rounded-lg focus:ring-blue-500 block w-full p-2.5"
 
 >
   Attach your certification
@@ -99,7 +99,7 @@ const Signupteacher = () => {
 </form>
             
         <div>
-          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2  w-xs px-4 rounded-2xl">Sign up</button>
+          <button className="bg-red-500  text-white font-bold py-2  w-xs px-4 rounded-2xl">Sign up</button>
           </div>
 
         <div class="gotosigninteacher">
