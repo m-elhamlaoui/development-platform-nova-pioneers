@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/api/test")
+    @GetMapping("/api/auth/test")
     public String testEndpoint() {
-        return "Spring Boot API is working!";
+        return "Auth Service Working";
     }
 }
