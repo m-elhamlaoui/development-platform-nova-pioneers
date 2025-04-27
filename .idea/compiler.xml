@@ -6,9 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="backend (3)" />
-        <module name="backend (4)" />
-        <module name="backend (1)" />
       </profile>
       <profile name="Annotation profile for backend" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -17,15 +14,26 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="backend (2)" />
+        <module name="admin-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="backend (1)" target="1.8" />
+      <module name="backend (2)" target="1.8" />
+      <module name="backend (3)" target="1.8" />
+      <module name="backend (4)" target="1.8" />
+      <module name="backend-services" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="backend" options="" />
-      <module name="backend (2)" options="-parameters" />
+      <module name="Auth-service" options="-parameters" />
+      <module name="admin-service" options="-parameters" />
+      <module name="backend (2)" options="" />
       <module name="backend (4)" options="" />
+      <module name="backend-services" options="" />
+      <module name="parents_kids-service" options="-parameters" />
+      <module name="teachers_course-service" options="-parameters" />
     </option>
   </component>
 </project>
