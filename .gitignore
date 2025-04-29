@@ -61,3 +61,5 @@ front-end/*.ntvs*
 front-end/*.njsproj
 front-end/*.sln
 front-end/*.sw?
+
+.idea
