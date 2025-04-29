@@ -30,7 +30,7 @@ const Signupteacher = () => {
           </h2>
 
           <form className="flex flex-col items-center" action="">
-            <nav className="border-gray-200 dark:bg-gray-900 h-17">
+            <nav className="border-gray-200 h-17">
               <ul
                 className="bg-blue-900 border border-gray-100 flex w-60 justify-between"
                 style={{
