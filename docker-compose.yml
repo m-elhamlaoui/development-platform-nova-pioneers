@@ -9,10 +9,44 @@ services:
       - "5431:5432"   ##avoids conflict with running local postgresql db
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  backend:
-    build: ./backend
+
+  admin-service:
+    build: ./backend-services/admin-service  # Correct path to admin service
     ports:
-      - "9090:9090"
+      - "9091:9091"  # Admin service port 9091
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+
+  auth-service:
+    build: ./backend-services/auth-service  # Correct path to auth service
+    ports:
+      - "9092:9092"  # Auth service port 9092
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+
+  parents_kids-service:
+    build: ./backend-services/parents_kids-service  # Correct path to parents_kids service
+    ports:
+      - "9093:9093"  # Parents Kids service port 9093
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+
+  teachers_courses-service:
+    build: ./backend-services/teachers_courses-service  # Correct path to teachers_courses service
+    ports:
+      - "9094:9094"  # Teachers Courses service port 9094
     depends_on:
       - db
     environment:
