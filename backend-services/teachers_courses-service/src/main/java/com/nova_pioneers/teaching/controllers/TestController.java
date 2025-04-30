@@ -1,4 +1,4 @@
-package com.nova_pioneers.admin.controllers;
+package com.nova_pioneers.teaching.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

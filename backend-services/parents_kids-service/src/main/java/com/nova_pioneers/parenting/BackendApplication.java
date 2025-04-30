@@ -1,4 +1,4 @@
-package com.nova_pioneers.admin;
+package com.nova_pioneers.parenting;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
