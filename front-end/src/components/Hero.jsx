@@ -147,7 +147,12 @@ export default function Hero(){
             </div>
             {isExpanded && apodData && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-start justify-center z-50" style={{padding: "30px 0 0 0 "}}>
-                    <div className="relative max-w-4xl">
+                    <div className="relative max-w-4xl overflow-y-scroll
+                    [&::-webkit-scrollbar]:w-1
+                    [&::-webkit-scrollbar-track]:bg-gray-100
+                    [&::-webkit-scrollbar-thumb]:bg-blue-300
+                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                    dark:[&::-webkit-scrollbar-thumb]:bg-blue-500">
                         <img className="max-w-full max-h-[100vh] rounded-lg" src={apodData.url} alt={apodData.title} />
                         <div className="absolute bottom-[-100px]left-0 right-0 bg-black bg-opacity-70 text-white p-4 rounded-b-lg" >
                             <h2 className="text-xl font-bold">{apodData.title}</h2>
