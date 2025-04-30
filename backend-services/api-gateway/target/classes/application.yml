@@ -1,0 +1,35 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: admin-service
+          uri: http://localhost:9091
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+        - id: auth-service
+          uri: http://localhost:9092
+          predicates:
+            - Path=/auth/**
+        - id: parents-kids-service
+          uri: http://localhost:9093
+          predicates:
+            - Path=/parents-kids/**
+        - id: teachers-courses-service
+          uri: http://localhost:9094
+          predicates:
+            - Path=/teachers-courses/**
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
