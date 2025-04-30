@@ -53,6 +53,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
       SPRING_DATASOURCE_USERNAME: pioneer
       SPRING_DATASOURCE_PASSWORD: nova25!X
+  api-gateway:
+    build:
+      context: ./backend-services/api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - admin-service
+      - auth-service
+      - parents_kids-service
+      - teachers_courses-service
   frontend:
     container_name: nova-pioneers-front-end
     build:
