@@ -1,5 +1,9 @@
 # Backend .gitignore (Moved from backend/ directory)
 backend-services/admin-service/target
+backend-services/auth-service/target
+backend-services/parents_kids-service/target
+backend-services/teachers_courses-service/target
+
 
 # ------------------------------------------------------------------
 # Frontend .gitignore (Moved from frontend/ directory)
