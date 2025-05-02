@@ -1,8 +1,8 @@
-# Educational Platform Database Schema
+# Minimal Educational Platform Database Schema
 
-This document outlines the PostgreSQL database schema for our educational platform. The platform connects teachers with students, allows parents to manage their children's learning, and provides administrative oversight.
+This document outlines an optimized PostgreSQL database schema for our educational platform, focusing only on essential data that cannot be easily calculated by the backend.
 
-## Database Tables and Relationships
+## Core Database Tables and Relationships
 
 ### Users and Authentication
 
@@ -14,14 +14,10 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20),
-    profile_image_url VARCHAR(255),
     role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'parent', 'teacher', 'kid')),
+    profile_picture VARCHAR(255), -- Stores relative path to file, not full URL
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    last_login_at TIMESTAMP WITH TIME ZONE,
     is_active BOOLEAN DEFAULT TRUE,
-    is_verified BOOLEAN DEFAULT FALSE,
     oauth_provider VARCHAR(50),
     oauth_id VARCHAR(255)
 );
@@ -32,54 +28,25 @@ CREATE TABLE users (
 CREATE TABLE verification_documents (
     document_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-    document_type VARCHAR(50) NOT NULL,
-    uploaded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    is_approved BOOLEAN DEFAULT FALSE,
-    approved_by INTEGER REFERENCES users(user_id),
-    approved_at TIMESTAMP WITH TIME ZONE,
-    notes TEXT
-);
-```
-
-#### `refresh_tokens` Table
-```sql
-CREATE TABLE refresh_tokens (
-    token_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-    token VARCHAR(255) UNIQUE NOT NULL,
-    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    device_info TEXT
-);
-```
-
-### Teacher Profiles
-
-#### `teacher_profiles` Table
-```sql
-CREATE TABLE teacher_profiles (
-    teacher_id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
-    bio TEXT,
-    specialty VARCHAR(100),
-    experience_years INTEGER,
-    total_xp INTEGER DEFAULT 0,
-    teacher_title VARCHAR(50) DEFAULT 'Beginner Teacher',
+    document_path VARCHAR(255) NOT NULL, -- Stores relative path to file, not full URL
     is_approved BOOLEAN DEFAULT FALSE,
     approved_by INTEGER REFERENCES users(user_id),
     approved_at TIMESTAMP WITH TIME ZONE
 );
 ```
 
-### Parent-Kid Relationship
+### User Extensions 
 
-#### `parent_profiles` Table
+#### `user_profile` Table
 ```sql
-CREATE TABLE parent_profiles (
-    parent_id SERIAL PRIMARY KEY,
+CREATE TABLE user_profile (
+    profile_id SERIAL PRIMARY KEY,
     user_id INTEGER UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
-    address TEXT,
-    preferred_contact_method VARCHAR(20) DEFAULT 'email'
+    bio TEXT,
+    specialty VARCHAR(100),
+    experience_years INTEGER,
+    total_xp INTEGER DEFAULT 0,
+    is_approved BOOLEAN DEFAULT FALSE
 );
 ```
 
@@ -88,24 +55,21 @@ CREATE TABLE parent_profiles (
 CREATE TABLE kids (
     kid_id SERIAL PRIMARY KEY,
     user_id INTEGER UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
-    parent_id INTEGER REFERENCES parent_profiles(parent_id) ON DELETE CASCADE,
+    parent_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     birth_date DATE,
-    age INTEGER,
-    total_xp INTEGER DEFAULT 0,
-    current_title VARCHAR(50) DEFAULT 'Novice',
-    avatar_url VARCHAR(255)
+    total_xp INTEGER DEFAULT 0
 );
 ```
 
-### Courses and XP System
+### Courses and Categories
 
-#### `course_sizes` Table
+#### `categories` Table
 ```sql
-CREATE TABLE course_sizes (
-    size_id SERIAL PRIMARY KEY,
-    size_code CHAR(1) NOT NULL UNIQUE CHECK (size_code IN ('S', 'M', 'L', 'XL')),
-    base_xp INTEGER NOT NULL,
-    description TEXT
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    icon_path VARCHAR(255) -- Stores relative path to file, not full URL
 );
 ```
 
@@ -113,19 +77,17 @@ CREATE TABLE course_sizes (
 ```sql
 CREATE TABLE courses (
     course_id SERIAL PRIMARY KEY,
-    teacher_id INTEGER REFERENCES teacher_profiles(teacher_id) ON DELETE CASCADE,
+    teacher_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    category_id INTEGER REFERENCES categories(category_id),
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    size_id INTEGER REFERENCES course_sizes(size_id),
+    thumbnail_path VARCHAR(255), -- Stores relative path to file, not full URL
+    size_code CHAR(1) NOT NULL CHECK (size_code IN ('S', 'M', 'L', 'XL')),
     xp_reward INTEGER NOT NULL,
     min_age INTEGER,
     max_age INTEGER,
-    duration_minutes INTEGER,
-    difficulty_level VARCHAR(20),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    is_active BOOLEAN DEFAULT TRUE,
-    thumbnail_url VARCHAR(255)
+    is_active BOOLEAN DEFAULT TRUE
 );
 ```
 
@@ -135,11 +97,9 @@ CREATE TABLE course_materials (
     material_id SERIAL PRIMARY KEY,
     course_id INTEGER REFERENCES courses(course_id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
-    description TEXT,
-    file_url VARCHAR(255),
+    file_path VARCHAR(255), -- Stores relative path to file, not full URL
     material_type VARCHAR(50) NOT NULL,
-    order_index INTEGER,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    order_index INTEGER
 );
 ```
 
@@ -153,7 +113,6 @@ CREATE TABLE enrollments (
     course_id INTEGER REFERENCES courses(course_id) ON DELETE CASCADE,
     enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     completed_at TIMESTAMP WITH TIME ZONE,
-    is_active BOOLEAN DEFAULT TRUE,
     progress_percentage INTEGER DEFAULT 0,
     xp_earned INTEGER DEFAULT 0,
     UNIQUE(kid_id, course_id)
@@ -166,8 +125,7 @@ CREATE TABLE progress_logs (
     log_id SERIAL PRIMARY KEY,
     enrollment_id INTEGER REFERENCES enrollments(enrollment_id) ON DELETE CASCADE,
     material_id INTEGER REFERENCES course_materials(material_id) ON DELETE CASCADE,
-    completed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    time_spent_minutes INTEGER
+    completed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -180,8 +138,7 @@ CREATE TABLE course_ratings (
     enrollment_id INTEGER REFERENCES enrollments(enrollment_id) ON DELETE CASCADE,
     rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
     review_text TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -191,98 +148,66 @@ CREATE TABLE course_reports (
     report_id SERIAL PRIMARY KEY,
     enrollment_id INTEGER REFERENCES enrollments(enrollment_id) ON DELETE CASCADE,
     teacher_notes TEXT,
-    kid_performance TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    is_approved BOOLEAN DEFAULT FALSE,
-    approved_by INTEGER REFERENCES users(user_id),
-    approved_at TIMESTAMP WITH TIME ZONE
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-### XP Titles System
-
-#### `xp_titles_kids` Table
+### XP Title Reference Tables 
 ```sql
-CREATE TABLE xp_titles_kids (
+CREATE TABLE xp_titles (
     title_id SERIAL PRIMARY KEY,
-    title_name VARCHAR(50) UNIQUE NOT NULL,
+    title_name VARCHAR(50) NOT NULL,
     min_xp_required INTEGER NOT NULL,
-    description TEXT,
-    badge_url VARCHAR(255)
+    role VARCHAR(20) NOT NULL CHECK (role IN ('kid', 'teacher')),
+    badge_path VARCHAR(255), -- Stores relative path to file, not full URL
+    UNIQUE(title_name, role)
 );
 ```
 
-#### `xp_titles_teachers` Table
-```sql
-CREATE TABLE xp_titles_teachers (
-    title_id SERIAL PRIMARY KEY,
-    title_name VARCHAR(50) UNIQUE NOT NULL,
-    min_xp_required INTEGER NOT NULL,
-    description TEXT,
-    badge_url VARCHAR(255)
-);
-```
-
-### Contact and Communication
+### Contact System
 
 #### `contact_messages` Table
 ```sql
 CREATE TABLE contact_messages (
     message_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
     email VARCHAR(255) NOT NULL,
     name VARCHAR(100) NOT NULL,
     subject VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    is_read BOOLEAN DEFAULT FALSE,
-    read_by INTEGER REFERENCES users(user_id),
-    read_at TIMESTAMP WITH TIME ZONE
-);
-```
-
-#### `notifications` Table
-```sql
-CREATE TABLE notifications (
-    notification_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-    title VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    notification_type VARCHAR(50) NOT NULL,
-    is_read BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    read_at TIMESTAMP WITH TIME ZONE,
-    action_url VARCHAR(255)
+    is_read BOOLEAN DEFAULT FALSE
 );
 ```
 
 ## Entity Relationship Diagram (ERD)
 
 ```
-users 1--1 teacher_profiles
-users 1--1 parent_profiles
-users 1--1 kids
-parent_profiles 1--* kids
-teacher_profiles 1--* courses
+users 1--1 user_profile
+users 1--* kids (parent relationship)
+users 1--* courses (teacher relationship)
+categories 1--* courses
 courses 1--* course_materials
 kids *--* courses (through enrollments)
 enrollments 1--* progress_logs
 enrollments 1--1 course_ratings
 enrollments 1--1 course_reports
-course_sizes 1--* courses
 ```
 
-## XP Rules
+## Backend-Calculated Values
 
-- Course XP is determined by the course size:
-  - Size S: 200 XP
-  - Size M: 1000 XP
-  - Size L and XL: Configured in the course_sizes table
+The following information doesn't need to be stored and can be calculated by the backend:
 
-- Kids earn XP upon completion of courses or course materials
-- Teachers accumulate XP based on the XP earned by kids who complete their courses
+1. **User Titles** - Based on XP and the xp_titles reference table
+2. **Teacher Titles** - Based on XP and the xp_titles reference table  
+3. **Age** - Calculated from birth_date
+4. **Course size XP rules** - Can be implemented in business logic:
+   - Size S: 200 XP
+   - Size M: 1000 XP
+   - Larger sizes determined by business rules
+5. **Last login time** - Tracked in the authentication service, not needed in DB
+6. **Profile verification status** - Derived from approved verification documents
 
-## Indices for Performance
+## Essential Indices
 
 ```sql
 -- User Authentication
@@ -291,50 +216,42 @@ CREATE INDEX idx_users_role ON users(role);
 
 -- Course Discovery
 CREATE INDEX idx_courses_teacher_id ON courses(teacher_id);
+CREATE INDEX idx_courses_category_id ON courses(category_id);
 CREATE INDEX idx_courses_age_range ON courses(min_age, max_age);
-CREATE INDEX idx_courses_activity ON courses(is_active);
 
 -- Kid Management
 CREATE INDEX idx_kids_parent_id ON kids(parent_id);
-CREATE INDEX idx_kids_xp ON kids(total_xp);
 
 -- Progress Tracking
 CREATE INDEX idx_enrollments_kid_id ON enrollments(kid_id);
 CREATE INDEX idx_enrollments_course_id ON enrollments(course_id);
-CREATE INDEX idx_progress_logs_enrollment_id ON progress_logs(enrollment_id);
-
--- Teacher Performance
-CREATE INDEX idx_teacher_profiles_xp ON teacher_profiles(total_xp);
 ```
 
-## Database Setup Instructions
+## Implementation Notes
 
-1. Install PostgreSQL if not already installed
-2. Create a new database:
-   ```
-   CREATE DATABASE educational_platform;
-   ```
-3. Connect to the database:
-   ```
-   \c educational_platform
-   ```
-4. Run the SQL scripts to create the tables in the following order:
-   - users
-   - refresh_tokens, verification_documents
-   - teacher_profiles, parent_profiles
-   - kids
-   - course_sizes
-   - courses
-   - course_materials
-   - enrollments
-   - progress_logs, course_ratings, course_reports
-   - xp_titles_kids, xp_titles_teachers
-   - contact_messages, notifications
-5. Create indexes for performance optimization
+1. **File Storage Approach**:
+   - All uploaded files are stored in the server's filesystem
+   - Only the relative file paths are stored in the database for efficiency
+   - The backend service constructs full URLs when needed by combining the server base URL with the file paths
+   - Standardized file path format: `/uploads/{content_type}/{user_id}/{filename}`
+   - Example: `/uploads/profiles/42/profile.jpg` or `/uploads/courses/15/thumbnail.png`
 
-## Development Notes
+2. **XP Calculation**:
+   - Kid XP is updated in the kids table when courses are completed
+   - Teacher XP is updated when a kid completes a teacher's course
 
-- Use prepared statements to prevent SQL injection
-- Implement row-level security for multi-tenant data where applicable
-- Consider using PostgreSQL triggers for maintaining updated_at timestamps
-- Add database migrations for future schema changes
+2. **Title Assignment**:
+   - The backend queries the xp_titles table with a user's role and XP to determine their current title
+   - No need to store the current title in the user tables
+
+3. **Age-based Logic**:
+   - Calculate age on-the-fly from kid's birth_date
+
+4. **Notifications**:
+   - Implement as a separate microservice rather than in the database
+   - Use a messaging queue for real-time notifications
+
+5. **Session Management**:
+   - Handle with JWT tokens, no need for a refresh_tokens table unless you need persistent sessions
+
+This minimalist schema focuses on storing only essential data while allowing the backend services to handle derived values and business logic.
