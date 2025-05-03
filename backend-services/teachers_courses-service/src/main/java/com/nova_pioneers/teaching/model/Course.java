@@ -53,4 +53,18 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Module> modules;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Rating> ratings;
+
+    // Helper method to calculate average rating
+    @Transient
+    public Double getAverageRating() {
+        if (ratings == null || ratings.isEmpty()) {
+            return 0.0;
+        }
+        double sum = ratings.stream()
+                .mapToInt(Rating::getRatingValue)
+                .sum();
+        return sum / ratings.size();
+    }
 }
