@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import NoPage from "./pages/NoPage";
 import './index.css'
 import Signupteacher from "./pages/Signupteacher";
+import ParentsDashboard from "./pages/ParentsDashboard";
 export default function App() {
   return (
     <BrowserRouter>
@@ -14,7 +15,8 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<NoPage />} />
-          <Route path="/Signupteacher" element={<Signupteacher/>}/>
+          <Route path="/Signupteacher" element={<Signupteacher />}/>
+          <Route path="/parents-dashboard" element={<ParentsDashboard />}/>
       
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,77 @@
+
+.dashboard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    
+}
+.Menu {
+    padding: 20px 70px 30px 20px;
+    /* background-color: rgba(190, 190, 190, 0.493); */
+
+}
+.Menu .menu-link, .settings, .logout{
+    font-weight: bold;
+}
+.Menu .menu-link:hover,
+.settings:hover
+{
+    color: #0B3D91;
+}
+.logout:hover{
+    color: red;
+}
+.Menu .menu-link.active{
+    color: #0B3D91;
+}
+.Menu h1{
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+.menu-links-container{
+    margin-top: 50px;
+}
+.Menu h1{
+    margin-bottom: 20px;
+}
+.children-container{
+    margin-top: 50px;
+}
+.child-link img{
+    margin-right: 7px;
+    border-radius: 50px;
+}
+.children-list-container{
+    gap: 10px;
+}
+.child-infos .name{
+    font-weight: 700;
+    font-size: 14px;
+}
+.child-infos .child-xp{
+    font-weight: 600;
+    color: rgb(47, 255, 75);
+    font-size: 12px;
+}
+.parents-main{
+    padding: 10px;
+}
+.search-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+.search-container .search{
+    border: 2px solid gainsboro;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 9px 11px;
+    border-radius: 7px;
+
+}
+.search-container .search-icon:hover{
+    color: red ;
+}

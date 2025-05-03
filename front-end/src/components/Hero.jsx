@@ -1,10 +1,10 @@
-import Nav from "./Nav"
+import Nav from "./ui/Nav"
 import rocket from '../assets/homeimage.png'
 import { Link } from "react-router-dom"
 import vector from '../assets/vector.png'
 import { Expand, X } from "lucide-react"
+import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion";
 import np_logo from "../assets/np-logo.png"
 export default function Hero(){
     const [isExpanded, setIsExpanded] = useState(false);
@@ -148,11 +148,11 @@ export default function Hero(){
             {isExpanded && apodData && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-start justify-center z-50" style={{padding: "30px 0 0 0 "}}>
                     <div className="relative max-w-4xl overflow-y-scroll
-                    [&::-webkit-scrollbar]:w-1
-                    [&::-webkit-scrollbar-track]:bg-gray-100
-                    [&::-webkit-scrollbar-thumb]:bg-blue-300
-                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
-                    dark:[&::-webkit-scrollbar-thumb]:bg-blue-500">
+                                    [&::-webkit-scrollbar]:w-1
+                                    [&::-webkit-scrollbar-track]:bg-gray-100
+                                    [&::-webkit-scrollbar-thumb]:bg-blue-300
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-blue-500">
                         <img className="max-w-full max-h-[100vh] rounded-lg" src={apodData.url} alt={apodData.title} />
                         <div className="absolute bottom-[-100px]left-0 right-0 bg-black bg-opacity-70 text-white p-4 rounded-b-lg" >
                             <h2 className="text-xl font-bold">{apodData.title}</h2>
