@@ -3,6 +3,7 @@ package com.nova_pioneers.teaching.controllers;
 
 import com.nova_pioneers.teaching.Service.CourseService;
 import com.nova_pioneers.teaching.model.Course;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +37,13 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) {
         return new ResponseEntity<>(courseService.saveCourse(course), HttpStatus.CREATED);
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course course) {
+    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @Valid @RequestBody Course course) {
         Optional<Course> existingCourse = courseService.getCourseById(id);
 
         if (existingCourse.isPresent()) {
