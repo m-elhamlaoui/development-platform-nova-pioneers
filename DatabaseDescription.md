@@ -57,7 +57,8 @@ CREATE TABLE kids (
     user_id INTEGER UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
     parent_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     birth_date DATE,
-    total_xp INTEGER DEFAULT 0
+    total_xp INTEGER DEFAULT 0,
+    is_restricted INTEGER DEFAULT 1
 );
 ```
 
