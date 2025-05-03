@@ -65,4 +65,20 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Course>> searchCourses(@RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(courseService.searchCoursesByKeyword(keyword));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Course>> filterCourses(
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false) String gradeLevel,
+            @RequestParam(required = false) String sizeCategory,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) Integer maxAge) {
+
+        return ResponseEntity.ok(courseService.filterCourses(subject, gradeLevel, sizeCategory, minAge, maxAge));
+    }
 }
+

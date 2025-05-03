@@ -62,4 +62,15 @@ public class CourseService {
 
         course.setXpValue(baseXp * ageMultiplier);
     }
+    public List<Course> searchCoursesByKeyword(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return courseRepository.findAll();
+        }
+        return courseRepository.searchByKeyword(keyword);
+    }
+
+    public List<Course> filterCourses(String subject, String gradeLevel,
+                                      String sizeCategory, Integer minAge, Integer maxAge) {
+        return courseRepository.filterCourses(subject, gradeLevel, sizeCategory, minAge, maxAge);
+    }
 }
