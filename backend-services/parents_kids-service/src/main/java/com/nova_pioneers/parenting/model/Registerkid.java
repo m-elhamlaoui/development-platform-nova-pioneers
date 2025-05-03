@@ -14,14 +14,14 @@ import jakarta.persistence.Id;
 public class Registerkid{
     @Id
     @GeneratedValue( strategy= GenerationType.AUTO)
-  @CreationTimestamp
-
     private Long user_id;
     private String email;
     private String password_hash;
     private String first_name ;
     private String last_name;
     private String role;
+    
+    @CreationTimestamp
     private OffsetDateTime created_at;
     private Boolean is_active;
     private String oauth_provider;

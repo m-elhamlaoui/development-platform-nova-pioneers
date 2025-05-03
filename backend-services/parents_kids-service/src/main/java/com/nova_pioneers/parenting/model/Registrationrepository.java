@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 
 public interface Registrationrepository extends JpaRepository<Registerkid, Long> {
-
-    Optional<Registerkid> findByUsername(String last_name);
+    // This method will be automatically implemented by Spring Data JPA
+    Optional<Registerkid> findByEmail(String email);
 }
-    

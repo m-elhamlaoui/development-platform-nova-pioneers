@@ -1,23 +1,40 @@
 package com.nova_pioneers.parenting.controllers;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import com.nova_pioneers.parenting.model.Registerkid;
 import com.nova_pioneers.parenting.model.Registrationrepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-
 public class RegisterController {
 
-@Autowired
-private Registrationrepository registrationrepository;
+    @Autowired
+    private Registrationrepository registrationrepository;
 
-    
-@PostMapping(value="/registerchild", consumes ="application/json")
-   public Registerkid createUser(@RequestBody Registerkid user){
+    @PostMapping(value = "/registerchild", consumes = "application/json")
+    public Registerkid createUser(@RequestBody Registerkid user) {
         return registrationrepository.save(user);
+    }
+
+    @GetMapping("/allkids")
+    public List<Registerkid> getAllKids() {
+        return registrationrepository.findAll();
+    }
+    @GetMapping("/testdb")
+    public String testDatabaseConnection() {
+        try {
+            List<Registerkid> kids = registrationrepository.findAll();
+            return "Database connection successful. Found " + kids.size() + " kids.";
+        } catch (Exception e) {
+            return "Database connection failed: " + e.getMessage();
+        }
+    }
+    @GetMapping("/test")
+    public String testing() {
+       return "hihihi its freaking working";
     }
 
 }
