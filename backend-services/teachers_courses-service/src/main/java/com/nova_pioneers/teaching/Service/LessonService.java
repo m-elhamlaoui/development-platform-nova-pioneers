@@ -3,6 +3,8 @@ package com.nova_pioneers.teaching.Service;
 import com.nova_pioneers.teaching.Repositories.LessonRepository;
 import com.nova_pioneers.teaching.Repositories.ModuleRepository;
 import com.nova_pioneers.teaching.model.Lesson;
+import com.nova_pioneers.teaching.model.Module;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
