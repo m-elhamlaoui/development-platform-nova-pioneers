@@ -2,7 +2,7 @@ package com.nova_pioneers.parenting.controllers;
 
 import com.nova_pioneers.parenting.model.Registerkid;
 import com.nova_pioneers.parenting.model.Registrationrepository;
-
+import com.nova_pioneers.parenting.service.Registerkidservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +14,13 @@ public class RegisterController {
     @Autowired
     private Registrationrepository registrationrepository;
 
-    @PostMapping(value = "/registerchild", consumes = "application/json")
-    public Registerkid createUser(@RequestBody Registerkid user) {
-        return registrationrepository.save(user);
-    }
+   @Autowired
+       Registerkidservice registerkidservice;
+
+   @PostMapping(value = "/registerchild", consumes = "application/json")
+       public Registerkid createUser(@RequestBody Registerkid user) {
+          return registerkidservice.registerNewKid(user);
+}
 
     @GetMapping("/allkids")
     public List<Registerkid> getAllKids() {
