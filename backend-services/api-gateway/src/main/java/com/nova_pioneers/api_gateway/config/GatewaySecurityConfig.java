@@ -1,4 +1,4 @@
-// package com.nova_pioneers.parenting.config; // Make sure this package is scanned
+// package com.nova_pioneers.api_gateway.config;
 
 // import org.springframework.context.annotation.Bean;
 // import org.springframework.context.annotation.Configuration;
@@ -8,14 +8,15 @@
 
 // @Configuration
 // @EnableWebSecurity
-// public class SecurityConfig {
+// public class GatewaySecurityConfig {
 
 //     @Bean
 //     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //         http
 //             .csrf().disable()
 //             .authorizeHttpRequests()
-//             .anyRequest().permitAll(); // Allow everything
+//             .anyRequest().permitAll(); // Allow all requests
+
 //         return http.build();
 //     }
 // }
