@@ -4,7 +4,6 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
 import NoPage from "./pages/NoPage";
-import './index.css'
 import Signupteacher from "./pages/Signupteacher";
 import ParentsDashboard from "./pages/ParentsDashboard";
 export default function App() {
