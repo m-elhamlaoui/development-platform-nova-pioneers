@@ -2,9 +2,12 @@ package com.nova_pioneers.parenting.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.nova_pioneers.parenting.model.Kidadd;
 import com.nova_pioneers.parenting.model.Registrationrepository;
+import com.nova_pioneers.parenting.model.Kidaddrepo;
 import com.nova_pioneers.parenting.model.Registerkid;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @Service
 public class Registerkidservice {
@@ -16,7 +19,10 @@ public class Registerkidservice {
         this.registrationrepository = registrationrepository;
     }
 
-  
+    @Autowired
+     private Kidaddrepo kidaddrepo;
+
+
     public Registerkid findUserByEmail(String email) {
         return registrationrepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
@@ -37,13 +43,21 @@ public class Registerkidservice {
             throw new IllegalStateException("email taken");
         }
      
-         String encodePaswword = bCryptPasswordEncoder
-                .encode(userkid.getPassword_hash());
-         
-         userkid.setPassword_hash(encodePaswword);
          userkid.setRole("kid");
          userkid.setIs_active(true);
-        return registrationrepository.save(userkid);
+      Registerkid savedUserkid = registrationrepository.save(userkid);
+     
+
+      Kidadd kid = new Kidadd();
+
+      kid.setUser_id(savedUserkid.getUser_id());
+    
+      kid.setIsRestricted(0);
+
+      kidaddrepo.save(kid);
+
+    return savedUserkid;
+      
  
     }
 }

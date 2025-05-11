@@ -1,10 +1,13 @@
 package com.nova_pioneers.parenting.controllers;
 
+import com.nova_pioneers.parenting.model.Kidadd;
 import com.nova_pioneers.parenting.model.Registerkid;
 import com.nova_pioneers.parenting.model.Registrationrepository;
 import com.nova_pioneers.parenting.service.Registerkidservice;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.nova_pioneers.parenting.model.Kidaddrepo;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -13,6 +16,10 @@ public class RegisterController {
 
     @Autowired
     private Registrationrepository registrationrepository;
+
+    @Autowired
+    private Kidaddrepo kidaddrepo;
+    
 
    @Autowired
        Registerkidservice registerkidservice;
@@ -23,13 +30,13 @@ public class RegisterController {
 }
 
     @GetMapping("/allkids")
-    public List<Registerkid> getAllKids() {
-        return registrationrepository.findAll();
+    public List<Kidadd> getAllKids() {
+        return kidaddrepo.findAll();
     }
     @GetMapping("/testdb")
     public String testDatabaseConnection() {
         try {
-            List<Registerkid> kids = registrationrepository.findAll();
+            List<Kidadd> kids = kidaddrepo.findAll();
             return "Database connection successful. Found " + kids.size() + " kids.";
         } catch (Exception e) {
             return "Database connection failed: " + e.getMessage();

@@ -3,7 +3,7 @@ package com.nova_pioneers.parenting.model;
 import java.time.OffsetDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
-
+import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 
 
 @Entity
+@Table(name = "users")
 public class Registerkid{
     @Id
     @GeneratedValue( strategy= GenerationType.AUTO)
