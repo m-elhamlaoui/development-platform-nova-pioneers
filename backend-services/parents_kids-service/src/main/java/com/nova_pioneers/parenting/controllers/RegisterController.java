@@ -29,10 +29,14 @@ public class RegisterController {
           return registerkidservice.registerNewKid(user);
 }
 
-    @GetMapping("/allkids")
-    public List<Kidadd> getAllKids() {
-        return kidaddrepo.findAll();
-    }
+   @GetMapping("/allkids")
+     public List<Kidadd> getAllKids() {
+      List<Kidadd> kids = kidaddrepo.findAll();  
+     return kids; 
+}
+
+
+
     @GetMapping("/testdb")
     public String testDatabaseConnection() {
         try {
@@ -42,9 +46,6 @@ public class RegisterController {
             return "Database connection failed: " + e.getMessage();
         }
     }
-    @GetMapping("/test")
-    public String testing() {
-       return "hihihi its freaking working";
-    }
+    
 
 }

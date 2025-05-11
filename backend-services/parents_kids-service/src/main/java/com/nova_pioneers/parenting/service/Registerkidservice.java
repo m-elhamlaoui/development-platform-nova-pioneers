@@ -1,10 +1,14 @@
 package com.nova_pioneers.parenting.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nova_pioneers.parenting.model.Kidadd;
 import com.nova_pioneers.parenting.model.Registrationrepository;
+
+import jakarta.transaction.Transactional;
+
 import com.nova_pioneers.parenting.model.Kidaddrepo;
 import com.nova_pioneers.parenting.model.Registerkid;
 
@@ -35,6 +39,7 @@ public class Registerkidservice {
     }
 
 
+    @Transactional
     public Registerkid registerNewKid(Registerkid userkid) {
        boolean userExists = registrationrepository
                             .findByEmail(userkid.getEmail())
@@ -49,12 +54,10 @@ public class Registerkidservice {
      
 
       Kidadd kid = new Kidadd();
+       kid.setUser(savedUserkid); 
+       kid.setIsRestricted(0);
 
-      kid.setUser_id(savedUserkid.getUser_id());
-    
-      kid.setIsRestricted(0);
-
-      kidaddrepo.save(kid);
+       kidaddrepo.save(kid);
 
     return savedUserkid;
       

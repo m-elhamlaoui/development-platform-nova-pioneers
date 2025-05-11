@@ -12,8 +12,18 @@ public class Kidadd{
    
     private Long kid_id;
 
+   @OneToOne
+    @JoinColumn(name = "kid_id", referencedColumnName = "user_id",unique=true)
 
-    private Long user_id;
+    private Registerkid user;
+    
+    public void setUser(Registerkid user) {
+        this.user = user;
+    }
+
+    public Registerkid getUser() {
+        return user;
+    }
 
     private Long parent_id;
 
@@ -31,16 +41,6 @@ public class Kidadd{
     
     public void setKidId(Long kid_id) {
         this.kid_id = kid_id;
-    }
-
-    
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
     }
 
     

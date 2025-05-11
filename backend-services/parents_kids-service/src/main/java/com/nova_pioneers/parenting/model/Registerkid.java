@@ -1,9 +1,10 @@
 package com.nova_pioneers.parenting.model;
 
 import java.time.OffsetDateTime;
-
+import jakarta.persistence.OneToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,16 @@ public class Registerkid{
     private String oauth_provider;
     private  Integer  oauth_id;
    
+
+    @OneToOne(mappedBy= "user", cascade= CascadeType.ALL)
+    private Kidadd kid;
+     
+    public Kidadd getKid() {
+        return kid;
+    }
+    public void setKid(Kidadd kid) {
+        this.kid = kid;
+    }
     
 
    
