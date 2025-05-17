@@ -43,7 +43,7 @@ Our project is a kid-friendly web-based learning platform designed to educate yo
     - Once approved, the content will be available for children to explore and learn from.
 
 5. **Kid-Friendly Rating System**:
-    - Children can rate courses using simple emoji reactions.
+    - Children can rate courses using simple emoji reactions
     - Ratings help highlight the most engaging courses for different age groups.
     - The rating system will encourage content creators to provide high-quality, age-appropriate material.
 
