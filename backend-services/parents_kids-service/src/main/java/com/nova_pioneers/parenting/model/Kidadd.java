@@ -5,82 +5,76 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "kids")
-public class Kidadd{
+public class Kidadd { // Consider renaming to 'Kid' for clarity
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-   
-    private Long kid_id;
+    @Column(name = "kid_id")
+    private Long kidId; // Renamed from kid_id to match findByKidId
 
-   @OneToOne
-    @JoinColumn(name = "kid_id", referencedColumnName = "user_id",unique=true)
-
+    // Remove @OneToOne on kid_id; add a separate foreign key for the relationship
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", unique = true) // Use a separate column
     private Registerkid user;
-    
-    public void setUser(Registerkid user) {
-        this.user = user;
+
+    @Column(name = "parent_id")
+    private Long parentId;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Column(name = "total_xp")
+    private Integer totalXp = 0;
+
+    @Column(name = "is_restricted")
+    private Integer isRestricted = 1;
+
+    // Getters and setters
+    public Long getKidId() {
+        return kidId;
+    }
+
+    public void setKidId(Long kidId) {
+        this.kidId = kidId;
     }
 
     public Registerkid getUser() {
         return user;
     }
 
-    private Long parent_id;
-
-    private LocalDate birth_date;
-
-    private Integer totalXp = 0;
-
-    private Integer isRestricted = 1;
-
-   
-    public Long getKidId() {
-        return kid_id;
+    public void setUser(Registerkid user) {
+        this.user = user;
     }
 
-    
-    public void setKidId(Long kid_id) {
-        this.kid_id = kid_id;
+    public Long getParentId() {
+        return parentId;
     }
 
-    
-    public Long getParent_id() {
-        return parent_id;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
-   
-    public void setParent_id(Long parent_id) {
-        this.parent_id = parent_id;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    
-    public LocalDate getBirth_date() {
-        return birth_date;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
-   
-    public void setBirth_date(LocalDate birth_date) {
-        this.birth_date = birth_date;
-    }
-
-    
     public Integer getTotalXp() {
         return totalXp;
     }
 
-    
     public void setTotalXp(Integer totalXp) {
         this.totalXp = totalXp;
     }
 
-    
     public Integer getIsRestricted() {
         return isRestricted;
     }
 
-    
     public void setIsRestricted(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
-
 }
