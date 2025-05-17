@@ -6,6 +6,8 @@ import LandingPage from "./pages/LandingPage";
 import NoPage from "./pages/NoPage";
 import Signupteacher from "./pages/Signupteacher";
 import ParentsDashboard from "./pages/ParentsDashboard";
+import ParentsDashboardLessons from "./components/ParentsDashboardLessons";
+import ParentsDashboardKids from "./components/ParentsDashboardKids";
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,6 +18,8 @@ export default function App() {
           <Route path="*" element={<NoPage />} />
           <Route path="/Signupteacher" element={<Signupteacher />}/>
           <Route path="/parents-dashboard" element={<ParentsDashboard />}/>
+          <Route path="/parents-dashboard/lessons" element={<ParentsDashboardLessons />}/>
+          <Route path="/parents-dashboard/kids" element={<ParentsDashboardKids />}/>
       
       </Routes>
     </BrowserRouter>

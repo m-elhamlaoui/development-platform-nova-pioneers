@@ -27,14 +27,14 @@ export default function CourseCard({ course, index }) {
           className="w-full h-48 object-cover hover:scale"
         />
         <div className="absolute top-3 right-3">
-          <button 
+          {/* <button 
             onClick={handleFavoriteToggle}
             className={`p-2 rounded-full backdrop-blur-md ${isFav ? 'bg-white/20' : 'bg-black/30'} transition-all`}
           >
             <Heart 
               className={`w-5 h-5 ${isFav ? 'text-red-500 fill-red-500' : 'text-white/80'}`} 
             />
-          </button>
+          </button> */}
         </div>
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent h-16" />
       </div>

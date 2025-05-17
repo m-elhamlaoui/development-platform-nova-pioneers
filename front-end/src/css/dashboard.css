@@ -7,6 +7,7 @@
     
 }
 .Menu {
+    /* width: 500px; */
     padding: 20px 70px 30px 20px;
     /* background-color: rgba(190, 190, 190, 0.493); */
 
@@ -44,10 +45,13 @@
 }
 .children-list-container{
     gap: 10px;
+
+
 }
 .child-infos .name{
     font-weight: 700;
     font-size: 14px;
+
 }
 .child-infos .child-xp{
     font-weight: 600;
@@ -74,4 +78,8 @@
 }
 .search-container .search-icon:hover{
     color: red ;
+}
+.kids-sec-dashboard table td{
+    padding: 7px;
+    text-align: center;
 }

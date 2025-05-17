@@ -24,17 +24,18 @@ export default function Menu() {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 100 }}
-        className="Menu flex flex-col justify-between shadow min-h-screen p-4 bg-white"
+        className="Menu flex flex-col justify-between shadow min-h-screen max-h-screen p-4 bg-white"
+      
       >
         <div className="menu-upper-section space-y-4">
           <img className="dash-logo w-[60px]" src={dashlogo} alt="Logo" />
           <div className="menu-links-container">
             <h1 className="text-gray-600 font-semibold mb-2">Overview</h1>
             <div className="menu-links flex flex-col gap-2 text-gray-700">
-              <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <House size={20} /> <p>Dashboard</p></Link>
-              <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <BookMarked size={20} /> <p>Lessons</p></Link>
-              <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Baby size={20} /> <p>My kids</p></Link>
-              <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Heart size={20} /> <p>Favorites</p></Link>
+              <Link to={{pathname: "/parents-dashboard"}} className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <House size={20} /> <p>Dashboard</p></Link>
+              <Link to={{pathname: "/parents-dashboard/lessons"}} className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <BookMarked size={20} /> <p>Lessons</p></Link>
+              <Link to={{pathname: "/parents-dashboard/kids"}} className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Baby size={20} /> <p>My kids</p></Link>
+              {/* <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Heart size={20} /> <p>Favorites</p></Link> */}
             </div>
           </div>
           <div className="children-container">
