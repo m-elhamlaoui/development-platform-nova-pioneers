@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 
+@Repository
 public interface Kidaddrepo extends JpaRepository<Kidadd, Long> {
 
     Optional<Kidadd> findByKidId(Long kid_id);

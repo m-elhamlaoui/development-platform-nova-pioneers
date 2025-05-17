@@ -29,12 +29,26 @@ public class RegisterController {
           return registerkidservice.registerNewKid(user);
 }
 
+
    @GetMapping("/allkids")
      public List<Kidadd> getAllKids() {
       List<Kidadd> kids = kidaddrepo.findAll();  
      return kids; 
 }
 
+
+    @PutMapping("/updatekid")
+      public Kidadd updatekid(@RequestBody Kidadd kid){
+          return registerkidservice.update(kid);
+      }
+
+
+    @DeleteMapping("/deletekid/{id}")
+     public String deleteKid(@PathVariable("id") Long user_id){
+         registerkidservice.deleteKid(user_id);
+         return "kid deleted";
+       
+     }
 
 
     @GetMapping("/testdb")

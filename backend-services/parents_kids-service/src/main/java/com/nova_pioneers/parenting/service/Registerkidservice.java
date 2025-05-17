@@ -63,4 +63,13 @@ public class Registerkidservice {
       
  
     }
+
+    public String deleteKid(Long user_id) {
+        registrationrepository.deleteById(user_id);
+        return "kid deleted";
+    }
+
+    public Kidadd update(Kidadd kid){
+        return kidaddrepo.save(kid);
+    }
 }
