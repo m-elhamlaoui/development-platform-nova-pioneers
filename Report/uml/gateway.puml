@@ -1,0 +1,63 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "API Gateway" {
+    [Client (Web/Mobile)] --> [Spring Cloud Gateway]
+
+    [Spring Cloud Gateway] --> [Route Predicate Factory]
+    [Spring Cloud Gateway] --> [Global Filters]
+
+    [Global Filters] --> [JWT Authentication Filter]
+    [Global Filters] --> [CORS Filter]
+    [Global Filters] --> [Rate Limiting Filter]
+    [Global Filters] --> [Logging Filter]
+
+    [JWT Authentication Filter] --> [TokenValidationService]
+    [TokenValidationService] --> [JwtConfig]
+
+    [Route Predicate Factory] --> [Route Configuration]
+
+    [Spring Cloud Gateway] --> [Load Balancer]
+}
+
+package "Security Components" {
+    [JwtConfig]
+    [Route Configuration]
+}
+
+package "Microservices" {
+    [Auth Service]
+    [Admin Service]
+    [Parents-Kids Service]
+    [Teachers-Courses Service]
+}
+
+[Load Balancer] --> [Auth Service]
+[Load Balancer] --> [Admin Service]
+[Load Balancer] --> [Parents-Kids Service]
+[Load Balancer] --> [Teachers-Courses Service]
+
+[TokenValidationService] ..> [Auth Service]: validate token (optional)
+
+note right of [JWT Authentication Filter]
+  1. Extracts JWT from Authorization header
+  2. Validates token signature and expiration
+  3. Extracts user roles and ID
+  4. Adds user info to request headers
+  5. Makes authorization decision
+end note
+
+note right of [Route Configuration]
+  Defines path routing:
+  - /auth/** -> Auth Service
+  - /admin/** -> Admin Service
+  - /parents-kids/** -> Parents-Kids Service
+  - /teachers-courses/** -> Teachers-Courses Service
+
+  Also defines role-based permissions:
+  - /admin/** requires ADMIN role
+  - /parents-kids/** requires PARENT or ADMIN role
+  - /teachers-courses/** requires TEACHER or ADMIN role
+end note
+
+@enduml

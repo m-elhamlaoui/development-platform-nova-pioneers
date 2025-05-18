@@ -1,0 +1,51 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "auth-service" {
+    [Client (Web/Mobile)] --> [SignupController]
+    [Client (Web/Mobile)] --> [AuthController]
+    [Client (Web/Mobile)] --> [TokenController]
+
+    [SignupController] --> [SignupService]
+    [AuthController] --> [AuthService]
+    [TokenController] --> [TokenService]
+
+    [SignupService] --> [UserRepository]
+    [SignupService] --> [VerificationDocumentRepository]
+    [SignupService] --> [FileStorageService]
+    [SignupService] --> [PasswordEncoder]
+
+    [AuthService] --> [UserRepository]
+    [AuthService] --> [PasswordEncoder]
+    [AuthService] --> [TokenService]
+
+    [TokenService] --> [JwtConfig]
+    [TokenService] --> [TokenRepository]
+
+    [FileStorageService] --> [FileStorageConfig]
+
+    [JwtAuthenticationFilter] --> [TokenService]
+    [JwtAuthenticationFilter] --> [SecurityContext]
+}
+
+package "Database Tables" {
+    [users]
+    [verification_documents]
+    [token_registry]
+}
+
+[UserRepository] --> [users]
+[VerificationDocumentRepository] --> [verification_documents]
+[TokenRepository] --> [token_registry]
+
+package "Security Components" {
+    [SecurityConfig]
+    [SecurityContext]
+    [PasswordEncoder]
+    [JwtConfig]
+}
+
+[SecurityConfig] --> [JwtAuthenticationFilter]
+[FileStorageConfig] --> [File System Storage]
+
+@enduml
