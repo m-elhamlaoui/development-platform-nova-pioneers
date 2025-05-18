@@ -109,7 +109,7 @@ entity "ratings" as ratings {
 entity "enrollments" as enrollments {
   * enrollment_id : SERIAL <<PK>>
   --
-  kid_id : INTEGER <<FK>>
+  user_id : INTEGER <<FK>>
   course_id : INTEGER <<FK>>
   enrolled_at : TIMESTAMPTZ
   completed_at : TIMESTAMPTZ
@@ -130,7 +130,7 @@ entity "course_reports" as course_reports {
 users ||--o{ verification_documents 
 users ||--o{ kids 
 users ||--o{ teachers 
-kids ||--o{ enrollments 
+users ||--o{ enrollments 
 courses ||--o{ enrollments 
 courses ||--o{ modules 
 modules ||--o{ lessons 
