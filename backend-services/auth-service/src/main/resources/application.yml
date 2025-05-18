@@ -1,5 +1,6 @@
 server:
   port: 9092
+
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -13,7 +14,18 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: auth-service
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
+file:
+  upload-dir: ./uploads
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.nova_pioneers.auth: DEBUG
 
 
 
