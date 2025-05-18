@@ -1,0 +1,140 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+entity "users" as users {
+  * user_id : SERIAL <<PK>>
+  --
+  email : VARCHAR
+  password_hash : VARCHAR
+  first_name : VARCHAR
+  last_name : VARCHAR
+  role : VARCHAR
+  profile_picture : VARCHAR
+  created_at : TIMESTAMPTZ
+  is_active : BOOLEAN
+  oauth_provider : VARCHAR
+  oauth_id : VARCHAR
+}
+
+entity "verification_documents" as verification_documents {
+  * document_id : SERIAL <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  document_path : VARCHAR
+  is_approved : BOOLEAN
+  approved_by : INTEGER <<FK>>
+  approved_at : TIMESTAMPTZ
+}
+
+entity "kids" as kids {
+  * kid_id : SERIAL <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  parent_id : INTEGER <<FK>>
+  birth_date : DATE
+  title : VARCHAR
+  total_xp : INTEGER
+  is_restricted : INTEGER
+}
+
+entity "teachers" as teachers {
+  * id : BIGSERIAL <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  username : VARCHAR
+  email : VARCHAR
+  first_name : VARCHAR
+  last_name : VARCHAR
+  certification_info : VARCHAR
+  join_date : DATE
+  accumulated_xp : INTEGER
+  title : VARCHAR
+}
+
+entity "courses" as courses {
+  * id : SERIAL <<PK>>
+  --
+  teacher_id : BIGINT <<FK>>
+  title : VARCHAR
+  description : VARCHAR
+  grade_level : VARCHAR
+  subject : VARCHAR
+  created_date : DATE
+  xp_value : INTEGER
+  size_category : CHAR
+  recommended_age : INTEGER
+}
+
+entity "modules" as modules {
+  * id : BIGSERIAL <<PK>>
+  --
+  title : VARCHAR
+  description : TEXT
+  sequence_order : INTEGER
+  course_id : BIGINT <<FK>>
+}
+
+entity "lessons" as lessons {
+  * id : BIGSERIAL <<PK>>
+  --
+  title : VARCHAR
+  content : TEXT
+  resource_links : TEXT
+  sequence_order : INTEGER
+  module_id : BIGINT <<FK>>
+}
+
+entity "lesson_contents" as lesson_contents {
+  * id : BIGSERIAL <<PK>>
+  --
+  lesson_id : INTEGER <<FK>>
+  sequence_order : INTEGER
+  subheading : VARCHAR
+  text : TEXT
+  image_path : VARCHAR
+  fun_fact : TEXT
+}
+
+entity "ratings" as ratings {
+  * id : BIGSERIAL <<PK>>
+  --
+  rating_value : INTEGER
+  comment : TEXT
+  course_id : BIGINT <<FK>>
+  user_id : BIGINT
+  user_type : VARCHAR
+}
+
+entity "enrollments" as enrollments {
+  * enrollment_id : SERIAL <<PK>>
+  --
+  kid_id : INTEGER <<FK>>
+  course_id : INTEGER <<FK>>
+  enrolled_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+  progress_percentage : INTEGER
+  xp_earned : INTEGER
+}
+
+entity "course_reports" as course_reports {
+  * report_id : SERIAL <<PK>>
+  --
+  enrollment_id : INTEGER <<FK>>
+  subject_report : TEXT
+  desc_report : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+' Relationships
+users ||--o{ verification_documents 
+users ||--o{ kids 
+users ||--o{ teachers 
+kids ||--o{ enrollments 
+courses ||--o{ enrollments 
+courses ||--o{ modules 
+modules ||--o{ lessons 
+lessons ||--o{ lesson_contents  
+courses ||--o{ ratings 
+enrollments ||--|| course_reports
+@enduml
