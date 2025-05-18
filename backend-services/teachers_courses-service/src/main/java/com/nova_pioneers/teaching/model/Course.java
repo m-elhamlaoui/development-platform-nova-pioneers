@@ -1,19 +1,13 @@
 package com.nova_pioneers.teaching.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
-
-
 import jakarta.validation.constraints.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Data
@@ -32,6 +26,8 @@ public class Course {
     @NotBlank(message = "Course description is required")
     @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
     private String description;
+
+    private String thumbnail;
 
     @NotBlank(message = "Grade level is required")
     private String gradeLevel;
@@ -58,6 +54,11 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Module> modules;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sequenceOrder ASC")
+    private List<Lesson> lessons;
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Rating> ratings;
 
@@ -72,4 +73,17 @@ public class Course {
                 .sum();
         return sum / ratings.size();
     }
+
+    // Helper method to get number of reviews
+    @Transient
+    public Integer getReviewCount() {
+        return ratings != null ? ratings.size() : 0;
+    }
+
+    // Helper method to get instructor name
+    @Transient
+    public String getInstructorName() {
+        return teacher != null ? teacher.getFirstName() + " " + teacher.getLastName() : "";
+    }
+
 }
