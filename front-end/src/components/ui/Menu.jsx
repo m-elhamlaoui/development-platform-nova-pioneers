@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import dashlogo from "../../assets/np-logo.png";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { House, BookMarked, Baby, Heart, Settings, LogOut, X } from "lucide-react";
 
 export default function Menu() {
@@ -32,10 +32,41 @@ export default function Menu() {
           <div className="menu-links-container">
             <h1 className="text-gray-600 font-semibold mb-2">Overview</h1>
             <div className="menu-links flex flex-col gap-2 text-gray-700">
-              <Link to={{pathname: "/parents-dashboard"}} className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <House size={20} /> <p>Dashboard</p></Link>
-              <Link to={{pathname: "/parents-dashboard/lessons"}} className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <BookMarked size={20} /> <p>Lessons</p></Link>
-              <Link to={{pathname: "/parents-dashboard/kids"}} className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Baby size={20} /> <p>My kids</p></Link>
-              {/* <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Heart size={20} /> <p>Favorites</p></Link> */}
+             <NavLink
+              to="/parents-dashboard"
+              end
+              className={({ isActive }) =>
+                `menu-link flex items-center gap-2 transition ${
+                  isActive ? 'text-[#0B3D91] font-semibold' : 'text-gray-700 hover:text-[#0B3D91]'
+                }`
+              }
+            >
+              <House size={20} /> <p>Dashboard</p>
+            </NavLink>
+
+
+              <NavLink
+                to="/parents-dashboard/lessons"
+                className={({ isActive }) =>
+                  `menu-link flex items-center gap-2 transition ${
+                    isActive ? 'text-[#0B3D91] font-semibold' : 'text-gray-700 hover:text-[#0B3D91]'
+                  }`
+                }
+              >
+                <BookMarked size={20} /> <p>Lessons</p>
+              </NavLink>
+              <NavLink
+                to="/parents-dashboard/kids"
+                className={({ isActive }) =>
+                  `menu-link flex items-center gap-2 transition ${
+                    isActive ? 'text-[#0B3D91] font-semibold' : 'text-gray-700 hover:text-[#0B3D91]'
+                  }`
+                }
+              >
+                <Baby size={20} /> <p>My kids</p>
+              </NavLink>
+
+                            {/* <Link className="menu-link flex items-center gap-2 hover:text-red-600 transition"> <Heart size={20} /> <p>Favorites</p></Link> */}
             </div>
           </div>
           <div className="children-container">
