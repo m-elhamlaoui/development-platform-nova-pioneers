@@ -2,9 +2,13 @@ package com.nova_pioneers.teaching.model;
 
 import lombok.Data;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Data
+@Setter
+@Getter
 @Table(name = "lessons")
 public class Lesson {
     @Id

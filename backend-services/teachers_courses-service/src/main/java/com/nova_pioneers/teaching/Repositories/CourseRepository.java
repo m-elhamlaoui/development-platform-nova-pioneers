@@ -36,4 +36,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             @Param("sizeCategory") String sizeCategory,
             @Param("minAge") Integer minAge,
             @Param("maxAge") Integer maxAge);
+    List<Course> findBySubjectAndGradeLevelAndRecommendedAgeBetween(
+            String subject, String gradeLevel, Integer minAge, Integer maxAge);
 }

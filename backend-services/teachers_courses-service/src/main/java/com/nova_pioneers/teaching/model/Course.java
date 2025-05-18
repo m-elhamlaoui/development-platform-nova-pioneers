@@ -3,7 +3,7 @@ package com.nova_pioneers.teaching.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -12,9 +12,13 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Data
+@Setter
+@Getter
 @Table(name = "courses")
 public class Course {
     @Id

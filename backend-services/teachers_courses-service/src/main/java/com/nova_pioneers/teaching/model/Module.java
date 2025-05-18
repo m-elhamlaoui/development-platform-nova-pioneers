@@ -2,10 +2,15 @@ package com.nova_pioneers.teaching.model;
 
 import lombok.Data;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
 @Data
+@Setter
+@Getter
 @Table(name = "modules")
 public class Module {
     @Id
