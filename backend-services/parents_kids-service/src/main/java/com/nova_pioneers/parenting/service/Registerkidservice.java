@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nova_pioneers.parenting.model.Kidadd;
-import com.nova_pioneers.parenting.model.Registrationrepository;
+import com.nova_pioneers.parenting.model.Registerkid;
+import com.nova_pioneers.parenting.repositories.Kidaddrepo;
+import com.nova_pioneers.parenting.repositories.Registrationrepository;
 
 import jakarta.transaction.Transactional;
-
-import com.nova_pioneers.parenting.model.Kidaddrepo;
-import com.nova_pioneers.parenting.model.Registerkid;
 
 
 @Service

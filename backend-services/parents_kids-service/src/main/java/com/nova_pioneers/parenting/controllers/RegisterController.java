@@ -2,10 +2,10 @@ package com.nova_pioneers.parenting.controllers;
 
 import com.nova_pioneers.parenting.model.Kidadd;
 import com.nova_pioneers.parenting.model.Registerkid;
-import com.nova_pioneers.parenting.model.Registrationrepository;
+import com.nova_pioneers.parenting.repositories.Kidaddrepo;
+import com.nova_pioneers.parenting.repositories.Registrationrepository;
 import com.nova_pioneers.parenting.service.Registerkidservice;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.nova_pioneers.parenting.model.Kidaddrepo;
 import org.springframework.web.bind.annotation.*;
 
 

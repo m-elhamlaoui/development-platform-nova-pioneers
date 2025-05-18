@@ -5,16 +5,16 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "kids")
-public class Kidadd { // Consider renaming to 'Kid' for clarity
+public class Kidadd { 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "kid_id")
-    private Long kidId; // Renamed from kid_id to match findByKidId
+    private Long kidId;
 
-    // Remove @OneToOne on kid_id; add a separate foreign key for the relationship
+    
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", unique = true) // Use a separate column
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", unique = true) 
     private Registerkid user;
 
     @Column(name = "parent_id")
