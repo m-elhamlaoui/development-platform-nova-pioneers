@@ -77,6 +77,7 @@ CREATE TABLE courses (
     description VARCHAR(1000) NOT NULL CHECK (LENGTH(description) BETWEEN 10 AND 1000),
     grade_level VARCHAR(50) NOT NULL,
     subject VARCHAR(100) NOT NULL,
+    thumbnail VARCHAR(100) NOT NULL,
     created_date DATE,
     xp_value INTEGER NOT NULL CHECK (xp_value >= 0),
     size_category CHAR(1) NOT NULL CHECK (size_category IN ('S', 'M', 'L')),

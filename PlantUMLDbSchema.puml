@@ -60,6 +60,7 @@ entity "courses" as courses {
   description : VARCHAR
   grade_level : VARCHAR
   subject : VARCHAR
+  thumbnail: VARCHAR
   created_date : DATE
   xp_value : INTEGER
   size_category : CHAR
