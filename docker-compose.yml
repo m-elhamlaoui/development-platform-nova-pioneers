@@ -57,6 +57,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
       SPRING_DATASOURCE_USERNAME: pioneer
       SPRING_DATASOURCE_PASSWORD: nova25!X
+      SPRING_MAIL_USERNAME: dev-email@example.com
+      NOVA_CONTACT_RECIPIENT: dev-recipient@example.com
 
   api-gateway:
     build:
