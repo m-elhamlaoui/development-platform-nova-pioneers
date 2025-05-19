@@ -27,6 +27,10 @@ logging:
     org.springframework.security: DEBUG
     com.nova_pioneers.auth: DEBUG
 
+jwt: #will be changet in set in.env in prod
+  secret: SB4cgMKW7XkP83H5z94FfHd8QXYZVaJ2GtRbnLm5uEvsUwC6DTjeKqNyA7pZkrx
+  expiration: 86400000 # 24 hours in milliseconds
+
 
 
 
