@@ -16,9 +16,11 @@ rectangle "Authentication Service" as auth {
   [OAuth Integration] as oauth
 }
 
-rectangle "User Management" {
-  [Parent Service] as parent
-  [Kid Management] as kid
+rectangle "Parents & Kids Service" as parentkid {
+  [Parent Management] as parent
+  [Kid Profile Management] as kid
+  [Enrollment System] as enrollment
+  [XP & Achievement Tracking] as xp
 }
 
 cloud "NASA API" as nasa {
@@ -26,7 +28,7 @@ cloud "NASA API" as nasa {
   [Other NASA Data] as other
 }
 
-package "Teacher & Course Services" #LightBlue {
+rectangle "Teacher & Course Services" as teaching {
   [Teacher Management] as teacher
   [Course Management] as course
   [Content Organization] as content
@@ -52,5 +54,6 @@ content --> courseDb : Organize
 rating --> courseDb : Store Feedback
 parent --> rating : Submit Ratings
 kid --> courseDb : Access Content
-kid --> progressDb : Track Progress
+enrollment --> courseDb : Manage Enrollments
+xp --> progressDb : Track Progress
 @enduml
