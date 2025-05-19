@@ -1,0 +1,50 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "parent-kid-service" {
+
+    [Client (Web/Mobile)] --> [KidController]
+    [Client (Web/Mobile)] --> [ParentController]
+    [Client (Web/Mobile)] --> [RatingController]
+    [Client (Web/Mobile)] --> [ReportController]
+
+    [KidController] --> [KidService]
+    [ParentController] --> [ParentService]
+    [RatingController] --> [RatingService]
+    [ReportController] --> [ReportService]
+
+    [KidService] --> [UserRepository]
+    [KidService] --> [KidRepository]
+    [KidService] --> [EnrollmentRepository]
+
+    [ParentService] --> [UserRepository]
+
+    [RatingService] --> [EnrollmentRepository]
+    [RatingService] --> [RatingRepository]
+
+    [ReportService] --> [EnrollmentRepository]
+    [ReportService] --> [CourseReportRepository]
+
+    [KidService] --> [XPService]
+    [XPService] --> [KidRepository]
+    [XPService] --> [XPTitleConfig]
+
+}
+
+package "Database Tables" {
+    [users]
+    [kids]
+    [teachers]
+    [courses]
+    [enrollments]
+    [ratings]
+    [course_reports]
+}
+
+[UserRepository] --> [users]
+[KidRepository] --> [kids]
+[EnrollmentRepository] --> [enrollments]
+[RatingRepository] --> [ratings]
+[CourseReportRepository] --> [course_reports]
+
+@enduml

@@ -1,57 +1,207 @@
-# Space Exploration Learning Platform for Kids
-## Project Overview
-Our project is a kid-friendly web-based learning platform designed to educate young learners about space and exploration. The platform will use NASA APIs to provide real-time space-related content in an age-appropriate manner, track children's progress through a fun XP-based system, and offer an interactive and engaging learning experience with colorful visuals and simplified content.
+# Nova Pioneers Space Learning Platform - Technical Report
 
-## Technologies Used
-### Frontend:
-- **React.js**: For building the user interface.
-- **Tailwind CSS**: For styling and responsiveness.
-- **Framer Motion**: For smooth animations and interactive elements that appeal to kids.
+## Table of Contents
+- [1. Introduction](#1-introduction)
+    - [1.1 Context and Overview](#11-context-and-overview)
+    - [1.2 Vision and Mission](#12-vision-and-mission)
+    - [1.3 Project Objectives](#13-project-objectives)
+- [2. Platform Overview](#2-platform-overview)
+    - [2.1 Key Features](#21-key-features)
+    - [2.2 User Personas](#22-user-personas)
+- [3. System Architecture](#3-system-architecture)
+    - [3.1 High-Level Architecture](#31-high-level-architecture)
+    - [3.2 Microservices Breakdown](#32-microservices-breakdown)
+        - [API Gateway](#api-gateway)
+        - [Auth Service](#auth-service)
+        - [Parents-Kids Service](#parents-kids-service)
+        - [Teachers/Courses Service](#teacherscourses-service)
+    - [3.3 Database Schema](#33-database-schema)
+    - [3.4 Frontend Architecture](#34-frontend-architecture)
+- [4. Technology Stack](#4-technology-stack)
+    - [4.1 Backend Technologies](#41-backend-technologies)
+    - [4.2 Frontend Technologies](#42-frontend-technologies)
+    - [4.3 DevOps Tools](#43-devops-tools)
+    - [4.4 External APIs](#44-external-apis)
+- [5. Collaboration and Development Process](#5-collaboration-and-development-process)
+    - [5.1 Development Workflow](#51-development-workflow)
+    - [5.2 Code Quality Measures](#52-code-quality-measures)
 
-### Backend:
-- **Java & Spring Boot**: Using the MVC design pattern for structuring the backend logic.
-- **Spring Security**: For authentication and user management.
-- **PostgreSQL**: As the primary database for storing user progress, XP, and other relevant data.
+## 1. Introduction
 
-### APIs:
-- **NASA APIs**: To fetch space-related data such as the Astronomy Picture of the Day (APOD) and other kid-friendly exploration-related information.
+### 1.1 Context and Overview
+Nova Pioneers is a web-based learning platform designed for young learners interested in space exploration. The platform provides age-appropriate educational content about space, leveraging NASA APIs to deliver real-time space-related information in an engaging format for children. The target audience is school-age children, with content tailored for different age groups.
 
-### Collaboration:
-- **GitHub**: For version control and team collaboration.
+### 1.2 Vision and Mission
+Our mission is to democratize space education and inspire the next generation of astronomers, astrophysicists, and space enthusiasts. We believe that understanding our universe is the first step toward protecting our planet and expanding human knowledge. The platform aims to create a global community of young learners united by curiosity about the cosmos.
 
-## Features
-1. **Kid-Friendly Landing Page**:
-    - Displays a simplified version of NASA's Astronomy Picture of the Day (APOD) with kid-appropriate descriptions.
-    - Colorful and engaging introduction to the platform with animated characters.
-    - Easy navigation for young users with simple sign-up option.
+### 1.3 Project Objectives
+- Create an engaging, kid-friendly interface for space education
+- Implement a secure microservices architecture with distinct responsibility domains
+- Build an XP-based progress tracking system to motivate learning
+- Enable educators to contribute content with appropriate review mechanisms
+- Provide parents with oversight of their children's learning progress
 
-2. **User Authentication & Profiles**:
-    - Child-friendly account setup with appropriate access levels.
-    - Secure sign-up and login system (JWT-based authentication).
-    - Hashed passwords for secure authentication.
-    - Kid-friendly dashboard with visual progress tracking and achievement badges.
+### 1.4 Use Case Diagram
+![Use case diagram](Report/images/usecase.png)
+## 2. Platform Overview
 
-3. **Example of Kid-Focused Courses**:
-    - "Our Amazing Galaxy" - simplified explanations with vibrant visuals.
-    - "Wow! Space Facts" - surprising and fun facts about space tailored for kids.
-    - Interactive quizzes with immediate feedback and encouraging messages.
-    - Courses presented with age-appropriate language, animations, and illustrations.
+### 2.1 Key Features
+- Kid-friendly interface with space-themed design
+- Real-time space content integration via NASA APIs
+- XP-based achievement system with badges and rewards
+- Teacher content contribution and verification workflow
+- Parent dashboard for monitoring child progress
+- Course rating system with age-appropriate feedback mechanisms
 
-4. **Educator-Contributed Content**:
-    - Teachers or space enthusiasts can contribute kid-friendly content.
-    - Submitted materials go through a thorough review process to ensure age-appropriateness.
-    - Once approved, the content will be available for children to explore and learn from.
+### 2.2 User Personas
+- **Kids**: Primary learners accessing educational content
+- **Parents**: Monitor children's progress and manage accounts
+- **Teachers**: Create and contribute educational content
+- **Administrators**: Manage platform operations and content approval
 
-5. **Kid-Friendly Rating System**:
-    - Children can rate courses using simple emoji reactions
-    - Ratings help highlight the most engaging courses for different age groups.
-    - The rating system will encourage content creators to provide high-quality, age-appropriate material.
+## 3. System Architecture
 
-6. **Progress Tracking & Reward System**:
-    - Children earn stars and badges when they complete lessons and quizzes.
-    - Visual progress tracker that shows learning achievements and milestones.
-    - Virtual rewards to keep kids motivated and engaged.
+### 3.1 High-Level Architecture
 
-7. **Support**:
-    - Simple contact form to submit concerns and issues.
-    - Admin dashboard to manage support tickets and content moderation.
+The platform employs a microservices architecture with distinct services handling specific functionality domains. The architecture diagram (Report/images/overview.png) illustrates the high-level component interactions.
+
+![High-Level Architecture](Report/images/general.svg)
+
+### 3.2 Microservices Breakdown
+
+#### API Gateway
+The API Gateway serves as the single entry point for all client requests, handling routing, load balancing, and security filters. It uses Spring Cloud Gateway to direct traffic to appropriate microservices based on URL paths.
+
+![API Gateway Architecture](Report/images/gateway.svg)
+
+Key components:
+- Route predicate factory for path-based service routing
+- JWT authentication filter for token validation
+- CORS filter for cross-origin requests
+- Rate limiting for preventing abuse
+
+#### Auth Service
+The authentication service manages user registration, login, and security token management. It handles both parent and teacher registration flows, including document verification for teachers.
+
+![Auth Service Architecture](Report/images/auth.svg)
+
+Key components:
+- User registration (separate flows for parents and teachers)
+- Password encryption and authentication
+- JWT token generation and validation
+- Document storage for teacher verification
+
+#### Parents-Kids Service
+This microservice manages parent-child relationships and learning progression on the platform.
+![Parents/Kids Service Architecture](Report/images/parenting.svg)
+## Core Responsibilities
+- Parent/kid profile management
+- Course enrollment and progress tracking
+- Rating and reporting system
+- XP accumulation and achievement titles
+
+## Key Flows
+
+### Profile Management
+- Create and link kid accounts to parent profiles
+- Update user information and preferences
+- Manage account restrictions and permissions
+
+### Learning Progression
+- Track course completion percentage and milestones
+- Award XP based on completed activities
+- Assign achievement titles based on accumulated XP
+
+| XP Range | Title     |
+|----------|-----------|
+| 0-199    | Newbie    |
+| 200-499  | Explorer  |
+| 500-999  | Inventor  |
+| 1000+    | Astronaut |
+
+### Feedback System
+- Submit and retrieve course ratings (1-5 scale)
+- Process course reports from teachers
+- Generate progress summaries for parents
+
+### Database Interactions
+- Primary tables: users, kids, enrollments, progress_logs
+- Secondary tables: course_ratings, course_reports, xp_titles
+
+
+#### Teachers/Courses Service
+The teaching service handles course creation, management, and organization by educators. It supports structured learning content with modular organization.
+
+![Teachers/Courses Service Architecture](Report/images/teaching.svg)
+
+Key components:
+1.	Teacher Management
+      o	Create and manage teacher profiles
+      o	Track teacher certification information
+      o	Upgrade teacher titles based on accumulated XP
+      o	Manage teacher credentials and verification
+2.	Course Management
+      o	Create and manage educational courses about space and exploration
+      o	Organize content into modules, lessons, and content sections
+      o	Define XP values based on course size and complexity
+      o	Target content to appropriate age groups and grade levels
+      o	Support for ratings and feedback on courses
+
+### 3.3 Database Schema
+
+The database uses a normalized PostgreSQL schema optimized for educational content delivery and progress tracking. Key entities include:
+
+- **Users**: Central user table with role-based access control
+- **Verification Documents**: For teacher credential verification
+- **Kids**: Child profiles linked to parent accounts
+- **Courses**: Educational content organized by categories
+- **Enrollments**: Tracks kid enrollment in courses
+- **Progress Logs**: Detailed learning activity records
+- **Course Ratings**: Feedback mechanism for content quality
+
+### 3.4 Frontend Architecture
+
+The frontend is built with React and employs a component-based architecture with Tailwind CSS for styling and Framer Motion for animations.
+
+Key components:
+- Landing page with NASA API integration
+- User authentication forms
+- Role-specific dashboards
+- Course browsing and viewing interface
+- Interactive learning components
+
+## 4. Technology Stack
+
+### 4.1 Backend Technologies
+- **Java 21** with Spring Boot 3.4.x
+- **Spring Security** for authentication
+- **Spring Data JPA** for data access
+- **PostgreSQL** for data persistence
+- **Spring Cloud Gateway** for API routing
+
+### 4.2 Frontend Technologies
+- **React 19** for UI components
+- **Tailwind CSS 4** for styling
+- **Framer Motion** for animations
+- **React Router** for client-side routing
+- **Vite** for frontend build and development
+
+### 4.3 DevOps Tools
+- **Docker** for containerization
+- **Docker Compose** for multi-container orchestration
+- **Maven** for Java dependency management and build
+- **npm** for JavaScript dependency management
+
+### 4.4 External APIs
+- **NASA APIs**: Integration with Astronomy Picture of the Day (APOD) and other space data sources
+
+## 5. Collaboration and Development Process
+
+### 5.1 Development Workflow
+The project employs a feature-branch Git workflow with code reviews before merging to the main branch. The microservices architecture allows for parallel development across different system components.
+
+### 5.2 Code Quality Measures
+- Consistent code style across services
+- Comprehensive exception handling
+- Service-specific error handling
+- Containerized development environments for consistency
