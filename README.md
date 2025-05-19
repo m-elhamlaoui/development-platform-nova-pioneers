@@ -41,6 +41,8 @@ Our mission is to democratize space education and inspire the next generation of
 - Enable educators to contribute content with appropriate review mechanisms
 - Provide parents with oversight of their children's learning progress
 
+### 1.4 Use Case Diagram
+![Use case diagram](Report/images/usecase.png)
 ## 2. Platform Overview
 
 ### 2.1 Key Features
