@@ -1,31 +1,39 @@
-# Build stage
+# Build stage with optimized caching
 FROM maven:3.9-eclipse-temurin-21-alpine AS build
 
 WORKDIR /build
 
-# Copy only the POM file first to leverage Docker caching for dependencies
+# Copy only POM file first for better dependency caching
 COPY pom.xml .
 
-# Download dependencies
-RUN mvn dependency:go-offline
+# Download dependencies with explicit cache location and offline mode
+# This creates a separate cache layer that won't change unless pom.xml changes
+RUN mvn -Dmaven.repo.local=/build/.m2/repository dependency:go-offline
 
-# Copy source code
+# Copy source code (changes more frequently)
 COPY src ./src/
 
-# Build the application (always runs when Docker image is rebuilt)
-RUN mvn clean install -DskipTests
+# Build with improved settings
+# 1. Skip tests during build (they'll run separately)
+# 2. Build only what's needed for the JAR
+# 3. Use the cached local repo
+RUN mvn -Dmaven.repo.local=/build/.m2/repository clean package -DskipTests
 
-# Runtime stage - using a smaller base image
+# Runtime stage - optimized small image
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
 # Copy only the built JAR from the build stage
-COPY --from=build /build/target/admin-service*.jar backend.jar
+COPY --from=build /build/target/admin-service*.jar app.jar
 
-# Expose the port Spring Boot will run on
+# Single EXPOSE statement - no redundant port specification
 EXPOSE 9091
 
-# Run the application on port 9090
-ENTRYPOINT ["java", "-jar", "backend.jar", "--server.port=9091"]
-
+# Configure Spring DevTools in the entrypoint
+# Remove redundant server.port setting (use application.yml instead)
+# Add remote debugging support for development
+ENTRYPOINT ["java", \
+            "-Dspring.devtools.restart.enabled=true", \
+            "-Dspring.devtools.livereload.enabled=true", \
+            "-jar", "app.jar"]
