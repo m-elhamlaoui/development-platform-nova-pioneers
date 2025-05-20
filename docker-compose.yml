@@ -49,6 +49,7 @@ services:
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
     volumes:
+      - auth-uploads:/app/uploads
       - ./backend-services/auth-service/src:/build/src
       - ./backend-services/auth-service/target:/build/target
       - maven-repo:/root/.m2/repository
@@ -135,3 +136,4 @@ services:
 volumes:
   postgres-data:
   maven-repo:
+  auth-uploads:

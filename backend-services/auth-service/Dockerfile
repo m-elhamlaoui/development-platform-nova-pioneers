@@ -37,3 +37,4 @@ ENTRYPOINT ["java", \
             "-Dspring.devtools.restart.enabled=true", \
             "-Dspring.devtools.livereload.enabled=true", \
             "-jar", "app.jar"]
+
