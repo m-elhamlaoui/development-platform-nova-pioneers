@@ -10,7 +10,7 @@ public class CourseRating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ratingId;
 
     @Column(name = "rating_value")
     private Integer ratingValue;
@@ -19,12 +19,16 @@ public class CourseRating {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "courseId")
     private Course course;
      
-    @OneToMany
+    @ManyToOne
     @Column(name = "user_id")
     private Registerkid userId; 
+
+    
+
+
 
     @Column(name = "user_type")
     private String userType; 
@@ -32,12 +36,12 @@ public class CourseRating {
     // Getters and Setters
 
 
-    public Long getId() {
-        return id;
+    public Long getRatingId() {
+        return ratingId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRatingId(Long ratingId) {
+        this.ratingId = ratingId;
     }
 
     public Integer getRatingValue() {

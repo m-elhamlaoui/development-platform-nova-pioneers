@@ -1,5 +1,7 @@
 package com.nova_pioneers.parenting.repositories;
 
+import java.util.Optional;
+
 import com.nova_pioneers.parenting.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +10,9 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
+
+   Optional<Course> findById(Long courseId);
+
 
     // Find all courses by teacher ID
     List<Course> findByTeacherId(Long teacherId);

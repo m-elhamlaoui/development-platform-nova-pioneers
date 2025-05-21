@@ -12,6 +12,11 @@ public class CourseReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
 
+    @ManyToOne
+    @JoinColumn(name="courseId")
+    private Course course;
+
+
     @OneToOne
     @JoinColumn(name = "enrollment_id")
     private Enrollments enrollment;
@@ -66,7 +71,12 @@ public class CourseReport {
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    public Course getCourse() {
+        return course;
+    }
+    public void setCourse(Course course) {
+        this.course = course;
 
 }
-
+}
 

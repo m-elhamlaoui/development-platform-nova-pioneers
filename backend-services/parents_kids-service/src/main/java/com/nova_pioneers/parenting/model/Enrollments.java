@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "enrollments", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"kid_id", "course_id"})
-})
+    })
 public class Enrollments {
 
     @Id
@@ -15,11 +15,11 @@ public class Enrollments {
     private Long enrollmentId;
 
     @ManyToOne
-    @JoinColumn(name = "kid_id", nullable = false)
+    @JoinColumn(name = "kid_id")
     private Kidadd kid;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @Column(name = "enrolled_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")

@@ -5,10 +5,14 @@ import org.springframework.stereotype.Repository;
 
 import com.nova_pioneers.parenting.model.CourseRating;
 
-import java.util.Optional;
+import java.util.List;
+
 
 
 @Repository
+
 public interface RatingRepository extends JpaRepository<CourseRating, Long> {
-    Optional<CourseRating> findByUserIdAndCourseId(Long userId, Long courseId);
+    
+    List<CourseRating> findByCourseId(Long courseId);
+    List<CourseRating> findByUserId(Long userId);
 }

@@ -6,13 +6,18 @@ import com.nova_pioneers.parenting.repositories.Kidaddrepo;
 import com.nova_pioneers.parenting.repositories.Registrationrepository;
 import com.nova_pioneers.parenting.service.Registerkidservice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import com.nova_pioneers.parenting.model.CourseRating;
+import com.nova_pioneers.parenting.service.RatingandReportService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
 
 @RestController
-public class RegisterController {
+public class KidController {
 
     @Autowired
     private Registrationrepository registrationrepository;
@@ -49,6 +54,32 @@ public class RegisterController {
          return "kid deleted";
        
      }
+
+
+   @RequestMapping("/courses/{courseId}/ratings")
+       public class RatingController {
+
+    @Autowired
+    private RatingandReportService ratingService;
+
+    @GetMapping
+    public ResponseEntity<List<CourseRating>> getRatingsByCourse(@PathVariable Long courseId) {
+        return ResponseEntity.ok(ratingService.getRatingsByCourse(courseId));
+    }
+
+    @PostMapping
+    public ResponseEntity<CourseRating> addRating(
+            @PathVariable Long courseId, @RequestBody CourseRating rating) {
+        return new ResponseEntity<>(ratingService.saveRating(rating, courseId), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{ratingId}")
+    public ResponseEntity<Void> deleteRating(@PathVariable Long ratingId) {
+        ratingService.deleteRating(ratingId);
+        return ResponseEntity.noContent().build();
+    }
+}
+
 
 
     @GetMapping("/testdb")

@@ -1,15 +1,17 @@
 package com.nova_pioneers.parenting.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "courses")
+@Table(name = "course")
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long courseId;
 
    
     @Column(name="Title")
@@ -27,28 +29,31 @@ public class Course {
     @Column(name = "createdDate")
     private LocalDate createdDate;
 
+     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<CourseRating> ratings;
+
     
-    @Column(name = "xp_value", nullable = false)
+    @Column(name = "xp_value")
     private Integer xpValue = 0;
 
-    @Column(name = "size_category", nullable = false, length = 1)
+    @Column(name = "size_category")
     private String sizeCategory;
 
-    @Column(name = "recommended_age", nullable = false)
+    @Column(name = "recommended_age")
     private Integer recommendedAge;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @JoinColumn(name = "teacherId")
     private Teachers teacher;
 
     // Getters and Setters
 
     public Long getId() {
-        return id;
+        return courseId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public String getTitle() {

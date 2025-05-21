@@ -9,7 +9,7 @@ import com.nova_pioneers.parenting.model.Registerkid;
 import com.nova_pioneers.parenting.repositories.Kidaddrepo;
 import com.nova_pioneers.parenting.repositories.Registrationrepository;
 
-import jakarta.transaction.Transactional;
+
 
 
 @Service
@@ -38,7 +38,7 @@ public class Registerkidservice {
     }
 
 
-    @Transactional
+  
     public Registerkid registerNewKid(Registerkid userkid) {
        boolean userExists = registrationrepository
                             .findByEmail(userkid.getEmail())

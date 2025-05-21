@@ -1,73 +1,67 @@
 package com.nova_pioneers.parenting.service;
 
-import java.time.ZonedDateTime;
+import com.nova_pioneers.parenting.repositories.CourseRepository;
+import com.nova_pioneers.parenting.repositories.RatingRepository;
+import com.nova_pioneers.parenting.repositories.CourseReportRepository;
+import com.nova_pioneers.parenting.model.Course;
+import com.nova_pioneers.parenting.model.CourseRating;
+import com.nova_pioneers.parenting.model.CourseReport;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nova_pioneers.parenting.model.CourseRating;
-
-import com.nova_pioneers.parenting.model.Course;
-import com.nova_pioneers.parenting.model.CourseReport;
-import com.nova_pioneers.parenting.repositories.CourseReportRepository;
-import com.nova_pioneers.parenting.repositories.EnrollmentRepository;
-import com.nova_pioneers.parenting.repositories.RatingRepository;
-import com.nova_pioneers.parenting.model.Enrollments;
-import com.nova_pioneers.parenting.repositories.CourseRepository;
-
 import java.util.List;
+import java.util.Optional;
 
+@Service
+public class RatingandReportService {
 
+    @Autowired
+    private RatingRepository ratingRepository;
 
-    @Service
-public class RatingAndReportService {
+    @Autowired
+    private CourseReportRepository coursereportRepository;
 
-    private final RatingRepository ratingRepo;
-    private final CourseReportRepository reportRepo;
-    private final EnrollmentRepository enrollmentRepo;
-    private final CourseRepository courseRepo;
+    @Autowired
+    private CourseRepository courseRepository;
 
-    public RatingAndReportService(RatingRepository ratingRepo, 
-                                  CourseReportRepository reportRepo,
-                                  EnrollmentRepository enrollmentRepo,
-                                  CourseRepository courseRepo) {
-        this.ratingRepo = ratingRepo;
-        this.reportRepo = reportRepo;
-        this.enrollmentRepo = enrollmentRepo;
-        this.courseRepo = courseRepo;
+   
+    public List<CourseRating> getRatingsByCourse(Long courseId) {
+        return ratingRepository.findByCourseId(courseId);
     }
 
-    public CourseRating rateCourse(Long userId, Long courseId, int ratingValue, String comment, String userType) {
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+   
+    public CourseRating saveRating(CourseRating rating, Long courseId) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (!course.isPresent()) {
+            throw new RuntimeException("Course not found with id: " + courseId);
+        }
 
-        CourseRating rating = ratingRepo.findByUserIdAndCourseId(userId, courseId)
-                .orElse(new CourseRating());
-
-        rating.setUserId(userId);
-        rating.setUserType(userType);
-        rating.setCourse(course);
-        rating.setRatingValue(ratingValue);
-        rating.setComment(comment);
-
-        return ratingRepo.save(rating);
+        rating.setCourse(course.get());
+        return ratingRepository.save(rating);
     }
 
-    public CourseReport reportCourse(Long enrollmentId, String subject, String desc) {
-        Enrollments enrollment = enrollmentRepo.findById(enrollmentId)
-                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
-
-        CourseReport report = new CourseReport();
-        report.setEnrollment(enrollment);
-        report.setSubjectReport(subject);
-        report.setDescReport(desc);
-        report.setCreatedAt(ZonedDateTime.now());
-
-        return reportRepo.save(report);
+    public void deleteRating(Long id) {
+        ratingRepository.deleteById(id);
     }
 
-    public List<CourseReport> getReportsForKid(Long kidId) {
-        return reportRepo.findByEnrollmentKidKidId(kidId);
+   
+    public List<CourseReport> getReportsByCourse(Long courseId) {
+        return coursereportRepository.findByCourseId(courseId);
+    }
+
+   
+    public CourseReport saveReport(CourseReport report, Long courseId) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (!course.isPresent()) {
+            throw new RuntimeException("Course not found with id: " + courseId);
+        }
+
+        report.setCourse(course.get());
+        return coursereportRepository.save(report);
+    }
+
+    public void deleteReport(Long reportId) {
+        coursereportRepository.deleteById(reportId);
     }
 }
-
-    
