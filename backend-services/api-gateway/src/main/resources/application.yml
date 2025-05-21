@@ -1,6 +1,20 @@
 server:
   port: 9000
+# Add this to auth-service/src/main/resources/application.yml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    prometheus:
+     enabled: true
 
+# OpenTelemetry configuration
+otel:
+  exporter:
+    otlp:
+      endpoint: http://lgtm:4317
 spring:
   application:
     name: api-gateway

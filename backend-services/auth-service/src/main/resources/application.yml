@@ -1,6 +1,24 @@
 server:
   port: 9092
+# Add this to auth-service/src/main/resources/application.yml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
+# OpenTelemetry configuration
+otel:
+  exporter:
+    otlp:
+      endpoint: http://lgtm:4317
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}

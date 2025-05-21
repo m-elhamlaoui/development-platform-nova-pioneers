@@ -1,4 +1,28 @@
+networks:
+  macro:
 services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - C:/Users/asus/development-platform-nova-pioneers/backend-services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+
+    ports:
+      - "9090:9090"
+    networks:
+      - macro
+  lgtm:
+    image: grafana/otel-lgtm
+    container_name: lgtm
+    restart: unless-stopped
+    ports:
+      - "4317:4317"  # OTLP gRPC
+      - "4318:4318"  # OTLP HTTP
+      - "3002:3000"  # Grafana UI (fixed spacing)
+    networks:
+      - macro
   db:
     image: postgres:17
     environment:
@@ -14,7 +38,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+    networks:
+      - macro
   admin-service:
     container_name: admin-service
     build: ./backend-services/admin-service
@@ -33,7 +58,8 @@ services:
       - ./backend-services/admin-service/src:/build/src
       - ./backend-services/admin-service/target:/build/target
       - maven-repo:/root/.m2/repository
-
+    networks:
+      - macro
   auth-service:
     container_name: auth-service
     build: ./backend-services/auth-service
@@ -42,18 +68,22 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
       SPRING_DATASOURCE_USERNAME: pioneer
       SPRING_DATASOURCE_PASSWORD: nova25!X
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+
     volumes:
       - auth-uploads:/app/uploads
       - ./backend-services/auth-service/src:/build/src
       - ./backend-services/auth-service/target:/build/target
       - maven-repo:/root/.m2/repository
-
+      - ./otel-agent.jar:/app/otel-agent.jar
+    networks:
+      - macro
   parents-kids-service:
     container_name: parents-kids-service
     build: ./backend-services/parents_kids-service
@@ -72,7 +102,8 @@ services:
       - ./backend-services/parents_kids-service/src:/build/src
       - ./backend-services/parents_kids-service/target:/build/target
       - maven-repo:/root/.m2/repository
-
+    networks:
+      - macro
   teachers-courses-service:
     container_name: teachers-courses-service
     build: ./backend-services/teachers_courses-service
@@ -91,7 +122,8 @@ services:
       - ./backend-services/teachers_courses-service/src:/build/src
       - ./backend-services/teachers_courses-service/target:/build/target
       - maven-repo:/root/.m2/repository
-
+    networks:
+      - macro
   api-gateway:
     build:
       context: ./backend-services/api-gateway
@@ -113,7 +145,8 @@ services:
       - ./backend-services/api-gateway/src:/app/src
       - ./backend-services/api-gateway/target:/app/target
       - maven-repo:/root/.m2/repository
-
+    networks:
+      - macro
   frontend:
     container_name: nova-pioneers-front-end
     build:
@@ -132,7 +165,8 @@ services:
       - CHOKIDAR_USEPOLLING=1
       - VITE_PORT=5173
     command: [ "npm", "run", "dev", "--", "--host" ]
-
+    networks:
+      - macro
 volumes:
   postgres-data:
   maven-repo:

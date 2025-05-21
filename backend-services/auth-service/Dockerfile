@@ -26,9 +26,14 @@ WORKDIR /app
 
 # Copy only the built JAR from the build stage
 COPY --from=build /build/target/auth-service*.jar app.jar
+COPY ./otel-agent.jar /app/otel-agent.jar
+
+ENV OTEL_SERVICE_NAME=auth-service
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
 
 # Single EXPOSE statement - no redundant port specification
 EXPOSE 9092
+# Add this at the end of your auth-service Dockerfile before the ENTRYPOINT/CMD
 
 # Configure Spring DevTools in the entrypoint
 # Remove redundant server.port setting (use application.yml instead)
