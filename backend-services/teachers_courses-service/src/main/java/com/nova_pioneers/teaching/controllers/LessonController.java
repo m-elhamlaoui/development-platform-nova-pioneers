@@ -1,5 +1,6 @@
 package com.nova_pioneers.teaching.controllers;
 
+import com.nova_pioneers.teaching.DTO.LessonDTO;
 import com.nova_pioneers.teaching.Service.LessonService;
 import com.nova_pioneers.teaching.model.Lesson;
 import jakarta.validation.Valid;
@@ -57,5 +58,21 @@ public class LessonController {
     public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
         lessonService.deleteLesson(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/courses/{courseId}/lessons")
+    public ResponseEntity<List<Lesson>> getLessonsByCourse(@PathVariable Long courseId) {
+        return ResponseEntity.ok(lessonService.getLessonsByCourse(courseId));
+    }
+
+    @GetMapping("/courses/{courseId}/lessons/detailed")
+    public ResponseEntity<List<LessonDTO>> getLessonsByCourseDetailed(@PathVariable Long courseId) {
+        return ResponseEntity.ok(lessonService.getLessonsByCourseDetailed(courseId));
+    }
+
+    @PostMapping("/courses/{courseId}/lessons")
+    public ResponseEntity<Lesson> createLessonForCourse(
+            @PathVariable Long courseId,
+            @Valid @RequestBody Lesson lesson) {
+        return new ResponseEntity<>(lessonService.saveLessonForCourse(lesson, courseId), HttpStatus.CREATED);
     }
 }

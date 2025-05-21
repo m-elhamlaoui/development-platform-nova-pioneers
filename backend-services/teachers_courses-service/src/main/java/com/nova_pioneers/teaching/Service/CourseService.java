@@ -5,11 +5,11 @@ import com.nova_pioneers.teaching.DTO.LessonDTO;
 import com.nova_pioneers.teaching.Repositories.ContentSectionRepository;
 import com.nova_pioneers.teaching.Repositories.CourseRepository;
 import com.nova_pioneers.teaching.Repositories.LessonRepository;
-
-import com.nova_pioneers.teaching.Service.CourseMapperService;
+import com.nova_pioneers.teaching.Repositories.TeacherRepository;
 import com.nova_pioneers.teaching.model.ContentSection;
 import com.nova_pioneers.teaching.model.Course;
 import com.nova_pioneers.teaching.model.Lesson;
+import com.nova_pioneers.teaching.model.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +33,8 @@ public class CourseService {
 
     @Autowired
     private CourseMapperService mapperService;
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     // Original methods kept intact
     public List<Course> getAllCourses() {
@@ -121,7 +123,7 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    /**
+    /**saveCourseWithDetails
      * Save or update a course with its complete structure
      */
     @Transactional
@@ -150,10 +152,9 @@ public class CourseService {
             course.setSubject("Space");
             course.setRecommendedAge(8);
 
-            // Set teacher - this would be obtained from the repository in a real implementation
-            // For now we'll just set the id
-            Teacher teacher = new Teacher();
-            teacher.setId(teacherId);
+            // Get teacher from repository
+            Teacher teacher = teacherRepository.findById(teacherId)
+                    .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + teacherId));
             course.setTeacher(teacher);
         }
 
@@ -169,14 +170,17 @@ public class CourseService {
         }
 
         // Reload the course with all its lessons to return
-        List<Lesson> savedLessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(course.getId());
+        // Use loadLessonsWithContentSections instead of just finding lessons
+        List<Lesson> savedLessons = loadLessonsWithContentSections(course.getId());
         return mapperService.mapToDTO(course, savedLessons);
     }
 
     /**
      * Private helper method to save lessons and their content sections
      */
-    private void saveLessonsForCourse(Course course, List<LessonDTO> lessonDTOs) {
+    @Transactional
+
+    protected void saveLessonsForCourse(Course course, List<LessonDTO> lessonDTOs) {
         // Keep track of which lessons to keep
         List<Long> processedLessonIds = new ArrayList<>();
 
@@ -203,18 +207,31 @@ public class CourseService {
             // Ensure proper ordering
             lesson.setSequenceOrder(i + 1);
 
+            // Process content sections if they exist
+            if (lessonDTO.getContent() != null && !lessonDTO.getContent().isEmpty()) {
+                // Create content sections from DTOs
+                Lesson finalLesson = lesson;
+                List<ContentSection> contentSections = lessonDTO.getContent().stream()
+                        .map(sectionDTO -> {
+                            ContentSection section = mapperService.mapToEntity(sectionDTO, finalLesson);
+                            return section;
+                        })
+                        .collect(Collectors.toList());
+
+                // Use the helper method to properly update the bidirectional relationship
+                lesson.updateContentSections(contentSections);
+            } else {
+                // Clear content sections if none are provided
+                lesson.updateContentSections(new ArrayList<>());
+            }
+
             // Save the lesson
             lesson = lessonRepository.save(lesson);
             processedLessonIds.add(lesson.getId());
-
-            // Process content sections if they exist
-            if (lessonDTO.getContent() != null && !lessonDTO.getContent().isEmpty()) {
-                saveContentSectionsForLesson(lesson, lessonDTO.getContent());
-            }
         }
 
         // Delete any lessons that weren't in the update (if this is an update operation)
-        if (!processedLessonIds.isEmpty()) {
+        if (!processedLessonIds.isEmpty() && course.getId() != null) {
             List<Lesson> existingLessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(course.getId());
 
             for (Lesson existingLesson : existingLessons) {
@@ -275,15 +292,86 @@ public class CourseService {
     }
 
     // For imports to work correctly
-    private static class Teacher {
-        private Long id;
 
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
+    /**
+     * Get all courses in DTO format
+     */
+    public List<CourseDTO> getAllCoursesDTO() {
+        List<Course> courses = courseRepository.findAll();
+        return courses.stream()
+                .map(course -> {
+                    List<Lesson> lessons = loadLessonsWithContentSections(course.getId());
+                    return mapperService.mapToDTO(course, lessons);
+                })
+                .collect(Collectors.toList());
     }
+
+    /**
+     * Get course by ID in DTO format
+     */
+    public Optional<CourseDTO> getCourseByIdDTO(Long id) {
+        Optional<Course> courseOpt = courseRepository.findById(id);
+
+        if (courseOpt.isPresent()) {
+            Course course = courseOpt.get();
+            List<Lesson> lessons = loadLessonsWithContentSections(course.getId());
+            return Optional.of(mapperService.mapToDTO(course, lessons));
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Get courses by teacher ID in DTO format
+     */
+    public List<CourseDTO> getCoursesByTeacherDTO(Long teacherId) {
+        List<Course> courses = courseRepository.findByTeacherId(teacherId);
+        return courses.stream()
+                .map(course -> {
+                    List<Lesson> lessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(course.getId());
+                    return mapperService.mapToDTO(course, lessons);
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Save course with full details (DTO format)
+     */
+    @Transactional
+    public CourseDTO saveCourseWithDetails(CourseDTO courseDTO) {
+        // For new courses, we need a teacher
+        // In a real implementation, you'd get this from security context or request
+        // For simplicity, using teacher ID 1 for new courses
+        Long teacherId = 1L;
+        return saveOrUpdateCourseWithDetails(courseDTO, teacherId);
+    }
+    @Transactional(readOnly = true)
+    public List<Lesson> loadLessonsWithContentSections(Long courseId) {
+        List<Lesson> lessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(courseId);
+
+        if (lessons != null) {
+            for (Lesson lesson : lessons) {
+                // Force initialization of the content sections collection
+                System.out.println("Loading content sections for lesson: " + lesson.getTitle());
+                List<ContentSection> sections = contentSectionRepository.findByLessonIdOrderBySequenceOrderAsc(lesson.getId());
+                System.out.println("Found " + (sections != null ? sections.size() : 0) + " content sections");
+
+                // Properly initialize the content sections to avoid orphan collection issues
+                if (lesson.getContentSections() == null) {
+                    lesson.setContentSections(new ArrayList<>());
+                }
+
+                // Only update if they're not already loaded
+                if (lesson.getContentSections().isEmpty() && !sections.isEmpty()) {
+                    for (ContentSection section : sections) {
+                        // Use the helper method to maintain the bidirectional relationship
+                        lesson.addContentSection(section);
+                    }
+                }
+            }
+        }
+
+        return lessons;
+
 }
+    }

@@ -19,6 +19,7 @@ public class Module {
 
     private String title;
     private String description;
+    @Column(name = "sequence_order")
     private Integer sequenceOrder;
 
     @ManyToOne

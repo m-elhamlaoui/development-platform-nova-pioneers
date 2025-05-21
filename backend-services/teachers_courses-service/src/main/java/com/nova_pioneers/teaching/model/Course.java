@@ -3,6 +3,7 @@ package com.nova_pioneers.teaching.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Setter
 @Getter
+@EqualsAndHashCode(exclude = {"modules", "lessons", "ratings"})
 @Table(name = "courses")
 public class Course {
     @Id
@@ -29,20 +31,25 @@ public class Course {
 
     private String thumbnail;
 
+    @Column(name = "grade_level")
     @NotBlank(message = "Grade level is required")
     private String gradeLevel;
 
     @NotBlank(message = "Subject is required")
     private String subject;
 
+    @Column(name = "created_date")
     private LocalDate createdDate;
 
+    @Column(name = "xp_value")
     @Min(value = 0, message = "XP value cannot be negative")
     private Integer xpValue;
 
+    @Column(name = "size_category")
     @Pattern(regexp = "^[SML]$", message = "Size category must be S, M, or L")
     private String sizeCategory;
 
+    @Column(name = "recommended_age")
     @Min(value = 4, message = "Minimum recommended age is 4")
     @Max(value = 18, message = "Maximum recommended age is 18")
     private Integer recommendedAge;

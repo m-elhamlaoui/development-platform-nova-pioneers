@@ -1,7 +1,9 @@
 package com.nova_pioneers.teaching.controllers;
 
 
+import com.nova_pioneers.teaching.DTO.ContentSectionDTO;
 import com.nova_pioneers.teaching.DTO.CourseDTO;
+import com.nova_pioneers.teaching.DTO.LessonDTO;
 import com.nova_pioneers.teaching.Service.CourseService;
 
 import com.nova_pioneers.teaching.model.Course;
@@ -62,7 +64,27 @@ public class CourseController {
 
     @PostMapping("/detailed")
     public ResponseEntity<CourseDTO> createCourseDetailed(@Valid @RequestBody CourseDTO courseDTO) {
-        return new ResponseEntity<>(courseService.saveCourseWithDetails(courseDTO), HttpStatus.CREATED);
+        CourseDTO createdCourse = courseService.saveCourseWithDetails(courseDTO);
+
+        // Debug logging
+        if (createdCourse.getLessons() != null) {
+            for (LessonDTO lesson : createdCourse.getLessons()) {
+                System.out.println("Lesson '" + lesson.getTitle() + "' has " +
+                        (lesson.getContent() != null ? lesson.getContent().size() : "null") +
+                        " content sections");
+
+                if (lesson.getContent() != null) {
+                    for (int i = 0; i < lesson.getContent().size(); i++) {
+                        ContentSectionDTO section = lesson.getContent().get(i);
+                        System.out.println("  Section " + i + ": " +
+                                (section.getSubheading() != null ? section.getSubheading() :
+                                        section.getFunFact() != null ? "Fun fact" : "No title"));
+                    }
+                }
+            }
+        }
+
+        return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

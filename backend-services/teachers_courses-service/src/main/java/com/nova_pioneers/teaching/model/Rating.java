@@ -19,6 +19,7 @@ public class Rating {
     private Long id;
 
     // Rating value (e.g., 1-5 for stars, or 1-3 for emoji reactions)
+    @Column(name = "rating_value")
     @Min(value = 1, message = "Rating must be at least 1")
     @Max(value = 5, message = "Rating cannot exceed 5")
     private Integer ratingValue;
@@ -32,8 +33,10 @@ public class Rating {
     private Course course;
 
     // Store student/parent ID for the person who rated
+    @Column(name = "user_id")
     private Long userId;
 
     // Type of user (student or parent)
+    @Column(name = "user_type")
     private String userType;
 }

@@ -1,5 +1,6 @@
 package com.nova_pioneers.teaching;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.nova_pioneers.teaching.Repositories.CourseRepository;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,6 +53,7 @@ public class CourseIntegrationTest {
     @BeforeEach
     void setUp() {
         // Create a test teacher
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         testTeacher = new Teacher();
         testTeacher.setUsername("integration_teacher");
         testTeacher.setEmail("integration@example.com");
