@@ -1,0 +1,340 @@
+@startuml "Teacher and Course Management Services"
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "com.nova_pioneers.teaching" {
+  package "controllers" {
+    class CourseController {
+      -CourseService courseService
+      +getAllCourses(): ResponseEntity<List<CourseDTO>>
+      +getCourseById(Long id): ResponseEntity<CourseDTO>
+      +createCourse(CourseDTO courseDTO): ResponseEntity<CourseDTO>
+      +updateCourse(Long id, CourseDTO courseDTO): ResponseEntity<CourseDTO>
+      +deleteCourse(Long id): ResponseEntity<Void>
+      +searchCourses(String keyword): ResponseEntity<List<CourseDTO>>
+      +filterCourses(...): ResponseEntity<List<CourseDTO>>
+    }
+
+    class LessonController {
+      -LessonService lessonService
+      +getLessonsByModule(Long moduleId): ResponseEntity<List<Lesson>>
+      +getLessonById(Long id): ResponseEntity<Lesson>
+      +createLesson(Lesson lesson, Long moduleId): ResponseEntity<Lesson>
+      +updateLesson(Long id, Lesson lesson): ResponseEntity<Lesson>
+      +deleteLesson(Long id): ResponseEntity<Void>
+    }
+
+    class ModuleController {
+      -ModuleService moduleService
+      +getModulesByCourse(Long courseId): ResponseEntity<List<Module>>
+      +getModuleById(Long id): ResponseEntity<Module>
+      +createModule(Module module, Long courseId): ResponseEntity<Module>
+      +updateModule(Long id, Module module): ResponseEntity<Module>
+      +deleteModule(Long id): ResponseEntity<Void>
+    }
+
+    class RatingController {
+      -RatingService ratingService
+      +getRatingsByCourse(Long courseId): ResponseEntity<List<Rating>>
+      +createRating(Rating rating, Long courseId): ResponseEntity<Rating>
+      +deleteRating(Long id): ResponseEntity<Void>
+    }
+
+    class TeacherController {
+      -TeacherService teacherService
+      +getAllTeachers(): ResponseEntity<List<Teacher>>
+      +getTeacherById(Long id): ResponseEntity<Teacher>
+      +createTeacher(Teacher teacher): ResponseEntity<Teacher>
+      +updateTeacher(Long id, Teacher teacher): ResponseEntity<Teacher>
+      +addXpToTeacher(Long id, int xpAmount): ResponseEntity<Teacher>
+    }
+
+    class TestController {
+      +testEndpoint(): ResponseEntity<String>
+    }
+  }
+
+  package "DTO" {
+    class ContentSectionDTO {
+      -Long id
+      -String subheading
+      -String text
+      -String image
+      -String funFact
+      +getters()
+      +setters()
+    }
+
+    class CourseDTO {
+      -Long id
+      -String title
+      -String description
+      -String thumbnail
+      -String instructor
+      -String size
+      -Double rating
+      -Integer reviews
+      -List<LessonDTO> lessons
+      +getters()
+      +setters()
+    }
+
+    class LessonDTO {
+      -Long id
+      -String title
+      -String image
+      -Integer sequenceOrder
+      -List<ContentSectionDTO> content
+      +getters()
+      +setters()
+    }
+  }
+
+  package "model" {
+    class ContentSection {
+      -Long id
+      -String subheading
+      -String text
+      -String image
+      -String funFact
+      -Integer sequenceOrder
+      -Lesson lesson
+      +getters()
+      +setters()
+    }
+
+    class Course {
+      -Long id
+      -String title
+      -String description
+      -String thumbnail
+      -String gradeLevel
+      -String subject
+      -LocalDate createdDate
+      -Integer xpValue
+      -String sizeCategory
+      -Integer recommendedAge
+      -Teacher teacher
+      -List<Module> modules
+      -List<Lesson> lessons
+      -List<Rating> ratings
+      +Double getAverageRating()
+      +Integer getReviewCount()
+      +String getInstructorName()
+      +getters()
+      +setters()
+    }
+
+    class Lesson {
+      -Long id
+      -String title
+      -String content
+      -String resourceLinks
+      -String image
+      -Integer sequenceOrder
+      -Module module
+      -Course course
+      -List<ContentSection> contentSections
+      +getters()
+      +setters()
+    }
+
+    class Module {
+      -Long id
+      -String title
+      -String description
+      -Integer sequenceOrder
+      -Course course
+      -List<Lesson> lessons
+      +getters()
+      +setters()
+    }
+
+    class Rating {
+      -Long id
+      -Integer ratingValue
+      -String comment
+      -Course course
+      -Long userId
+      -String userType
+      +getters()
+      +setters()
+    }
+
+    class Teacher {
+      -Long id
+      -String username
+      -String email
+      -String firstName
+      -String lastName
+      -String certificationInfo
+      -LocalDate joinDate
+      -Integer accumulatedXp
+      -String title
+      -List<Course> courses
+      +getters()
+      +setters()
+    }
+  }
+
+  package "Repositories" {
+    interface ContentSectionRepository {
+      +findByLessonIdOrderBySequenceOrderAsc(Long lessonId): List<ContentSection>
+      +findById(Long id): Optional<ContentSection>
+      +save(ContentSection section): ContentSection
+      +deleteById(Long id): void
+    }
+
+    interface CourseRepository {
+      +findAll(): List<Course>
+      +findById(Long id): Optional<Course>
+      +findByTeacherId(Long teacherId): List<Course>
+      +save(Course course): Course
+      +deleteById(Long id): void
+      +searchByKeyword(String keyword): List<Course>
+      +filterCourses(...): List<Course>
+    }
+
+    interface LessonRepository {
+      +findByModuleIdOrderBySequenceOrder(Long moduleId): List<Lesson>
+      +findByCourseIdOrderBySequenceOrderAsc(Long courseId): List<Lesson>
+      +findById(Long id): Optional<Lesson>
+      +save(Lesson lesson): Lesson
+      +deleteById(Long id): void
+    }
+
+    interface ModuleRepository {
+      +findByCourseIdOrderBySequenceOrder(Long courseId): List<Module>
+      +findById(Long id): Optional<Module>
+      +save(Module module): Module
+      +deleteById(Long id): void
+    }
+
+    interface RatingRepository {
+      +findByCourseId(Long courseId): List<Rating>
+      +save(Rating rating): Rating
+      +deleteById(Long id): void
+    }
+
+    interface TeacherRepository {
+      +findAll(): List<Teacher>
+      +findById(Long id): Optional<Teacher>
+      +save(Teacher teacher): Teacher
+    }
+  }
+
+  package "Service" {
+    class CourseMapperService {
+      +mapToDTO(Course course, List<Lesson> lessons): CourseDTO
+      +mapToDTO(Lesson lesson): LessonDTO
+      +mapToDTO(ContentSection section): ContentSectionDTO
+      +mapToEntity(LessonDTO dto, Course course): Lesson
+      +mapToEntity(ContentSectionDTO dto, Lesson lesson): ContentSection
+    }
+
+    class CourseService {
+      -CourseRepository courseRepository
+      -LessonRepository lessonRepository
+      -ContentSectionRepository contentSectionRepository
+      -CourseMapperService mapperService
+      +getAllCourses(): List<Course>
+      +getCourseById(Long id): Optional<Course>
+      +getCoursesByTeacher(Long teacherId): List<Course>
+      +saveCourse(Course course): Course
+      +deleteCourse(Long id): void
+      -calculateXpForCourse(Course course): void
+      +searchCoursesByKeyword(String keyword): List<Course>
+      +filterCourses(...): List<Course>
+      +getCourseWithDetailsById(Long id): Optional<CourseDTO>
+      +getAllCoursesWithBasicDetails(): List<CourseDTO>
+      +saveOrUpdateCourseWithDetails(CourseDTO courseDTO, Long teacherId): CourseDTO
+      -saveLessonsForCourse(Course course, List<LessonDTO> lessonDTOs): void
+      -saveContentSectionsForLesson(Lesson lesson, List<ContentSectionDTO> sectionDTOs): void
+    }
+
+    class LessonService {
+      -LessonRepository lessonRepository
+      -ModuleRepository moduleRepository
+      +getLessonsByModule(Long moduleId): List<Lesson>
+      +getLessonById(Long id): Optional<Lesson>
+      +saveLesson(Lesson lesson, Long moduleId): Lesson
+      +deleteLesson(Long id): void
+    }
+
+    class ModuleService {
+      -ModuleRepository moduleRepository
+      -CourseRepository courseRepository
+      +getModulesByCourse(Long courseId): List<Module>
+      +getModuleById(Long id): Optional<Module>
+      +saveModule(Module module, Long courseId): Module
+      +deleteModule(Long id): void
+    }
+
+    class RatingService {
+      -RatingRepository ratingRepository
+      -CourseRepository courseRepository
+      +getRatingsByCourse(Long courseId): List<Rating>
+      +saveRating(Rating rating, Long courseId): Rating
+      +deleteRating(Long id): void
+    }
+
+    class TeacherService {
+      -TeacherRepository teacherRepository
+      +getAllTeachers(): List<Teacher>
+      +getTeacherById(Long id): Optional<Teacher>
+      +saveTeacher(Teacher teacher): Teacher
+      +updateTeacherTitle(Teacher teacher): void
+      +addXpToTeacher(Long teacherId, int xpToAdd): void
+    }
+
+    class GlobalExceptionHandler {
+      +handleResourceNotFoundException(ResourceNotFoundException ex): ResponseEntity<ErrorResponse>
+      +handleValidationException(ValidationException ex): ResponseEntity<ErrorResponse>
+      +handleGeneralException(Exception ex): ResponseEntity<ErrorResponse>
+    }
+  }
+
+  class BackendApplication {
+    +main(String[] args): void
+  }
+}
+
+' Relationships between Model Classes
+Teacher "1" *-- "many" Course
+Course "1" *-- "many" Module
+Course "1" *-- "many" Lesson
+Module "1" *-- "many" Lesson
+Lesson "1" *-- "many" ContentSection
+Course "1" *-- "many" Rating
+
+' Controllers to Services
+CourseController --> CourseService
+LessonController --> LessonService
+ModuleController --> ModuleService
+RatingController --> RatingService
+TeacherController --> TeacherService
+
+' Service to Repository dependencies
+TeacherService --> TeacherRepository
+CourseService --> CourseRepository
+CourseService --> LessonRepository
+CourseService --> ContentSectionRepository
+CourseService --> CourseMapperService
+ModuleService --> ModuleRepository
+ModuleService --> CourseRepository
+LessonService --> LessonRepository
+LessonService --> ModuleRepository
+RatingService --> RatingRepository
+RatingService --> CourseRepository
+
+' DTO to Model class mapping
+CourseMapperService --> CourseDTO
+CourseMapperService --> LessonDTO
+CourseMapperService --> ContentSectionDTO
+CourseMapperService --> Course
+CourseMapperService --> Lesson
+CourseMapperService --> ContentSection
+
+note "Spring Boot Application Entry Point" as N1
+BackendApplication .. N1
+@enduml
