@@ -1,5 +1,7 @@
 package com.nova_pioneers.auth.controllers;
 
+import com.nova_pioneers.auth.dto.LogOutRequest;
+import com.nova_pioneers.auth.dto.LogOutResponse;
 import com.nova_pioneers.auth.dto.SigninRequest;
 import com.nova_pioneers.auth.dto.SigninResponse;
 import com.nova_pioneers.auth.services.AuthService;
@@ -25,4 +27,11 @@ public class AuthController {
         SigninResponse response = authService.authenticateUser(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<LogOutResponse> logoutUser(@RequestBody LogOutRequest request) {
+        LogOutResponse response =authService.logOut(request);
+        return ResponseEntity.ok(response);
+    }
+
 }
