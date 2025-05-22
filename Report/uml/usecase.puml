@@ -1,0 +1,48 @@
+@startuml "Nova Pioneers - Use Case Diagram"
+!theme plain
+skinparam actorStyle awesome
+
+actor "Kid" as kid
+actor "Parent" as parent
+actor "Teacher" as teacher
+actor "Admin" as admin
+
+rectangle "Nova Pioneers Platform" {
+  usecase "Browse Space Content" as UC1
+  usecase "Complete Courses" as UC2
+  usecase "Earn XP & Badges" as UC3
+  usecase "Create Kid Account" as UC4
+  usecase "Monitor Kid Progress" as UC5
+  usecase "Rate Courses" as UC6
+  usecase "Create Educational Content" as UC7
+  usecase "Submit Verification Documents" as UC8
+  usecase "Approve Teacher Verification" as UC9
+  usecase "Manage Platform Users" as UC10
+  usecase "View NASA APOD" as UC11
+}
+
+' Kid relationships
+kid --> UC1
+kid --> UC2
+kid --> UC3
+kid --> UC11
+
+' Parent relationships
+parent --> UC4
+parent --> UC5
+parent --> UC6
+
+' Teacher relationships
+teacher --> UC7
+teacher --> UC8
+
+' Admin relationships
+admin --> UC9
+admin --> UC10
+
+' Use case relationships
+UC2 ..> UC3 : <<includes>>
+UC5 ..> UC6 : <<extends>>
+UC7 ..> UC8 : <<includes>>
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+rectangle "Client Application" as client {
+  [React Frontend] as frontend
+}
+
+rectangle "API Gateway" as gateway {
+  [Spring Cloud Gateway] as scg
+}
+
+rectangle "Authentication Service" as auth {
+  [Spring Security] as security
+  [JWT Provider] as jwt
+  [OAuth Integration] as oauth
+}
+
+rectangle "Parents & Kids Service" as parentkid {
+  [Parent Management] as parent
+  [Kid Profile Management] as kid
+  [Enrollment System] as enrollment
+  [XP & Achievement Tracking] as xp
+}
+
+cloud "NASA API" as nasa {
+  [APOD] as apod
+  [Other NASA Data] as other
+}
+
+rectangle "Teacher & Course Services" as teaching {
+  [Teacher Management] as teacher
+  [Course Management] as course
+  [Content Organization] as content
+  [Rating System] as rating
+}
+
+database "PostgreSQL" as db {
+  [User Data] as userDb
+  [Course Data] as courseDb
+  [Progress Data] as progressDb
+}
+
+frontend --> scg : HTTP/HTTPS
+scg --> security : Authenticate
+scg --> parent : Parent Requests
+scg --> kid : Kid Requests
+scg --> teacher : Teacher Requests
+scg --> course : Course Requests
+teacher --> userDb : Store/Retrieve
+course --> courseDb : Store/Retrieve
+course --> nasa : Fetch Space Data
+content --> courseDb : Organize
+rating --> courseDb : Store Feedback
+parent --> rating : Submit Ratings
+kid --> courseDb : Access Content
+enrollment --> courseDb : Manage Enrollments
+xp --> progressDb : Track Progress
+@enduml
