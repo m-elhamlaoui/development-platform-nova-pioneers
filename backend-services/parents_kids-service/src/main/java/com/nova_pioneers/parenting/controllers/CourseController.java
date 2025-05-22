@@ -30,7 +30,7 @@ public class CourseController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/createcourse")
     public ResponseEntity<Course> createCourse (@RequestBody Course course) {
         return new ResponseEntity<>(courseService.saveCourse(course), HttpStatus.CREATED);
     }
