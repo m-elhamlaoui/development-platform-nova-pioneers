@@ -2,35 +2,49 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
+import { Heart, User, ChevronDown } from "lucide-react";
 
-const CourseCard = ({ course, onEdit, onDelete }) => {
+const CourseCard = ({ course, onEdit, onDelete, index }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [isFav, setIsFav] = useState(false);
+
+  const handleFavoriteToggle = () => setIsFav(!isFav);
 
   return (
     <motion.div
-      className="card border border-gray-200"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      style={{ maxWidth: "500px" }}
+      className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 text-black flex-grow"
       layout
     >
       <div className="relative">
         <img
           src={course.thumbnail}
           alt={course.title}
-          className="w-full h-48 object-cover rounded-t-xl"
+          className="w-full h-48 object-cover"
         />
-        <div className="absolute top-2 right-2 bg-white bg-opacity-90 rounded-md px-2 py-1 text-xs font-medium">
-          {course.grade_level}
+        <div className="absolute top-3 right-3">
+          <div className="bg-white bg-opacity-90 rounded-md px-2 py-1 text-xs font-medium">
+            {course.grade_level}
+          </div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent h-16" />
       </div>
 
-      <div className="p-4">
-        <h3 className="text-xl font-bold text-marine-blue-700 mb-2">{course.title}</h3>
-        <p className="text-gray-600 mb-3 line-clamp-3">{course.description}</p>
+      <div className="p-5 space-y-3">
+        <h2 className="text-xl font-bold text-gray-800">{course.title}</h2>
+        <p className="text-sm text-gray-600 line-clamp-3">{course.description}</p>
 
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex items-center gap-2 mt-2">
+          <div className="p-1 bg-[#0b3d91] rounded-full">
+            <User className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-sm font-medium">{course.subject}</span>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
           <span className="bg-marine-blue-100 text-marine-blue-800 px-2 py-1 rounded text-xs">
             {course.subject}
           </span>
@@ -42,15 +56,28 @@ const CourseCard = ({ course, onEdit, onDelete }) => {
           </span>
         </div>
 
-        <div className="text-sm text-gray-500 mb-4">
+        <div className="text-xs text-gray-500 flex justify-between items-center">
           <div>Created: {new Date(course.created_date).toLocaleDateString()}</div>
-          <div>Recommended Age: {course.recommended_age}</div>
+          <div>Age: {course.recommended_age}</div>
           <div>{course.lessons?.length || 0} Lessons</div>
+        </div>
+
+        <div className="rating-kids flex justify-between items-center">
+          <div className="flex items-center gap-1">
+            {Array(5)
+              .fill(0)
+              .map((_, i) => (
+                <span key={i} className="text-[16px] text-amber-400">
+                  {i < (course.rating || 4) ? "★" : "☆"}
+                </span>
+              ))}
+            <span className="ml-1 text-xs text-slate-400">({course.reviews || 0} reviews)</span>
+          </div>
         </div>
 
         {showConfirmDelete ? (
           <div className="mt-3 border-t pt-3">
-            <p className="text-error-600 font-medium mb-2">Delete this course?</p>
+            <p className="text-red-600 font-medium mb-2">Delete this course?</p>
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setShowConfirmDelete(false)}
@@ -63,23 +90,23 @@ const CourseCard = ({ course, onEdit, onDelete }) => {
                   onDelete(course.id);
                   setShowConfirmDelete(false);
                 }}
-                className="px-3 py-1 text-sm bg-error-600 hover:bg-error-700 text-white rounded transition-colors"
+                className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
               >
                 Confirm
               </button>
             </div>
           </div>
         ) : (
-          <div className="flex justify-between">
+          <div className="flex justify-between mt-4">
             <button
               onClick={() => onEdit(course)}
-              className="bg-space-purple-600 text-white px-3 py-1 rounded hover:bg-space-purple-700 transition-colors text-sm"
+              className="bg-[#0b3d91] text-white px-3 py-1 rounded-2xl hover:bg-blue-800 transition-colors text-sm"
             >
               Edit Course
             </button>
             <button
               onClick={() => setShowConfirmDelete(true)}
-              className="text-error-600 hover:text-error-700 transition-colors text-sm"
+              className="text-red-600 hover:text-red-700 transition-colors text-sm"
             >
               Delete
             </button>
@@ -218,10 +245,11 @@ const ManageCourses = () => {
       {filteredCourses.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
-            {filteredCourses.map(course => (
+            {filteredCourses.map((course, index) => (
               <CourseCard
                 key={course.id}
                 course={course}
+                index={index}
                 onEdit={handleEditCourse}
                 onDelete={deleteCourse}
               />
