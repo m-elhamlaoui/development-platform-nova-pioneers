@@ -14,7 +14,7 @@ import Dashboard from './pages/TeachersDashboard';
 import AddCourse from './pages/AddCourse';
 import ManageCourses from './pages/ManageCourses';
 import NotFound from './pages/NotFound';
-
+import CourseView from './pages/CourseView';
 export default function App() {
   return (
     <BrowserRouter>
@@ -28,6 +28,9 @@ export default function App() {
           <Route path="/parents-dashboard" element={<ParentsDashboard />}/>
           <Route path="/parents-dashboard/lessons" element={<ParentsDashboardLessons />}/>
           <Route path="/parents-dashboard/kids" element={<ParentsDashboardKids />}/>
+          <Route path="/course" element={<CourseView />} />
+          <Route path="/course/:courseId" element={<CourseView />} />
+            
           <Route path="/teachers" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="add-course" element={<AddCourse />} />
