@@ -4,33 +4,4 @@ server:
 spring:
   application:
     name: api-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: admin-service
-          uri: http://admin-service:9091/
-          predicates:
-            - Path=/admin/**
-          filters:
-            - StripPrefix=1
 
-        - id: auth-service
-          uri: http://auth-service:9092/
-          predicates:
-            - Path=/auth/**
-          filters:
-            - StripPrefix=1
-
-        - id: parents-kids-service
-          uri: http://parents-kids-service:9093/
-          predicates:
-            - Path=/parents-kids/**
-          filters:
-            - StripPrefix=1
-
-        - id: teachers-courses-service
-          uri: http://teachers-courses-service:9094/
-          predicates:
-            - Path=/teachers-courses/**
-          filters:
-            - StripPrefix=1
