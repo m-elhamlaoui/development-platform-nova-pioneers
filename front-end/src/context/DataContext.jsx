@@ -9,8 +9,8 @@ export const DataProvider = ({ children }) => {
   const [courses, setCourses] = useState([]);
   const [teacher, setTeacher] = useState({
     id: '1',
-    name: 'Dr. Stella Nova',
-    email: 'stella.nova@spaceedu.com',
+    name: 'Ilyas ELAMMARY',
+    email: 'ilyas.elammary@nova.com',
     avatar: 'https://images.pexels.com/photos/41162/moon-landing-apollo-11-nasa-buzz-aldrin-41162.jpeg',
     xpPoints: 1250,
     joinDate: '2023-04-15'

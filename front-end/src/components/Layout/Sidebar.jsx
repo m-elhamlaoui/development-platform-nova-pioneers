@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
           </div>
           
           {/* Modern Teacher Profile */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl shadow-sm">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl shadow-sm w-[200px] mx-auto">
             <div className="flex flex-col items-center">
               <div className="relative">
                 <img 
