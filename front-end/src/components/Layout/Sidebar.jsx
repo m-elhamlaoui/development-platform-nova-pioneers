@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useData } from '../../context/DataContext';
+import dashlogo from "../../assets/np-logo.png";
+
 import {
   LayoutDashboard,
   Plus,
@@ -53,8 +55,8 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
       >
         <div className="menu-upper-section space-y-4 overflow-visible">
           {/* Logo */}
-          <div className="flex items-center justify-center">
-            <div className="text-xl font-bold text-[#0B3D91] whitespace-nowrap overflow-visible">SpaceEdu</div>
+          <div className="flex items-center justify-start">
+                <img className="w-[60px] align-left" src={dashlogo} alt="Logo" />
           </div>
           
           {/* Modern Teacher Profile */}
