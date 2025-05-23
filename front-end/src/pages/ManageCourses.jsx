@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
-import { Heart, User, ChevronDown } from "lucide-react";
+import { Heart, User, ChevronDown, Award, BookOpen } from "lucide-react";
 
 const CourseCard = ({ course, onEdit, onDelete, index }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -37,31 +37,52 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
         <h2 className="text-xl font-bold text-gray-800">{course.title}</h2>
         <p className="text-sm text-gray-600 line-clamp-3">{course.description}</p>
 
+        {/* Teacher Info */}
         <div className="flex items-center gap-2 mt-2">
-          <div className="p-1 bg-[#0b3d91] rounded-full">
+          <div className="p-1 bg-[#0b3d91] rounded-full flex-shrink-0">
             <User className="w-4 h-4 text-white" />
           </div>
-          <span className="text-sm font-medium">{course.subject}</span>
+          <span className="text-sm font-medium text-gray-700">Teacher: {course.instructor || "Undefined"}</span>
         </div>
 
+        {/* Distinctive Badges */}
         <div className="flex flex-wrap gap-2">
-          <span className="bg-marine-blue-100 text-marine-blue-800 px-2 py-1 rounded text-xs">
-            {course.subject}
-          </span>
-          <span className="bg-space-purple-100 text-space-purple-800 px-2 py-1 rounded text-xs">
-            {course.size_category}
-          </span>
-          <span className="bg-cosmic-red-100 text-cosmic-red-800 px-2 py-1 rounded text-xs">
-            {course.xp_value} XP
-          </span>
+          <div className="flex items-center bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium">
+            <BookOpen className="w-3 h-3 mr-1" />
+            <span>{course.subject}</span>
+          </div>
+          
+          <div className="flex items-center bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full text-xs font-medium">
+            <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" 
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span>{course.size_category || "Medium"}</span>
+          </div>
+          
+          <div className="flex items-center bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-xs font-medium">
+            <Award className="w-3 h-3 mr-1" />
+            <span>{course.xp_value || 0} XP</span>
+          </div>
         </div>
 
-        <div className="text-xs text-gray-500 flex justify-between items-center">
-          <div>Created: {new Date(course.created_date).toLocaleDateString()}</div>
-          <div>Age: {course.recommended_age}</div>
-          <div>{course.lessons?.length || 0} Lessons</div>
+        {/* Course Metadata */}
+        <div className="grid grid-cols-3 text-xs text-gray-500">
+          <div className="flex flex-col">
+            <span className="text-gray-400">Created</span>
+            <span>{new Date(course.created_date).toLocaleDateString()}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-gray-400">Age</span>
+            <span>{course.recommended_age || "All ages"}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-gray-400">Lessons</span>
+            <span>{course.lessons?.length || 0}</span>
+          </div>
         </div>
 
+        {/* Rating */}
         <div className="rating-kids flex justify-between items-center">
           <div className="flex items-center gap-1">
             {Array(5)
@@ -75,6 +96,7 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
           </div>
         </div>
 
+        {/* Delete confirmation or action buttons */}
         {showConfirmDelete ? (
           <div className="mt-3 border-t pt-3">
             <p className="text-red-600 font-medium mb-2">Delete this course?</p>
@@ -100,13 +122,13 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
           <div className="flex justify-between mt-4">
             <button
               onClick={() => onEdit(course)}
-              className="bg-[#0b3d91] text-white px-3 py-1 rounded-2xl hover:bg-blue-800 transition-colors text-sm"
+              className="bg-[#0b3d91] text-white px-4 py-1.5 rounded-full hover:bg-blue-800 transition-colors text-sm font-medium"
             >
               Edit Course
             </button>
             <button
               onClick={() => setShowConfirmDelete(true)}
-              className="text-red-600 hover:text-red-700 transition-colors text-sm"
+              className="text-red-600 hover:text-red-700 transition-colors text-sm font-medium"
             >
               Delete
             </button>
