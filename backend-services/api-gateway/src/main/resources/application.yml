@@ -5,3 +5,37 @@ spring:
   application:
     name: api-gateway
 
+  # Database configuration for token validation
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/novadb}
+    username: ${SPRING_DATASOURCE_USERNAME:pioneer}
+    password: ${SPRING_DATASOURCE_PASSWORD:nova25!X}
+    driver-class-name: org.postgresql.Driver
+
+  # JPA configuration for token entity
+  jpa:
+    hibernate:
+      ddl-auto: none  # Don't change schema, using auth-service's schema
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  # Disable cloud config
+  cloud:
+    config:
+      enabled: false
+
+# JWT configuration - must match auth-service configuration
+jwt:
+  secret: ${JWT_SECRET:SB4cgMKW7XkP83H5z94FfHd8QXYZVaJ2GtRbnLm5uEvsUwC6DTjeKqNyA7pZkrx}
+  expiration: 86400000  # 24 hours in milliseconds
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
+    com.nova_pioneers.api_gateway: DEBUG

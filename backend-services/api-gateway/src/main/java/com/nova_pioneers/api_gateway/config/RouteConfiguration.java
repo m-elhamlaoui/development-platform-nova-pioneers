@@ -43,7 +43,6 @@ public class RouteConfiguration {
                 .route("teachers-courses-service", r -> r.path("/teachers-courses/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri(teachersCoursesServiceUri))
-
                 .build();
     }
 }

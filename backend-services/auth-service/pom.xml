@@ -70,7 +70,6 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- JWT Dependencies -->
-		<!-- JWT Dependencies -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
