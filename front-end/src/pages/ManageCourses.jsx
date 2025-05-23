@@ -139,7 +139,7 @@ const ManageCourses = () => {
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Manage Courses</h1>
-        <Link to="/add-course" className="btn-primary">
+        <Link to="/teachers/add-course" className="btn-primary">
           + Add New Course
         </Link>
       </div>
@@ -235,7 +235,7 @@ const ManageCourses = () => {
           className="text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300"
         >
           <p className="text-gray-500 mb-4">No courses match your filters.</p>
-          <Link to="/add-course" className="btn-primary">
+          <Link to="/teachers/add-course" className="btn-primary">
             Create Your First Course
           </Link>
         </motion.div>

@@ -24,7 +24,7 @@ const AddCourse = () => {
     };
     
     addCourse(newCourse);
-    navigate('/manage-courses');
+    navigate('/teachers/manage-courses');
   };
   
   const addLesson = () => {

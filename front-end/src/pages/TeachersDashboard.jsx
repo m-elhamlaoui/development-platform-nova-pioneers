@@ -153,7 +153,7 @@ const Dashboard = () => {
           </motion.a>
           
           <motion.a 
-            href="/manage-courses"
+            href="/teachers/manage-courses"
             className="card bg-space-purple-50 border border-space-purple-100 flex items-center p-4 hover:bg-space-purple-100 transition-colors"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
