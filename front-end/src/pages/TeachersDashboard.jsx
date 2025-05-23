@@ -149,7 +149,7 @@ const Dashboard = () => {
             whileTap={{ scale: 0.98 }}
           >
             <span className="text-2xl mr-3">➕</span>
-            <span className="font-medium text-marine-blue-700">Create New course</span>
+            <span className="font-medium text-marine-blue-700">Create New Course</span>
           </motion.a>
           
           <motion.a 
