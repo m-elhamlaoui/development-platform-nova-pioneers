@@ -19,24 +19,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
 
-body {
-  background-color: #F8F9FC;
-  font-family: sans-serif; /* Equivalent of `font-sans` */
-  color: #1f2937; /* Replace with your actual `text-gray-800` value */
+/* body {
+  color: #1f2937;
   line-height: 1.5;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Your Display Font', sans-serif; /* Replace with your `font-display` font */
-  color: #0b3c5d; /* Replace with your actual `marine-blue-600` color */
+  font-family: 'Your Display Font', sans-serif; 
+  color: #0b3c5d; 
   line-height: 1.2;
-}
+} */
 
 .btn-primary {
   background-color: #0b3c5d; /* replace with your actual "marine-blue-600" color */
