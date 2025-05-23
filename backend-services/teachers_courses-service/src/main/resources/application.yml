@@ -14,7 +14,8 @@ spring:
   application:
     name: teachers_courses-service
 
-
+file:
+  upload-dir: ./uploads
 
 
 
