@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate import
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
 import { Heart, User, ChevronDown, Award, BookOpen } from "lucide-react";
@@ -7,8 +7,19 @@ import { Heart, User, ChevronDown, Award, BookOpen } from "lucide-react";
 const CourseCard = ({ course, onEdit, onDelete, index }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isFav, setIsFav] = useState(false);
+  const navigate = useNavigate(); // Add useNavigate hook
 
   const handleFavoriteToggle = () => setIsFav(!isFav);
+
+  // Function to handle edit - navigate to AddCourse with state
+  const handleEdit = () => {
+    navigate('/teachers/add-course', { 
+      state: { 
+        isEditing: true,
+        courseData: course 
+      } 
+    });
+  };
 
   return (
     <motion.div
@@ -121,7 +132,7 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
         ) : (
           <div className="flex justify-between mt-4">
             <button
-              onClick={() => onEdit(course)}
+              onClick={handleEdit} // Use our new handleEdit function
               className="bg-[#0b3d91] text-white px-4 py-1.5 rounded-full hover:bg-blue-800 transition-colors text-sm font-medium"
             >
               Edit Course
@@ -150,13 +161,6 @@ const ManageCourses = () => {
   // Get unique subjects and grade levels for filters
   const subjects = [...new Set(courses.map(course => course.subject))];
   const gradeLevels = [...new Set(courses.map(course => course.grade_level))];
-
-  // Handle course edit (in a real app, this would navigate to an edit page or open a modal)
-  const handleEditCourse = (course) => {
-    console.log('Edit course:', course);
-    // This would be replaced with actual edit functionality
-    alert(`Editing ${course.title} (In a real app, this would open an edit form)`);
-  };
 
   // Filter and sort courses
   const filteredCourses = courses
@@ -272,7 +276,6 @@ const ManageCourses = () => {
                 key={course.id}
                 course={course}
                 index={index}
-                onEdit={handleEditCourse}
                 onDelete={deleteCourse}
               />
             ))}

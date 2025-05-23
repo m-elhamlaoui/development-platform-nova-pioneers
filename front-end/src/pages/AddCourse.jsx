@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react'; // Add useEffect
+import { useNavigate, useLocation } from 'react-router-dom'; // Add useLocation
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
@@ -8,22 +8,67 @@ import ImageUpload from '../components/FileUpload/ImageUpload';
 
 const AddCourse = () => {
   const navigate = useNavigate();
-  const { addCourse } = useData();
+  const location = useLocation(); // Get location to access state
+  const { addCourse, updateCourse } = useData(); // Add updateCourse function
+  
+  // Check if we're editing an existing course
+  const isEditing = location.state?.isEditing || false;
+  const existingCourse = location.state?.courseData || null;
+  
   const [lessons, setLessons] = useState([]);
   const [activeTab, setActiveTab] = useState('details');
   const [thumbnail, setThumbnail] = useState('');
   
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  
+  // Pre-fill form when editing
+  useEffect(() => {
+    if (isEditing && existingCourse) {
+      // Set thumbnail
+      setThumbnail(existingCourse.thumbnail || '');
+      
+      // Set lessons
+      if (existingCourse.lessons && existingCourse.lessons.length > 0) {
+        setLessons(existingCourse.lessons);
+      }
+      
+      // Pre-fill form values
+      reset({
+        title: existingCourse.title,
+        grade_level: existingCourse.grade_level,
+        description: existingCourse.description,
+        subject: existingCourse.subject,
+        size_category: existingCourse.size_category,
+        xp_value: existingCourse.xp_value,
+        recommended_age: existingCourse.recommended_age,
+      });
+    }
+  }, [isEditing, existingCourse, reset]);
   
   const onSubmitDetails = (data) => {
-    const newCourse = {
+    const courseData = {
       ...data,
       thumbnail,
       xp_value: parseInt(data.xp_value),
       lessons
     };
     
-    addCourse(newCourse);
+    if (isEditing && existingCourse) {
+      // If editing, update the existing course with ID
+      updateCourse({
+        ...courseData,
+        id: existingCourse.id,
+        created_date: existingCourse.created_date || new Date().toISOString()
+      });
+    } else {
+      // If creating a new course
+      addCourse({
+        ...courseData,
+        id: Date.now().toString(),
+        created_date: new Date().toISOString()
+      });
+    }
+    
     navigate('/teachers/manage-courses');
   };
   
@@ -65,7 +110,9 @@ const AddCourse = () => {
   
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Create New Course</h1>
+      <h1 className="text-3xl font-bold mb-6">
+        {isEditing ? 'Edit Course' : 'Create New Course'}
+      </h1>
       
       {/* Tabs */}
       <div className="flex border-b border-gray-200 mb-6">
@@ -222,7 +269,7 @@ const AddCourse = () => {
                 <button
                   type="button"
                   className="btn-outline"
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate('/teachers/manage-courses')} // Change this to go back to manage courses
                 >
                   Cancel
                 </button>
@@ -295,7 +342,7 @@ const AddCourse = () => {
                 className="btn-primary"
                 onClick={handleSubmit(onSubmitDetails)}
               >
-                Create Course
+                {isEditing ? 'Update Course' : 'Create Course'} {/* Change button text based on mode */}
               </button>
             </div>
           </motion.div>
