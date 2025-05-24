@@ -1,5 +1,7 @@
 package com.nova_pioneers.auth.services;
 
+import com.nova_pioneers.auth.dto.LogOutRequest;
+import com.nova_pioneers.auth.dto.LogOutResponse;
 import com.nova_pioneers.auth.dto.SigninRequest;
 import com.nova_pioneers.auth.dto.SigninResponse;
 import com.nova_pioneers.auth.entities.User;
@@ -43,5 +45,14 @@ public class AuthService {
                 user.getRole(),
                 token
         );
+    }
+
+    public LogOutResponse logOut(LogOutRequest request) {
+        User user = userRepository.findById(request.getUserId()).orElse(null);
+        if (user == null) {
+            throw new AuthenticationFailedException("Invalid user id");
+        }
+        tokenService.revokeAllUserTokens(user);
+        return new LogOutResponse("User logged out");
     }
 }

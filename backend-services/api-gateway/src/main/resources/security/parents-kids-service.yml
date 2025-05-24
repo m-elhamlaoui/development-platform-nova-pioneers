@@ -1,0 +1,24 @@
+# Security rules for parents-kids-service
+paths:
+  # Parent-specific endpoints
+  - pattern: "/parents-kids/parent/**"
+    roles: ["parent", "admin"]
+    authenticated: true
+
+  # Kid-specific endpoints
+  - pattern: "/parents-kids/kid/**"
+    roles: ["parent", "kid", "admin"]
+    authenticated: true
+
+  # Enrollment endpoints - parents and kids can access
+  - pattern: "/parents-kids/enrollment/**"
+    roles: ["parent", "kid", "admin"]
+    authenticated: true
+
+  # Public information endpoints
+  - pattern: "/parents-kids/public/**"
+    authenticated: false
+
+  # Test endpoint
+  - pattern: "/parents-kids/api/test"
+    authenticated: false
