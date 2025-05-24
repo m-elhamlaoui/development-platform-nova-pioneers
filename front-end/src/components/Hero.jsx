@@ -150,7 +150,7 @@ export default function Hero(){
                     <div className="relative max-w-4xl overflow-y-scroll
                                     [&::-webkit-scrollbar]:w-1
                                     [&::-webkit-scrollbar-track]:bg-gray-100
-                                    [&::-webkit-scrollbar-thumb]:bg-blue-300
+                                    [&::-webkit-scrollbar-thumb]:bg-blue-200
                                     dark:[&::-webkit-scrollbar-track]:bg-gray-700
                                     dark:[&::-webkit-scrollbar-thumb]:bg-blue-500
                               
