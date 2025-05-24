@@ -70,7 +70,7 @@ services:
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
     volumes:
-      - ./backend-services/parents-kids-service/src/main/resources/uploads:/app/uploads
+      - ./backend-services/parents_kids-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/parents_kids-service/src:/build/src
       - ./backend-services/parents_kids-service/target:/build/target
       - maven-repo:/root/.m2/repository
@@ -90,7 +90,7 @@ services:
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
     volumes:
-      - ./backend-services/teachers-courses-service/src/main/resources/uploads:/app/uploads
+      - ./backend-services/teachers_courses-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/teachers_courses-service/src:/build/src
       - ./backend-services/teachers_courses-service/target:/build/target
       - maven-repo:/root/.m2/repository
