@@ -14,6 +14,9 @@ spring:
   application:
     name: admin-service
 
+file:
+  upload-dir: ./uploads
+
 
 
 

@@ -1,0 +1,68 @@
+@startuml "Teacher and Course Management Services - Component View"
+skinparam componentStyle rectangle
+
+package "com.nova_pioneers.teaching" {
+
+    [Client (Web/Mobile App)] --> [CourseController]
+    [Client (Web/Mobile App)] --> [LessonController]
+    [Client (Web/Mobile App)] --> [ModuleController]
+    [Client (Web/Mobile App)] --> [RatingController]
+    [Client (Web/Mobile App)] --> [TeacherController]
+    [Client (Web/Mobile App)] --> [TestController]
+
+    [CourseController] --> [CourseService]
+    [LessonController] --> [LessonService]
+    [ModuleController] --> [ModuleService]
+    [RatingController] --> [RatingService]
+    [TeacherController] --> [TeacherService]
+
+    [CourseService] --> [CourseRepository]
+    [CourseService] --> [LessonRepository]
+    [CourseService] --> [ContentSectionRepository]
+    [CourseService] --> [CourseMapperService]
+
+    [LessonService] --> [LessonRepository]
+    [LessonService] --> [ModuleRepository]
+
+    [ModuleService] --> [ModuleRepository]
+    [ModuleService] --> [CourseRepository]
+
+    [RatingService] --> [RatingRepository]
+    [RatingService] --> [CourseRepository]
+
+    [TeacherService] --> [TeacherRepository]
+
+    [CourseMapperService] --|> [DTOs]
+    note right of [CourseMapperService]: Maps Entities to DTOs\n(CourseDTO, LessonDTO, ContentSectionDTO)
+
+}
+
+package "DTOs" {
+  [CourseDTO]
+  [LessonDTO]
+  [ContentSectionDTO]
+}
+
+package "Database Tables" {
+    [Teachers]
+    [Courses]
+    [Modules]
+    [Lessons]
+    [ContentSections]
+    [Ratings]
+}
+
+[TeacherRepository] --> [Teachers]
+[CourseRepository] --> [Courses]
+[ModuleRepository] --> [Modules]
+[LessonRepository] --> [Lessons]
+[ContentSectionRepository] --> [ContentSections]
+[RatingRepository] --> [Ratings]
+
+
+note "Spring Boot Application Entry Point" as N1
+[BackendApplication] .. N1
+[GlobalExceptionHandler] -[hidden]-> [Client (Web/Mobile App)]
+note top of [GlobalExceptionHandler]: Handles application-wide exceptions
+
+@enduml

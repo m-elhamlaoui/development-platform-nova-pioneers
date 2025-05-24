@@ -1,0 +1,141 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: pioneer
+      POSTGRES_PASSWORD: nova25!X
+      POSTGRES_DB: novadb
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pioneer -d novadb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  admin-service:
+    container_name: admin-service
+    build: ./backend-services/admin-service
+    ports:
+      - "9091:9091"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+    volumes:
+      - ./backend-services/admin-service/src/main/resources/uploads:/app/uploads
+      - ./backend-services/admin-service/src:/build/src
+      - ./backend-services/admin-service/target:/build/target
+      - maven-repo:/root/.m2/repository
+
+  auth-service:
+    container_name: auth-service
+    build: ./backend-services/auth-service
+    ports:
+      - "9092:9092"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+    volumes:
+      - ./backend-services/auth-service/src/main/resources/uploads:/app/uploads
+      - ./backend-services/auth-service/src:/build/src
+      - ./backend-services/auth-service/target:/build/target
+      - maven-repo:/root/.m2/repository
+
+  parents-kids-service:
+    container_name: parents-kids-service
+    build: ./backend-services/parents_kids-service
+    ports:
+      - "9093:9093"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+    volumes:
+      - ./backend-services/parents-kids-service/src/main/resources/uploads:/app/uploads
+      - ./backend-services/parents_kids-service/src:/build/src
+      - ./backend-services/parents_kids-service/target:/build/target
+      - maven-repo:/root/.m2/repository
+
+  teachers-courses-service:
+    container_name: teachers-courses-service
+    build: ./backend-services/teachers_courses-service
+    ports:
+      - "9094:9094"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
+      SPRING_DATASOURCE_USERNAME: pioneer
+      SPRING_DATASOURCE_PASSWORD: nova25!X
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+    volumes:
+      - ./backend-services/teachers-courses-service/src/main/resources/uploads:/app/uploads
+      - ./backend-services/teachers_courses-service/src:/build/src
+      - ./backend-services/teachers_courses-service/target:/build/target
+      - maven-repo:/root/.m2/repository
+
+  api-gateway:
+    build:
+      context: ./backend-services/api-gateway
+    environment:
+      ADMIN_SERVICE_URI: "http://admin-service:9091"
+      AUTH_SERVICE_URI: "http://auth-service:9092"
+      PARENTS_KIDS_SERVICE_URI: "http://parents-kids-service:9093"
+      TEACHERS_COURSES_SERVICE_URI: "http://teachers-courses-service:9094"
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - admin-service
+      - auth-service
+      - parents-kids-service
+      - teachers-courses-service
+    volumes:
+      - ./backend-services/api-gateway/src:/app/src
+      - ./backend-services/api-gateway/target:/app/target
+      - maven-repo:/root/.m2/repository
+
+  frontend:
+    container_name: nova-pioneers-front-end
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api-gateway
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=1
+      - VITE_PORT=5173
+    command: [ "npm", "run", "dev", "--", "--host" ]
+
+volumes:
+  postgres-data:
+  maven-repo:

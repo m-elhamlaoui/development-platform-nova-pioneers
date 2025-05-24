@@ -1,0 +1,41 @@
+# Security rules for teachers-courses-service
+paths:
+  # Teacher-specific endpoints
+  - pattern: "/teachers-courses/api/teachers/profile/**"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  # Course management - only teachers and admins
+  - pattern: "/teachers-courses/api/courses/*/detailed"
+    roles: ["teacher", "admin", "parent", "kid"]
+    authenticated: true
+
+  # Course creation/modification - only teachers and admins
+  - pattern: "/teachers-courses/api/courses/detailed"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  # Course ratings - any authenticated user
+  - pattern: "/teachers-courses/api/courses/*/ratings"
+    authenticated: true
+
+  # Public course listing endpoints
+  - pattern: "/teachers-courses/api/courses"
+    authenticated: false
+
+  # Course search and filtering - public
+  - pattern: "/teachers-courses/api/courses/search"
+    authenticated: false
+
+  - pattern: "/teachers-courses/api/courses/filter"
+    authenticated: false
+
+  # All teachers listing - accessible by any authenticated user
+  - pattern: "/teachers-courses/api/teachers"
+    authenticated: true
+
+  # Public teacher info
+  - pattern: "/teachers-courses/api/teachers/*/public"
+    authenticated: false
+
+

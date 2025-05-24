@@ -1,4 +1,4 @@
-package com.nova_pioneers.admin.controllers;
+package com.nova_pioneers.auth.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +8,6 @@ public class TestController {
 
     @GetMapping("/api/test")
     public String testEndpoint() {
-        return "Auth Service Working";
+        return "Admin Service Working";
     }
 }

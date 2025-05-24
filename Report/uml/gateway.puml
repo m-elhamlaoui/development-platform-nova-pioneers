@@ -1,0 +1,33 @@
+@startuml
+!theme plain
+
+actor "Client" as Client
+participant "API Gateway" as Gateway
+participant "JWT Auth" as JWT
+participant "Microservices" as Service
+
+Client -> Gateway: Request with JWT
+activate Gateway
+
+Gateway -> JWT: Verify Token
+JWT --> Gateway: Validation Result
+
+alt Valid Token
+    Gateway -> Service: Forward to Appropriate Service
+    Service --> Gateway: Response
+    Gateway --> Client: Return Response
+else Invalid Token
+    Gateway --> Client: 401 Unauthorized
+end
+
+deactivate Gateway
+
+note right of Gateway
+  Routes by path:
+  /auth/** → Auth Service
+  /admin/** → Admin Service
+  /parents-kids/** → Parents Service
+  /teachers-courses/** → Teaching Service
+end note
+
+@enduml
