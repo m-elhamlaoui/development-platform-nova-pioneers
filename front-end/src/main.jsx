@@ -16,6 +16,12 @@ import ManageCourses from './pages/ManageCourses';
 import NotFound from './pages/NotFound';
 import CourseView from './pages/CourseView';
 import KidDashboard from './pages/KidDashboard';
+import AdminDashboard from './components/AdminDashboard';
+import AdminHome from './components/AdminHome';
+import ManageUsers from './components/ManageUsers';
+import ConfirmTeachers from './components/ConfirmTeachers';
+import ManageAlerts from './components/ManageAlerts';
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -38,6 +44,14 @@ export default function App() {
             <Route path="manage-courses" element={<ManageCourses />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="" element={<AdminHome />} />
+            <Route path="manage-users" element={<ManageUsers />} />
+            <Route path="confirm-teachers" element={<ConfirmTeachers />} />
+            <Route path="manage-alerts" element={<ManageAlerts />} />
+          </Route>
+
           <Route path="/kid/dashboard" element={<KidDashboard />} />
           <Route path="/kid/courses" element={<KidDashboard />} />
           <Route path="/kid/settings" element={<KidDashboard />} />
