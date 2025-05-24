@@ -42,7 +42,6 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="add-course" element={<AddCourse />} />
             <Route path="manage-courses" element={<ManageCourses />} />
-            <Route path="*" element={<NotFound />} />
           </Route>
 
           <Route path="/admin" element={<AdminDashboard />}>
@@ -55,7 +54,8 @@ export default function App() {
           <Route path="/kid/dashboard" element={<KidDashboard />} />
           <Route path="/kid/courses" element={<KidDashboard />} />
           <Route path="/kid/settings" element={<KidDashboard />} />
-          
+          <Route path="*" element={<NotFound />} />
+
       </Routes>
       </DataProvider>
     </BrowserRouter>

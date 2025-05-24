@@ -17,11 +17,24 @@ import {
 
 const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
   const { teacher, getXpLevel } = useData();
-  const xpStatus = getXpLevel(teacher.xpPoints);
+  
+  // Safe access to teacher data with default values
+  const safeTeacher = teacher || {
+    name: "Teacher Name",
+    email: "teacher@example.com",
+    xpPoints: 0,
+    avatar: "https://via.placeholder.com/80x80?text=T"
+  };
+  
+  const xpStatus = getXpLevel ? getXpLevel(safeTeacher.xpPoints || 0) : { 
+    level: "Beginner", 
+    color: "bg-gray-400" 
+  };
+  
   const [showSettings, setShowSettings] = useState(false);
   const [profile, setProfile] = useState({ 
-    name: teacher?.name || "Teacher Name", 
-    email: teacher?.email || "teacher@example.com" 
+    name: safeTeacher.name, 
+    email: safeTeacher.email 
   });
 
   const toggleSettings = () => setShowSettings(!showSettings);
@@ -31,8 +44,53 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setShowSettings(false);
-    console.log("Updated Profile:", profile); // replace with API call if needed
+    console.log("Updated Profile:", profile);
   };
+
+  // Show loading state if teacher data is not available
+  if (!teacher) {
+    return (
+      <>
+        {/* Mobile burger menu */}
+        <div className="fixed top-4 left-4 z-30 lg:hidden">
+          <button
+            onClick={toggleSidebar}
+            className="bg-white p-2 rounded-md shadow-md text-gray-700"
+          >
+            ☰
+          </button>
+        </div>
+
+        {/* Loading Sidebar */}
+        <motion.div 
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: isOpen ? 0 : -100, opacity: isOpen ? 1 : 0 }}
+          transition={{ type: "spring", stiffness: 100 }}
+          className="Menu flex flex-col justify-between shadow min-h-screen max-h-screen p-4 bg-white fixed lg:static inset-y-0 left-0 z-20 w-64 overflow-hidden"
+        >
+          <div className="menu-upper-section space-y-4 overflow-visible">
+            {/* Logo */}
+            <div className="flex items-center justify-start">
+              <img className="w-[60px] align-left" src={dashlogo} alt="Logo" />
+            </div>
+            
+            {/* Loading Profile */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl shadow-sm w-[200px] mx-auto">
+              <div className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-full bg-gray-300 animate-pulse"></div>
+                <div className="mt-3 text-center w-full">
+                  <div className="h-4 bg-gray-300 rounded animate-pulse mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center text-gray-500">Loading...</div>
+          </div>
+        </motion.div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -64,9 +122,12 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
             <div className="flex flex-col items-center">
               <div className="relative">
                 <img 
-                  src={teacher.avatar} 
-                  alt={teacher.name} 
+                  src={safeTeacher.avatar || "https://via.placeholder.com/80x80?text=T"} 
+                  alt={safeTeacher.name} 
                   className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/80x80?text=T";
+                  }}
                 />
                 <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center ${xpStatus.color}`}>
@@ -76,8 +137,12 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
               </div>
               
               <div className="mt-3 text-center w-full">
-                <div className="font-semibold text-gray-800 text-lg whitespace-nowrap overflow-hidden text-ellipsis">{teacher.name}</div>
-                <div className="text-xs text-gray-500 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">{teacher.email}</div>
+                <div className="font-semibold text-gray-800 text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+                  {safeTeacher.name}
+                </div>
+                <div className="text-xs text-gray-500 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {safeTeacher.email}
+                </div>
                 
                 {/* XP Badge */}
                 <div className="flex items-center justify-center gap-2 mt-2 flex-nowrap">
@@ -86,7 +151,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
                     <span className="whitespace-nowrap">{xpStatus.level}</span>
                   </div>
                   <div className="bg-green-400 text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap overflow-visible">
-                    <span className="whitespace-nowrap overflow-visible">{teacher.xpPoints} XP</span>
+                    <span className="whitespace-nowrap overflow-visible">{safeTeacher.xpPoints || 0} XP</span>
                   </div>
                 </div>
               </div>

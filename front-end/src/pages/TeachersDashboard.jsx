@@ -58,9 +58,12 @@ const RecentCourseCard = ({ course, index }) => (
   >
     <div className="relative h-32">
       <img 
-        src={course.thumbnail} 
+        src={course.thumbnail || "https://via.placeholder.com/400x200?text=Course"} 
         alt={course.title} 
         className="w-full h-full object-cover"
+        onError={(e) => {
+          e.target.src = "https://via.placeholder.com/400x200?text=Course";
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
       <div className="absolute bottom-3 left-3 right-3">
@@ -68,17 +71,17 @@ const RecentCourseCard = ({ course, index }) => (
         <div className="flex items-center mt-1">
           <span className="bg-white/30 backdrop-blur-sm text-xs text-white rounded-full px-2 py-0.5 inline-flex items-center">
             <Clock size={10} className="mr-1" />
-            {new Date(course.created_date).toLocaleDateString()}
+            {course.created_date ? new Date(course.created_date).toLocaleDateString() : 'N/A'}
           </span>
           <span className="bg-white/30 backdrop-blur-sm text-xs text-white rounded-full px-2 py-0.5 inline-flex items-center ml-2">
             <Users size={10} className="mr-1" />
-            {course.grade_level}
+            {course.grade_level || 'All'}
           </span>
         </div>
       </div>
     </div>
     <div className="p-4">
-      <p className="text-sm text-gray-600 line-clamp-2 h-10">{course.description}</p>
+      <p className="text-sm text-gray-600 line-clamp-2 h-10">{course.description || 'No description available'}</p>
       <div className="mt-3 flex justify-between items-center">
         <div className="flex items-center text-xs font-medium">
           <FileText size={12} className="text-blue-500 mr-1" />
@@ -153,7 +156,15 @@ const XpProgressCard = ({ xpStatus, totalXp }) => {
 };
 
 const Dashboard = () => {
-  const { courses, teacher, getXpLevel, calculateTotalXp } = useData();
+  const { courses = [], teacher, getXpLevel, calculateTotalXp } = useData();
+  
+  // Safe teacher object with default values
+  const safeTeacher = teacher || {
+    name: "Teacher",
+    xpPoints: 0,
+    avatar: null
+  };
+  
   const [totalXp, setTotalXp] = useState(0);
   const [stats, setStats] = useState({
     totalCourses: 0,
@@ -162,7 +173,7 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    // Calculate stats
+    // Calculate stats with safe access
     const coursesCount = courses.length;
     const lessonsCount = courses.reduce(
       (total, course) => total + (course.lessons?.length || 0), 
@@ -177,16 +188,55 @@ const Dashboard = () => {
         : 0
     });
     
-    // Calculate XP
-    setTotalXp(calculateTotalXp() + teacher.xpPoints);
-  }, [courses, teacher.xpPoints, calculateTotalXp]);
+    // Calculate XP with safe access
+    const calculatedXp = calculateTotalXp ? calculateTotalXp() : 0;
+    const teacherXp = safeTeacher.xpPoints || 0;
+    setTotalXp(calculatedXp + teacherXp);
+  }, [courses, safeTeacher.xpPoints, calculateTotalXp]);
 
-  const xpStatus = getXpLevel(totalXp);
+  // Safe XP level calculation
+  const xpStatus = getXpLevel ? getXpLevel(totalXp) : { level: "Beginner", color: "bg-gray-400" };
 
-  // Sort courses by created date (most recent first)
+  // Sort courses by created date (most recent first) with safe access
   const recentCourses = [...courses]
-    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+    .sort((a, b) => {
+      const dateA = a.created_date ? new Date(a.created_date) : new Date(0);
+      const dateB = b.created_date ? new Date(b.created_date) : new Date(0);
+      return dateB - dateA;
+    })
     .slice(0, 3);
+
+  // Show loading state if teacher data is not available
+  if (!teacher) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="py-6"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl p-6 shadow-md h-full animate-pulse">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 rounded-full bg-gray-300"></div>
+                <div>
+                  <div className="h-8 bg-gray-300 rounded w-48 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-32"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-1">
+            <div className="bg-gray-300 rounded-2xl p-6 h-full animate-pulse"></div>
+          </div>
+        </div>
+        <div className="text-center py-10">
+          <div className="text-gray-500">Loading dashboard...</div>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -207,13 +257,16 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 rounded-full border-2 border-blue-500 p-1">
                 <img 
-                  src={teacher.avatar || "https://ui-avatars.com/api/?name=" + teacher.name} 
-                  alt={teacher.name}
+                  src={safeTeacher.avatar || `https://ui-avatars.com/api/?name=${safeTeacher.name}&background=3b82f6&color=fff`} 
+                  alt={safeTeacher.name}
                   className="w-full h-full rounded-full object-cover"
+                  onError={(e) => {
+                    e.target.src = `https://ui-avatars.com/api/?name=${safeTeacher.name}&background=3b82f6&color=fff`;
+                  }}
                 />
               </div>
               <div>
-                <h1 className="text-3xl font-bold mb-1">Welcome, {teacher.name}</h1>
+                <h1 className="text-3xl font-bold mb-1">Welcome, {safeTeacher.name}</h1>
                 <p className="text-gray-600">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
               </div>
             </div>
@@ -242,13 +295,6 @@ const Dashboard = () => {
           gradientFrom="#8b5cf6"
           gradientTo="#c084fc"
         />
-        {/* <StatCard 
-          title="Avg. Lessons/Course" 
-          value={stats.averageLessonsPerCourse} 
-          icon={<PieChart size={22} />} 
-          gradientFrom="#ec4899"
-          gradientTo="#f472b6"
-        /> */}
         <StatCard 
           title="Total XP" 
           value={totalXp} 
@@ -314,13 +360,13 @@ const Dashboard = () => {
             to="/teachers/manage-courses"
           />
           
-          {/* <ActionCard 
+          <ActionCard 
             icon={<BarChart2 size={24} className="text-white" />}
             title="View Analytics"
             description="Get insights about student engagement and progress"
             color="bg-gradient-to-br from-rose-500 to-rose-700"
             to="/teachers/analytics"
-          /> */}
+          />
         </div>
       </div>
     </motion.div>
