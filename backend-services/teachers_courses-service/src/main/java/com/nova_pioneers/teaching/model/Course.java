@@ -29,7 +29,8 @@ public class Course {
     @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
     private String description;
 
-    private String thumbnail;
+    @Column(name = "thumbnail_path")
+    private String thumbnailPath;
 
     @Column(name = "grade_level")
     @NotBlank(message = "Grade level is required")
@@ -93,4 +94,32 @@ public class Course {
         return teacher != null ? teacher.getFirstName() + " " + teacher.getLastName() : "";
     }
 
+
+    // Helper method to get full thumbnail URL
+    @Transient
+    public String getThumbnailUrl() {
+        if (thumbnailPath != null && !thumbnailPath.isEmpty()) {
+            return "/api/files/" + thumbnailPath;
+        }
+        return null;
+    }
+
+    // Keep backward compatibility for existing code
+    @Transient
+    public String getThumbnail() {
+        return getThumbnailUrl();
+    }
+
+    public void setThumbnail(String thumbnail) {
+        // If it's a full URL, extract the path part
+        if (thumbnail != null && thumbnail.startsWith("/api/files/")) {
+            this.thumbnailPath = thumbnail.replace("/api/files/", "");
+        } else if (thumbnail != null) {
+            this.thumbnailPath = thumbnail;
+        }
+    }
+
+    // ... rest of existing methods ...
 }
+
+

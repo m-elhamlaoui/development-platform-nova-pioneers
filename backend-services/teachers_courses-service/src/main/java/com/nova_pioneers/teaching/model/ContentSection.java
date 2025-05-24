@@ -21,8 +21,8 @@ public class ContentSection {
 
     @Column(length = 1000)
     private String text;
-    @Column(name = "image_path")  // Map to image_path column
-    private String image;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(name = "fun_fact", length = 500)
     private String funFact;
 

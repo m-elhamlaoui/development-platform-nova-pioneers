@@ -272,7 +272,7 @@ public class CourseService {
                 // Update existing section
                 section.setSubheading(sectionDTO.getSubheading());
                 section.setText(sectionDTO.getText());
-                section.setImage(sectionDTO.getImage());
+                section.setImagePath(sectionDTO.getImage());
                 section.setFunFact(sectionDTO.getFunFact());
                 section.setLesson(lesson);
             }

@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -27,6 +29,7 @@ public class CourseController {
     private CourseService courseService;
     @Autowired
     private FileUploadService fileUploadService;
+    private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     @GetMapping
     public ResponseEntity<List<Course>> getAllCourses() {
