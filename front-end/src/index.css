@@ -1,9 +1,128 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 *{
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
+  scroll-behavior: smooth;
+  /* background:black; */
+}
+
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* body {
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Your Display Font', sans-serif; 
+  color: #0b3c5d; 
+  line-height: 1.2;
+} */
+
+.btn-primary {
+  background-color: #0b3c5d; /* replace with your actual "marine-blue-600" color */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #092c47; /* replace with your actual "marine-blue-700" color */
+}
+
+.btn-secondary {
+  background-color: #5f27cd; /* replace with your actual "space-purple-600" color */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #341f97; /* replace with your actual "space-purple-700" color */
+}
+
+.btn-outline {
+  border: 1px solid #0b3c5d; /* replace with "marine-blue-600" */
+  color: #0b3c5d;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-outline:hover {
+  background-color: #e6f0fa; /* replace with "marine-blue-50" */
+}
+
+.btn-danger {
+  background-color: #dc2626; /* replace with your actual "error-500" color */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c; /* replace with your actual "error-600" color */
+}
+
+.card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* replace with your "shadow-card" style */
+}
+
+
+ /* .logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+} */
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+} 
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }

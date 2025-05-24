@@ -1,0 +1,36 @@
+server:
+  port: 9092
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  application:
+    name: auth-service
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+file:
+  upload-dir: ./uploads
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.nova_pioneers.auth: DEBUG
+
+jwt: #will be changet in set in.env in prod
+  secret: SB4cgMKW7XkP83H5z94FfHd8QXYZVaJ2GtRbnLm5uEvsUwC6DTjeKqNyA7pZkrx
+  expiration: 86400000 # 24 hours in milliseconds
+
+
+
+
