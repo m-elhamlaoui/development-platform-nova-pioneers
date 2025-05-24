@@ -77,7 +77,6 @@ const AddCourse = () => {
           text: content.text,
           fun_fact: content.fun_fact,
           sequence_order: content.sequence_order,
-          // Don't include image_file in JSON, it will be sent separately
         })) : []
       }))
     };
@@ -90,15 +89,22 @@ const AddCourse = () => {
       formData.append('thumbnail', thumbnail);
     }
     
-    // Add lesson content images
+    // Collect all lesson content images into a single array
+    const allImages = [];
+    
     courseData.lessons.forEach((lesson, lessonIndex) => {
       if (lesson.lesson_contents) {
         lesson.lesson_contents.forEach((content, contentIndex) => {
           if (content.image_file) {
-            formData.append(`lesson_${lessonIndex}_content_${contentIndex}_image`, content.image_file);
+            allImages.push(content.image_file);
           }
         });
       }
+    });
+    
+    // Add all images as 'images' array (this matches backend expectation)
+    allImages.forEach((imageFile, index) => {
+      formData.append('images', imageFile);
     });
     
     return formData;
@@ -107,7 +113,69 @@ const AddCourse = () => {
   // Send course to backend
   const sendCourseToBackend = async (courseData) => {
     try {
-      const formData = createFormData(courseData);
+      console.log('Preparing to send course data:', courseData);
+      
+      const formData = new FormData();
+      
+      // Create course data without file references
+      const courseDataForBackend = {
+        title: courseData.title,
+        description: courseData.description,
+        grade_level: courseData.grade_level,
+        subject: courseData.subject,
+        size_category: courseData.size_category,
+        xp_value: parseInt(courseData.xp_value),
+        recommended_age: courseData.recommended_age,
+        lessons: courseData.lessons.map(lesson => ({
+          title: lesson.title,
+          content: lesson.content,
+          resource_links: lesson.resource_links || [],
+          sequence_order: lesson.sequence_order,
+          lesson_contents: lesson.lesson_contents ? lesson.lesson_contents.map(content => ({
+            subheading: content.subheading,
+            text: content.text,
+            fun_fact: content.fun_fact,
+            sequence_order: content.sequence_order
+          })) : []
+        }))
+      };
+      
+      // Add course data as JSON
+      formData.append('courseData', JSON.stringify(courseDataForBackend));
+      
+      // Add thumbnail if it exists
+      if (thumbnail && thumbnail instanceof File) {
+        console.log('Adding thumbnail:', thumbnail.name, thumbnail.size);
+        formData.append('thumbnail', thumbnail);
+      } else {
+        console.log('No thumbnail to upload');
+      }
+      
+      // Collect and add lesson content images
+      let imageCount = 0;
+      courseData.lessons.forEach((lesson, lessonIndex) => {
+        if (lesson.lesson_contents) {
+          lesson.lesson_contents.forEach((content, contentIndex) => {
+            if (content.image_file && content.image_file instanceof File) {
+              console.log(`Adding content image ${imageCount}:`, content.image_file.name, content.image_file.size);
+              formData.append('images', content.image_file);
+              imageCount++;
+            }
+          });
+        }
+      });
+      
+      console.log(`Total images to upload: ${imageCount}`);
+      
+      // Log all FormData entries
+      console.log('FormData entries:');
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
+        } else {
+          console.log(`${key}: ${typeof value} - ${value.length > 100 ? value.substring(0, 100) + '...' : value}`);
+        }
+      }
       
       const url = isEditing 
         ? `http://localhost:9094/api/courses/update-with-files/${existingCourse.id}`
@@ -115,31 +183,48 @@ const AddCourse = () => {
       
       const method = isEditing ? 'PUT' : 'POST';
       
+      console.log(`Sending ${method} request to ${url}`);
+      
       const response = await fetch(url, {
         method: method,
         body: formData,
-        // Don't set Content-Type header, let browser set it for multipart/form-data
+        // Don't set Content-Type - let browser handle it for multipart/form-data
       });
       
+      const responseText = await response.text();
+      console.log('Response status:', response.status);
+      console.log('Response text:', responseText);
+      
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}, response: ${responseText}`);
       }
       
-      const result = await response.json();
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Failed to parse JSON response:', e);
+        throw new Error('Invalid JSON response from server');
+      }
+      
+      if (result.success === false) {
+        throw new Error(result.error || 'Server returned an error');
+      }
+      
       console.log('Course saved successfully:', result);
       
-      // Update local state after successful backend save
+      // Update local state
       if (isEditing) {
-        updateCourse(result);
+        updateCourse(result.course || result);
       } else {
-        addCourse(result);
+        addCourse(result.course || result);
       }
       
       navigate('/teachers/manage-courses');
+      
     } catch (error) {
       console.error('Error saving course:', error);
-      // You might want to show an error message to the user here
-      alert('Failed to save course. Please try again.');
+      alert(`Failed to save course: ${error.message}`);
     }
   };
   

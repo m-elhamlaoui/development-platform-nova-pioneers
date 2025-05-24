@@ -1,6 +1,5 @@
 package com.nova_pioneers.teaching.controllers;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nova_pioneers.teaching.DTO.ContentSectionDTO;
 import com.nova_pioneers.teaching.DTO.CourseDTO;
@@ -85,8 +84,8 @@ public class CourseController {
                     for (int i = 0; i < lesson.getContent().size(); i++) {
                         ContentSectionDTO section = lesson.getContent().get(i);
                         System.out.println("  Section " + i + ": " +
-                                (section.getSubheading() != null ? section.getSubheading() :
-                                        section.getFunFact() != null ? "Fun fact" : "No title"));
+                                (section.getSubheading() != null ? section.getSubheading()
+                                        : section.getFunFact() != null ? "Fun fact" : "No title"));
                     }
                 }
             }
@@ -108,7 +107,8 @@ public class CourseController {
     }
 
     @PutMapping("/{id}/detailed")
-    public ResponseEntity<CourseDTO> updateCourseDetailed(@PathVariable Long id, @Valid @RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<CourseDTO> updateCourseDetailed(@PathVariable Long id,
+            @Valid @RequestBody CourseDTO courseDTO) {
         Optional<Course> existingCourse = courseService.getCourseById(id);
 
         if (existingCourse.isPresent()) {
@@ -146,7 +146,6 @@ public class CourseController {
 
         return ResponseEntity.ok(courseService.filterCourses(subject, gradeLevel, sizeCategory, minAge, maxAge));
     }
-
 
     @PostMapping(value = "/detailed/multipart", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CourseDTO> createCourseFromMultipart(
@@ -212,12 +211,17 @@ public class CourseController {
     }
 
     private String transformSizeCategory(String frontendSize) {
-        if (frontendSize == null) return "M";
+        if (frontendSize == null)
+            return "M";
         switch (frontendSize.toLowerCase()) {
-            case "small": return "S";
-            case "medium": return "M";
-            case "large": return "L";
-            default: return "M";
+            case "small":
+                return "S";
+            case "medium":
+                return "M";
+            case "large":
+                return "L";
+            default:
+                return "M";
         }
     }
 
@@ -230,7 +234,8 @@ public class CourseController {
             lessonDTO.setSequenceOrder(((Number) frontendLesson.get("sequence_order")).intValue());
 
             // Transform lesson_contents to content
-            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson.get("lesson_contents");
+            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson
+                    .get("lesson_contents");
             if (frontendContents != null) {
                 List<ContentSectionDTO> contentDTOs = transformContentSections(frontendContents);
                 lessonDTO.setContent(contentDTOs);
@@ -259,7 +264,7 @@ public class CourseController {
     }
 
     private void updateImagePaths(CourseDTO courseDTO, MultipartFile[] lessonImages,
-                                  MultipartFile[] contentImages, Map<String, String> imageMapping) {
+            MultipartFile[] contentImages, Map<String, String> imageMapping) {
         try {
             // Handle lesson images
             if (lessonImages != null && courseDTO.getLessons() != null) {
@@ -277,7 +282,8 @@ public class CourseController {
                 for (LessonDTO lesson : courseDTO.getLessons()) {
                     if (lesson.getContent() != null) {
                         for (ContentSectionDTO content : lesson.getContent()) {
-                            String mappingKey = "content_" + lesson.getSequenceOrder() + "_" + content.getSequenceOrder();
+                            String mappingKey = "content_" + lesson.getSequenceOrder() + "_"
+                                    + content.getSequenceOrder();
                             if (imageMapping.containsKey(mappingKey) && imageIndex < contentImages.length) {
                                 MultipartFile contentImage = contentImages[imageIndex];
                                 if (contentImage != null && !contentImage.isEmpty()) {
@@ -294,6 +300,7 @@ public class CourseController {
             logger.error("Error updating image paths", e);
         }
     }
+
     @PostMapping(value = "/create-with-files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> createCourseWithFiles(
             @RequestParam("courseData") String courseDataJson,
@@ -303,46 +310,54 @@ public class CourseController {
         try {
             logger.info("Creating course with files. CourseData: {}", courseDataJson);
 
-            // Parse course data from JSON string
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Object> frontendCourseData = objectMapper.readValue(courseDataJson, Map.class);
-
-            // Convert image array to list for easier handling
-            List<MultipartFile> imagesList = new ArrayList<>();
-            if (imageFiles != null) {
-                imagesList.addAll(Arrays.asList(imageFiles));
-            }
-
-            // Add thumbnail to the beginning of images list if present
+            // Add debugging for file uploads
             if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-                imagesList.add(0, thumbnailFile);
+                logger.info("Received thumbnail file: {} (size: {} bytes)",
+                        thumbnailFile.getOriginalFilename(), thumbnailFile.getSize());
+            } else {
+                logger.info("No thumbnail file received");
             }
 
-            // Create course using the service
-            CourseDTO createdCourse = courseService.createCourseFromFrontend(
-                    frontendCourseData,
-                    thumbnailFile,
-                    imagesList
-            );
+            if (imageFiles != null && imageFiles.length > 0) {
+                logger.info("Received {} image files:", imageFiles.length);
+                for (int i = 0; i < imageFiles.length; i++) {
+                    if (imageFiles[i] != null && !imageFiles[i].isEmpty()) {
+                        logger.info("  Image {}: {} (size: {} bytes)",
+                                i, imageFiles[i].getOriginalFilename(), imageFiles[i].getSize());
+                    } else {
+                        logger.info("  Image {}: empty or null", i);
+                    }
+                }
+            } else {
+                logger.info("No image files received");
+            }
 
-            // Return success response
-            Map<String, Object> response = Map.of(
-                    "success", true,
-                    "message", "Course created successfully",
-                    "course", createdCourse
-            );
+            // Parse course data
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> frontendData = objectMapper.readValue(courseDataJson, Map.class);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            // Convert MultipartFile[] to List<MultipartFile>
+            List<MultipartFile> imageFilesList = null;
+            if (imageFiles != null) {
+                imageFilesList = Arrays.asList(imageFiles);
+            }
+
+            // Create course
+            CourseDTO savedCourse = courseService.createCourseFromFrontend(frontendData, thumbnailFile, imageFilesList);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Course created successfully");
+            response.put("course", savedCourse);
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            logger.error("Error creating course with files", e);
-
-            Map<String, Object> errorResponse = Map.of(
-                    "success", false,
-                    "error", e.getMessage()
-            );
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            logger.error("Error creating course", e);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("error", "Failed to create course: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
@@ -360,6 +375,35 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    // Add this test endpoint to your CourseController
+
+    @PostMapping("/test-upload")
+    public ResponseEntity<Map<String, Object>> testFileUpload(
+            @RequestParam(value = "testFile", required = false) MultipartFile testFile) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (testFile != null && !testFile.isEmpty()) {
+                logger.info("Test file received: {} (size: {} bytes)",
+                        testFile.getOriginalFilename(), testFile.getSize());
+
+                String savedPath = fileUploadService.saveCourseImage(testFile, "test");
+
+                response.put("success", true);
+                response.put("message", "File uploaded successfully");
+                response.put("path", savedPath);
+            } else {
+                response.put("success", false);
+                response.put("message", "No file received");
+            }
+        } catch (Exception e) {
+            logger.error("Test upload failed", e);
+            response.put("success", false);
+            response.put("error", e.getMessage());
+        }
+
+        return ResponseEntity.ok(response);
+    }
 }
-
-

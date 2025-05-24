@@ -393,144 +393,66 @@ public class CourseService {
             MultipartFile thumbnailFile,
             List<MultipartFile> imageFiles) {
         try {
-            // Transform frontend data to backend Course entity
+            System.out.println("=== createCourseFromFrontend called ===");
+            System.out.println("Thumbnail file: " + (thumbnailFile != null ? thumbnailFile.getOriginalFilename() : "null"));
+            System.out.println("Image files count: " + (imageFiles != null ? imageFiles.size() : 0));
+            
+            // Create course entity from frontend data
             Course course = transformFrontendDataToCourse(frontendData);
 
             // Handle thumbnail upload
             if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-                String thumbnailPath = fileUploadService.saveCourseImage(thumbnailFile, "thumbnail");
-                course.setThumbnailPath(thumbnailPath);
+                System.out.println("Processing thumbnail upload...");
+                try {
+                    String thumbnailPath = fileUploadService.saveCourseImage(thumbnailFile, "thumbnail");
+                    System.out.println("Thumbnail saved at: " + thumbnailPath);
+                    course.setThumbnail("/api/files/" + thumbnailPath);
+                } catch (Exception e) {
+                    System.err.println("Failed to save thumbnail: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No thumbnail to process");
             }
 
             // Save course first to get ID
+            System.out.println("Saving course to database...");
             course = courseRepository.save(course);
+            System.out.println("Course saved with ID: " + course.getId());
 
-            // Handle lessons with images
+            // Handle lessons if they exist
             List<Map<String, Object>> frontendLessons = (List<Map<String, Object>>) frontendData.get("lessons");
-            if (frontendLessons != null) {
+            if (frontendLessons != null && !frontendLessons.isEmpty()) {
+                System.out.println("Processing " + frontendLessons.size() + " lessons...");
                 saveLessonsFromFrontend(course, frontendLessons, imageFiles);
+            } else {
+                System.out.println("No lessons to process");
             }
 
-            // Reload course with all lessons and content
+            // Reload with lessons and content sections
             List<Lesson> savedLessons = loadLessonsWithContentSections(course.getId());
             return mapperService.mapToDTO(course, savedLessons);
 
         } catch (Exception e) {
-            // Cleanup uploaded files if course creation fails
-            // ... cleanup logic
+            System.err.println("Error in createCourseFromFrontend: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Failed to create course: " + e.getMessage(), e);
-        }
-    }
-
-    private Course transformFrontendDataToCourse(Map<String, Object> frontendData) {
-        Course course = new Course();
-
-        // Basic course fields
-        course.setTitle((String) frontendData.get("title"));
-        course.setDescription((String) frontendData.get("description"));
-        course.setGradeLevel((String) frontendData.get("grade_level"));
-        course.setSubject((String) frontendData.get("subject"));
-
-        // Transform size category from frontend format to backend format
-        String sizeCategory = (String) frontendData.get("size_category");
-        course.setSizeCategory(mapSizeCategory(sizeCategory));
-
-        // Handle XP value
-        Object xpValue = frontendData.get("xp_value");
-        if (xpValue instanceof Number) {
-            course.setXpValue(((Number) xpValue).intValue());
-        } else if (xpValue instanceof String) {
-            try {
-                course.setXpValue(Integer.parseInt((String) xpValue));
-            } catch (NumberFormatException e) {
-                course.setXpValue(100); // Default value
-            }
-        } else {
-            course.setXpValue(100); // Default value
-        }
-
-        // Transform recommended_age: "11-14" -> 11 (take first number)
-        String recommendedAgeStr = (String) frontendData.get("recommended_age");
-        course.setRecommendedAge(parseRecommendedAge(recommendedAgeStr));
-
-        // Set creation date
-        course.setCreatedDate(LocalDate.now());
-
-        // Get teacher ID from frontend data - make it optional
-        Object teacherIdObj = frontendData.get("teacherId");
-        if (teacherIdObj != null) {
-            try {
-                Long teacherId = ((Number) teacherIdObj).longValue();
-                Teacher teacher = teacherRepository.findById(teacherId).orElse(null);
-                course.setTeacher(teacher);
-            } catch (Exception e) {
-                System.err.println("Failed to find teacher: " + e.getMessage());
-                course.setTeacher(null); // Set to null if teacher not found
-            }
-        } else {
-            course.setTeacher(null); // No teacher specified
-        }
-
-        return course;
-    }
-
-    private Teacher getOrCreateDefaultTeacher() {
-        // First try to find an existing teacher
-        Optional<Teacher> existingTeacher = teacherRepository.findById(1L);
-        if (existingTeacher.isPresent()) {
-            return existingTeacher.get();
-        }
-
-        // If no teacher exists, create a default one
-        Teacher defaultTeacher = new Teacher();
-        defaultTeacher.setUsername("default_teacher");
-        defaultTeacher.setEmail("default@example.com");
-        defaultTeacher.setFirstName("Default"); // Use setFirstName instead of setName
-        defaultTeacher.setLastName("Teacher"); // Use setLastName instead of setName
-        defaultTeacher.setJoinDate(LocalDate.now());
-        defaultTeacher.setAccumulatedXp(0);
-        defaultTeacher.setTitle("Beginner Teacher");
-
-        return teacherRepository.save(defaultTeacher);
-    }
-
-    private String mapSizeCategory(String frontendSize) {
-        if (frontendSize == null)
-            return "M";
-
-        switch (frontendSize.toLowerCase()) {
-            case "small":
-                return "S";
-            case "medium":
-                return "M";
-            case "large":
-                return "L";
-            default:
-                return "M";
-        }
-    }
-
-    private Integer parseRecommendedAge(String ageRange) {
-        if (ageRange == null || ageRange.trim().isEmpty()) {
-            return 8; // default
-        }
-
-        try {
-            // Handle formats like "11-14", "8-10", "12"
-            String[] parts = ageRange.split("-");
-            return Integer.parseInt(parts[0].trim());
-        } catch (NumberFormatException e) {
-            return 8; // default fallback
         }
     }
 
     @Transactional
     protected void saveLessonsFromFrontend(Course course, List<Map<String, Object>> frontendLessons,
             List<MultipartFile> imageFiles) {
+        System.out.println("=== saveLessonsFromFrontend called ===");
+        System.out.println("Course ID: " + course.getId());
+        System.out.println("Number of lessons: " + frontendLessons.size());
+        System.out.println("Number of image files: " + (imageFiles != null ? imageFiles.size() : 0));
+        
         int imageIndex = 0;
 
         for (int lessonIndex = 0; lessonIndex < frontendLessons.size(); lessonIndex++) {
             Map<String, Object> frontendLesson = frontendLessons.get(lessonIndex);
+            System.out.println("Processing lesson " + lessonIndex + ": " + frontendLesson.get("title"));
 
             // Create lesson entity
             Lesson lesson = new Lesson();
@@ -543,26 +465,39 @@ public class CourseService {
             if (imageFiles != null && imageIndex < imageFiles.size()) {
                 MultipartFile lessonImage = imageFiles.get(imageIndex);
                 if (lessonImage != null && !lessonImage.isEmpty()) {
+                    System.out.println("Processing lesson image " + imageIndex + ": " + lessonImage.getOriginalFilename());
                     try {
                         String imagePath = fileUploadService.saveLessonImage(lessonImage, "lesson");
-                        lesson.setImagePath(imagePath);
+                        lesson.setImage("/api/files/" + imagePath);
+                        System.out.println("Lesson image saved: " + imagePath);
                         imageIndex++;
                     } catch (Exception e) {
                         System.err.println("Failed to save lesson image: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             }
 
+            // Handle resource links
+            List<String> resourceLinks = (List<String>) frontendLesson.get("resource_links");
+            if (resourceLinks != null && !resourceLinks.isEmpty()) {
+                lesson.setResourceLinks(String.join(",", resourceLinks));
+                System.out.println("Resource links saved: " + resourceLinks);
+            }
+
             // Save lesson to get ID
             lesson = lessonRepository.save(lesson);
+            System.out.println("Lesson saved with ID: " + lesson.getId());
 
             // Handle lesson_contents
-            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson
-                    .get("lesson_contents");
+            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson.get("lesson_contents");
             if (frontendContents != null) {
+                System.out.println("Processing " + frontendContents.size() + " content sections for lesson " + lesson.getId());
                 imageIndex = saveContentSectionsFromFrontend(lesson, frontendContents, imageFiles, imageIndex);
             }
         }
+        
+        System.out.println("All lessons processed. Final image index: " + imageIndex);
     }
 
     private int saveContentSectionsFromFrontend(Lesson lesson, List<Map<String, Object>> frontendContents,
@@ -577,13 +512,13 @@ public class CourseService {
             contentSection.setSequenceOrder(((Number) frontendContent.get("sequence_order")).intValue());
             contentSection.setLesson(lesson);
 
-            // Handle content image if available
+            // Handle content image if available - FIX: Use correct method name
             if (imageFiles != null && imageIndex < imageFiles.size()) {
                 MultipartFile contentImage = imageFiles.get(imageIndex);
                 if (contentImage != null && !contentImage.isEmpty()) {
                     try {
                         String imagePath = fileUploadService.saveContentImage(contentImage, "content");
-                        contentSection.setImagePath(imagePath);
+                        contentSection.setImage("/api/files/" + imagePath); // Changed from setImagePath
                         imageIndex++;
                     } catch (Exception e) {
                         System.err.println("Failed to save content image: " + e.getMessage());
