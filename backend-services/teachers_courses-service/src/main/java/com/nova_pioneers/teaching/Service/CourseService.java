@@ -1,4 +1,5 @@
 package com.nova_pioneers.teaching.Service;
+
 import com.nova_pioneers.teaching.DTO.ContentSectionDTO;
 import com.nova_pioneers.teaching.DTO.CourseDTO;
 import com.nova_pioneers.teaching.DTO.LessonDTO;
@@ -41,7 +42,6 @@ public class CourseService {
     @Autowired
     private FileUploadService fileUploadService;
 
-
     // Original methods kept intact
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
@@ -71,7 +71,7 @@ public class CourseService {
         int baseXp = 0;
 
         // Size-based XP
-        switch(course.getSizeCategory().toUpperCase()) {
+        switch (course.getSizeCategory().toUpperCase()) {
             case "S":
                 baseXp = 200;
                 break;
@@ -99,7 +99,7 @@ public class CourseService {
     }
 
     public List<Course> filterCourses(String subject, String gradeLevel,
-                                      String sizeCategory, Integer minAge, Integer maxAge) {
+            String sizeCategory, Integer minAge, Integer maxAge) {
         return courseRepository.filterCourses(subject, gradeLevel, sizeCategory, minAge, maxAge);
     }
 
@@ -129,7 +129,8 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    /**saveCourseWithDetails
+    /**
+     * saveCourseWithDetails
      * Save or update a course with its complete structure
      */
     @Transactional
@@ -236,7 +237,8 @@ public class CourseService {
             processedLessonIds.add(lesson.getId());
         }
 
-        // Delete any lessons that weren't in the update (if this is an update operation)
+        // Delete any lessons that weren't in the update (if this is an update
+        // operation)
         if (!processedLessonIds.isEmpty() && course.getId() != null) {
             List<Lesson> existingLessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(course.getId());
 
@@ -267,7 +269,8 @@ public class CourseService {
                 section = mapperService.mapToEntity(sectionDTO, lesson);
             } else {
                 section = contentSectionRepository.findById(sectionDTO.getId())
-                        .orElseThrow(() -> new RuntimeException("Content section not found with id: " + sectionDTO.getId()));
+                        .orElseThrow(
+                                () -> new RuntimeException("Content section not found with id: " + sectionDTO.getId()));
 
                 // Update existing section
                 section.setSubheading(sectionDTO.getSubheading());
@@ -285,9 +288,11 @@ public class CourseService {
             processedSectionIds.add(section.getId());
         }
 
-        // Delete any sections that weren't in the update (if this is an update operation)
+        // Delete any sections that weren't in the update (if this is an update
+        // operation)
         if (!processedSectionIds.isEmpty()) {
-            List<ContentSection> existingSections = contentSectionRepository.findByLessonIdOrderBySequenceOrderAsc(lesson.getId());
+            List<ContentSection> existingSections = contentSectionRepository
+                    .findByLessonIdOrderBySequenceOrderAsc(lesson.getId());
 
             for (ContentSection existingSection : existingSections) {
                 if (!processedSectionIds.contains(existingSection.getId())) {
@@ -351,6 +356,7 @@ public class CourseService {
         Long teacherId = 1L;
         return saveOrUpdateCourseWithDetails(courseDTO, teacherId);
     }
+
     @Transactional(readOnly = true)
     public List<Lesson> loadLessonsWithContentSections(Long courseId) {
         List<Lesson> lessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(courseId);
@@ -359,7 +365,8 @@ public class CourseService {
             for (Lesson lesson : lessons) {
                 // Force initialization of the content sections collection
                 System.out.println("Loading content sections for lesson: " + lesson.getTitle());
-                List<ContentSection> sections = contentSectionRepository.findByLessonIdOrderBySequenceOrderAsc(lesson.getId());
+                List<ContentSection> sections = contentSectionRepository
+                        .findByLessonIdOrderBySequenceOrderAsc(lesson.getId());
                 System.out.println("Found " + (sections != null ? sections.size() : 0) + " content sections");
 
                 // Properly initialize the content sections to avoid orphan collection issues
@@ -379,11 +386,12 @@ public class CourseService {
 
         return lessons;
 
-}
+    }
+
     @Transactional
     public CourseDTO createCourseFromFrontend(Map<String, Object> frontendData,
-                                              MultipartFile thumbnailFile,
-                                              List<MultipartFile> imageFiles) {
+            MultipartFile thumbnailFile,
+            List<MultipartFile> imageFiles) {
         try {
             // Transform frontend data to backend Course entity
             Course course = transformFrontendDataToCourse(frontendData);
@@ -417,39 +425,78 @@ public class CourseService {
     private Course transformFrontendDataToCourse(Map<String, Object> frontendData) {
         Course course = new Course();
 
-        // Basic fields - direct mapping
+        // Basic course fields
         course.setTitle((String) frontendData.get("title"));
         course.setDescription((String) frontendData.get("description"));
-        course.setSubject((String) frontendData.get("subject"));
-        course.setCreatedDate(LocalDate.now());
-
-        // Transform grade_level to gradeLevel
         course.setGradeLevel((String) frontendData.get("grade_level"));
+        course.setSubject((String) frontendData.get("subject"));
 
-        // Transform size_category: "Medium" -> "M"
-        String frontendSize = (String) frontendData.get("size_category");
-        course.setSizeCategory(mapSizeCategory(frontendSize));
+        // Transform size category from frontend format to backend format
+        String sizeCategory = (String) frontendData.get("size_category");
+        course.setSizeCategory(mapSizeCategory(sizeCategory));
 
-        // Transform xp_value
+        // Handle XP value
         Object xpValue = frontendData.get("xp_value");
         if (xpValue instanceof Number) {
             course.setXpValue(((Number) xpValue).intValue());
+        } else if (xpValue instanceof String) {
+            try {
+                course.setXpValue(Integer.parseInt((String) xpValue));
+            } catch (NumberFormatException e) {
+                course.setXpValue(100); // Default value
+            }
+        } else {
+            course.setXpValue(100); // Default value
         }
 
         // Transform recommended_age: "11-14" -> 11 (take first number)
         String recommendedAgeStr = (String) frontendData.get("recommended_age");
         course.setRecommendedAge(parseRecommendedAge(recommendedAgeStr));
 
-        // Set teacher (you might want to get this from authentication context)
-        Teacher teacher = teacherRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("Default teacher not found"));
-        course.setTeacher(teacher);
+        // Set creation date
+        course.setCreatedDate(LocalDate.now());
+
+        // Get teacher ID from frontend data - make it optional
+        Object teacherIdObj = frontendData.get("teacherId");
+        if (teacherIdObj != null) {
+            try {
+                Long teacherId = ((Number) teacherIdObj).longValue();
+                Teacher teacher = teacherRepository.findById(teacherId).orElse(null);
+                course.setTeacher(teacher);
+            } catch (Exception e) {
+                System.err.println("Failed to find teacher: " + e.getMessage());
+                course.setTeacher(null); // Set to null if teacher not found
+            }
+        } else {
+            course.setTeacher(null); // No teacher specified
+        }
 
         return course;
     }
 
+    private Teacher getOrCreateDefaultTeacher() {
+        // First try to find an existing teacher
+        Optional<Teacher> existingTeacher = teacherRepository.findById(1L);
+        if (existingTeacher.isPresent()) {
+            return existingTeacher.get();
+        }
+
+        // If no teacher exists, create a default one
+        Teacher defaultTeacher = new Teacher();
+        defaultTeacher.setUsername("default_teacher");
+        defaultTeacher.setEmail("default@example.com");
+        defaultTeacher.setFirstName("Default"); // Use setFirstName instead of setName
+        defaultTeacher.setLastName("Teacher"); // Use setLastName instead of setName
+        defaultTeacher.setJoinDate(LocalDate.now());
+        defaultTeacher.setAccumulatedXp(0);
+        defaultTeacher.setTitle("Beginner Teacher");
+
+        return teacherRepository.save(defaultTeacher);
+    }
+
     private String mapSizeCategory(String frontendSize) {
-        if (frontendSize == null) return "M";
+        if (frontendSize == null)
+            return "M";
 
         switch (frontendSize.toLowerCase()) {
             case "small":
@@ -479,7 +526,7 @@ public class CourseService {
 
     @Transactional
     protected void saveLessonsFromFrontend(Course course, List<Map<String, Object>> frontendLessons,
-                                           List<MultipartFile> imageFiles) {
+            List<MultipartFile> imageFiles) {
         int imageIndex = 0;
 
         for (int lessonIndex = 0; lessonIndex < frontendLessons.size(); lessonIndex++) {
@@ -510,7 +557,8 @@ public class CourseService {
             lesson = lessonRepository.save(lesson);
 
             // Handle lesson_contents
-            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson.get("lesson_contents");
+            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson
+                    .get("lesson_contents");
             if (frontendContents != null) {
                 imageIndex = saveContentSectionsFromFrontend(lesson, frontendContents, imageFiles, imageIndex);
             }
@@ -518,7 +566,7 @@ public class CourseService {
     }
 
     private int saveContentSectionsFromFrontend(Lesson lesson, List<Map<String, Object>> frontendContents,
-                                                List<MultipartFile> imageFiles, int currentImageIndex) {
+            List<MultipartFile> imageFiles, int currentImageIndex) {
         int imageIndex = currentImageIndex;
 
         for (Map<String, Object> frontendContent : frontendContents) {
@@ -548,4 +596,4 @@ public class CourseService {
 
         return imageIndex;
     }
-    }
+}

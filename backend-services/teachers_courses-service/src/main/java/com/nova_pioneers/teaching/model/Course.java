@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Setter
 @Getter
-@EqualsAndHashCode(exclude = {"modules", "lessons", "ratings"})
+@EqualsAndHashCode(exclude = { "modules", "lessons", "ratings" })
 @Table(name = "courses")
 public class Course {
     @Id
@@ -55,7 +55,6 @@ public class Course {
     @Max(value = 18, message = "Maximum recommended age is 18")
     private Integer recommendedAge;
 
-    @NotNull(message = "Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
@@ -94,7 +93,6 @@ public class Course {
         return teacher != null ? teacher.getFirstName() + " " + teacher.getLastName() : "";
     }
 
-
     // Helper method to get full thumbnail URL
     @Transient
     public String getThumbnailUrl() {
@@ -121,5 +119,3 @@ public class Course {
 
     // ... rest of existing methods ...
 }
-
-

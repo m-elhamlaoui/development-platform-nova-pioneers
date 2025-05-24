@@ -149,7 +149,8 @@ const AddCourse = () => {
       xp_value: parseInt(data.xp_value),
       lessons: lessons,
       id: isEditing ? existingCourse.id : `course-${Date.now()}`,
-      created_date: isEditing ? existingCourse.created_date : new Date().toISOString()
+      created_date: isEditing ? existingCourse.created_date : new Date().toISOString(),
+      teacherId: 1 // Add a default teacher ID or get from user context
     };
     
     sendCourseToBackend(courseData);
