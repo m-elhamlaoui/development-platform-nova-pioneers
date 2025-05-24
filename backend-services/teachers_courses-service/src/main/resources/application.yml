@@ -20,15 +20,15 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 50MB          # Increased for multiple files
-      max-request-size: 100MB      # Total request size
+      max-file-size: 50MB # Increased for multiple files
+      max-request-size: 100MB # Total request size
       file-size-threshold: 2KB
-      location: ${java.io.tmpdir}  # Temporary storage during upload
+      location: ${java.io.tmpdir} # Temporary storage during upload
 
 # File upload directory - THIS IS KEY
 file:
   upload:
-    dir: src/main/resources/uploads  # This matches your requirement
+    dir: /app/uploads # This matches your requirement
 
 # Logging to debug file uploads
 logging:
@@ -36,7 +36,3 @@ logging:
     com.nova_pioneers.teaching: DEBUG
     org.springframework.web.multipart: DEBUG
     org.springframework.web.servlet.mvc.method.annotation: DEBUG
-
-
-
-

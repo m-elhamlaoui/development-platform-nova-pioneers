@@ -394,9 +394,10 @@ public class CourseService {
             List<MultipartFile> imageFiles) {
         try {
             System.out.println("=== createCourseFromFrontend called ===");
-            System.out.println("Thumbnail file: " + (thumbnailFile != null ? thumbnailFile.getOriginalFilename() : "null"));
+            System.out.println(
+                    "Thumbnail file: " + (thumbnailFile != null ? thumbnailFile.getOriginalFilename() : "null"));
             System.out.println("Image files count: " + (imageFiles != null ? imageFiles.size() : 0));
-            
+
             // Create course entity from frontend data
             Course course = transformFrontendDataToCourse(frontendData);
 
@@ -447,7 +448,7 @@ public class CourseService {
         System.out.println("Course ID: " + course.getId());
         System.out.println("Number of lessons: " + frontendLessons.size());
         System.out.println("Number of image files: " + (imageFiles != null ? imageFiles.size() : 0));
-        
+
         int imageIndex = 0;
 
         for (int lessonIndex = 0; lessonIndex < frontendLessons.size(); lessonIndex++) {
@@ -465,7 +466,8 @@ public class CourseService {
             if (imageFiles != null && imageIndex < imageFiles.size()) {
                 MultipartFile lessonImage = imageFiles.get(imageIndex);
                 if (lessonImage != null && !lessonImage.isEmpty()) {
-                    System.out.println("Processing lesson image " + imageIndex + ": " + lessonImage.getOriginalFilename());
+                    System.out.println(
+                            "Processing lesson image " + imageIndex + ": " + lessonImage.getOriginalFilename());
                     try {
                         String imagePath = fileUploadService.saveLessonImage(lessonImage, "lesson");
                         lesson.setImage("/api/files/" + imagePath);
@@ -490,13 +492,15 @@ public class CourseService {
             System.out.println("Lesson saved with ID: " + lesson.getId());
 
             // Handle lesson_contents
-            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson.get("lesson_contents");
+            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson
+                    .get("lesson_contents");
             if (frontendContents != null) {
-                System.out.println("Processing " + frontendContents.size() + " content sections for lesson " + lesson.getId());
+                System.out.println(
+                        "Processing " + frontendContents.size() + " content sections for lesson " + lesson.getId());
                 imageIndex = saveContentSectionsFromFrontend(lesson, frontendContents, imageFiles, imageIndex);
             }
         }
-        
+
         System.out.println("All lessons processed. Final image index: " + imageIndex);
     }
 
@@ -530,5 +534,114 @@ public class CourseService {
         }
 
         return imageIndex;
+    }
+
+    // Add this method to your CourseService class
+
+    private Course transformFrontendDataToCourse(Map<String, Object> frontendData) {
+        System.out.println("=== transformFrontendDataToCourse called ===");
+        System.out.println("Frontend data: " + frontendData);
+
+        Course course = new Course();
+
+        // Basic course fields
+        course.setTitle((String) frontendData.get("title"));
+        course.setDescription((String) frontendData.get("description"));
+        course.setGradeLevel((String) frontendData.get("grade_level"));
+        course.setSubject((String) frontendData.get("subject"));
+
+        // Transform size category from frontend format to backend format
+        String sizeCategory = (String) frontendData.get("size_category");
+        course.setSizeCategory(mapSizeCategory(sizeCategory));
+
+        // Handle XP value
+        Object xpValue = frontendData.get("xp_value");
+        if (xpValue instanceof Number) {
+            course.setXpValue(((Number) xpValue).intValue());
+        } else if (xpValue instanceof String) {
+            try {
+                course.setXpValue(Integer.parseInt((String) xpValue));
+            } catch (NumberFormatException e) {
+                course.setXpValue(100); // Default value
+            }
+        } else {
+            course.setXpValue(100); // Default value
+        }
+
+        // Handle recommended age - parse strings like "11-14" to get first number
+        String recommendedAgeStr = (String) frontendData.get("recommended_age");
+        course.setRecommendedAge(parseRecommendedAge(recommendedAgeStr));
+
+        // Set creation date
+        course.setCreatedDate(LocalDate.now());
+
+        // Get or create a default teacher
+        Teacher teacher = getOrCreateDefaultTeacher();
+        course.setTeacher(teacher);
+
+        System.out.println("Course transformed: " + course.getTitle());
+        return course;
+    }
+
+    // Helper method to map size category
+    private String mapSizeCategory(String frontendSize) {
+        if (frontendSize == null) {
+            return "M"; // Default to Medium
+        }
+
+        switch (frontendSize.toLowerCase()) {
+            case "small":
+                return "S";
+            case "medium":
+                return "M";
+            case "large":
+                return "L";
+            default:
+                // If it's already in the correct format (S, M, L), return as is
+                if (frontendSize.matches("[SML]")) {
+                    return frontendSize.toUpperCase();
+                }
+                return "M"; // Default to Medium
+        }
+    }
+
+    // Helper method to parse recommended age
+    private int parseRecommendedAge(String ageStr) {
+        if (ageStr == null || ageStr.trim().isEmpty()) {
+            return 8; // Default age
+        }
+
+        try {
+            // Handle cases like "11-14" by taking the first number
+            if (ageStr.contains("-")) {
+                ageStr = ageStr.split("-")[0].trim();
+            }
+            return Integer.parseInt(ageStr);
+        } catch (NumberFormatException e) {
+            System.err.println("Failed to parse recommended age: " + ageStr);
+            return 8; // Default age
+        }
+    }
+
+    // Helper method to get or create default teacher
+    private Teacher getOrCreateDefaultTeacher() {
+        // First try to find an existing teacher
+        Optional<Teacher> existingTeacher = teacherRepository.findById(1L);
+        if (existingTeacher.isPresent()) {
+            return existingTeacher.get();
+        }
+
+        // If no teacher exists, create a default one
+        Teacher defaultTeacher = new Teacher();
+        defaultTeacher.setUsername("default_teacher");
+        defaultTeacher.setEmail("default@example.com");
+        defaultTeacher.setFirstName("Default");
+        defaultTeacher.setLastName("Teacher");
+        defaultTeacher.setJoinDate(LocalDate.now());
+        defaultTeacher.setAccumulatedXp(0);
+        defaultTeacher.setTitle("Beginner Teacher");
+
+        System.out.println("Creating default teacher...");
+        return teacherRepository.save(defaultTeacher);
     }
 }

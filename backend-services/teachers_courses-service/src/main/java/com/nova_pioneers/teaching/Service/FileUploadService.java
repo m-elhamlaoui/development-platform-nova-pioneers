@@ -1,8 +1,8 @@
 package com.nova_pioneers.teaching.Service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,21 +14,61 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
-public class FileUploadService {
+public class FileUploadService implements InitializingBean {
 
-    // Update this to match your application.yml property
-    @Value("${file.upload.dir:./uploads/}")
-    private String uploadBaseDir;
+    // Hardcode the path instead of relying on @Value
+    private final String uploadBaseDir = "/app/uploads/";
 
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-    private static final String[] ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"};
+    private static final String[] ALLOWED_EXTENSIONS = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+
+    // Replace @PostConstruct with afterPropertiesSet method from InitializingBean
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("=== FileUploadService Configuration ===");
+        System.out.println("Upload base directory configured as: " + uploadBaseDir);
+        System.out.println("Absolute path: " + Paths.get(uploadBaseDir).toAbsolutePath());
+
+        // Create base directory structure if it doesn't exist
+        try {
+            Path basePath = Paths.get(uploadBaseDir);
+
+            if (!Files.exists(basePath)) {
+                Files.createDirectories(basePath);
+                System.out.println("Created base directory: " + basePath);
+            }
+
+            Path coursesPath = basePath.resolve("courses");
+            if (!Files.exists(coursesPath)) {
+                Files.createDirectories(coursesPath);
+                System.out.println("Created courses directory: " + coursesPath);
+            }
+
+            Path lessonsPath = basePath.resolve("lessons");
+            if (!Files.exists(lessonsPath)) {
+                Files.createDirectories(lessonsPath);
+                System.out.println("Created lessons directory: " + lessonsPath);
+            }
+
+            Path contentPath = basePath.resolve("content");
+            if (!Files.exists(contentPath)) {
+                Files.createDirectories(contentPath);
+                System.out.println("Created content directory: " + contentPath);
+            }
+
+            System.out.println("Upload directory structure verified");
+        } catch (IOException e) {
+            System.err.println("Failed to create upload directories: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     public String saveCourseImage(MultipartFile file, String prefix) throws IOException {
         System.out.println("=== Starting saveCourseImage ===");
         System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
         System.out.println("Prefix: " + prefix);
         System.out.println("Upload base dir: " + uploadBaseDir);
-        
+
         validateFile(file);
         return saveFile(file, "courses/", prefix);
     }
@@ -37,7 +77,7 @@ public class FileUploadService {
         System.out.println("=== Starting saveLessonImage ===");
         System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
         System.out.println("Prefix: " + prefix);
-        
+
         validateFile(file);
         return saveFile(file, "lessons/", prefix);
     }
@@ -46,7 +86,7 @@ public class FileUploadService {
         System.out.println("=== Starting saveContentImage ===");
         System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
         System.out.println("Prefix: " + prefix);
-        
+
         validateFile(file);
         return saveFile(file, "content/", prefix);
     }
@@ -56,11 +96,11 @@ public class FileUploadService {
         System.out.println("Upload base dir: " + uploadBaseDir);
         System.out.println("Directory: " + directory);
         System.out.println("Prefix: " + prefix);
-        
+
         // Create upload directory if it doesn't exist
         Path uploadPath = Paths.get(uploadBaseDir, directory);
         System.out.println("Full upload path: " + uploadPath.toAbsolutePath());
-        
+
         try {
             Files.createDirectories(uploadPath);
             System.out.println("Directory created successfully: " + uploadPath);
@@ -114,11 +154,11 @@ public class FileUploadService {
 
     private void validateFile(MultipartFile file) throws IllegalArgumentException {
         System.out.println("=== Validating file ===");
-        
+
         if (file == null) {
             throw new IllegalArgumentException("File is null");
         }
-        
+
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
@@ -130,14 +170,14 @@ public class FileUploadService {
 
         String originalFilename = file.getOriginalFilename();
         System.out.println("Original filename: " + originalFilename);
-        
+
         if (originalFilename == null) {
             throw new IllegalArgumentException("Invalid file name");
         }
 
         String extension = getFileExtension(originalFilename).toLowerCase();
         System.out.println("File extension: " + extension);
-        
+
         boolean validExtension = false;
         for (String allowedExt : ALLOWED_EXTENSIONS) {
             if (extension.equals(allowedExt)) {
@@ -150,7 +190,7 @@ public class FileUploadService {
             throw new IllegalArgumentException(
                     "File type not allowed. Allowed types: " + String.join(", ", ALLOWED_EXTENSIONS));
         }
-        
+
         System.out.println("File validation passed");
     }
 
