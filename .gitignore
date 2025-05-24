@@ -34,3 +34,6 @@ front-end/*.sln
 front-end/*.sw?
 
 .idea
+
+oci/usefulforreport.md
+oci/nova-ansible/inventory/hosts.yml

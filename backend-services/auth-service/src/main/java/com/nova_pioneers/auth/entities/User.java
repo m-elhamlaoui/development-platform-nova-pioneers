@@ -42,6 +42,8 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
+    //to add isapproved
+
     @Column(name = "oauth_provider")
     private String oauthProvider;
 
