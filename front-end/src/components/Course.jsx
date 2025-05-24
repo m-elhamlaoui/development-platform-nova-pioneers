@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
-import { Heart, User, ChevronDown, Award, BookOpen, FileText, Clock, Users } from "lucide-react";
+import { User, Award, BookOpen, Users } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export default function CourseCard({ course, index }) {
+export default function CourseCard({ course, index, isParentDashboard }) {
   const [isFav, setIsFav] = useState(false);
+  const location = useLocation();
   
-  const handleFavoriteToggle = () => setIsFav(!isFav);
+  // Check if we're in the kid dashboard
+  const isKidDashboard = location.pathname.includes('/kid/'); 
+  
+  // Use explicit prop if provided, otherwise use the path detection
+  const showChildLinks = isParentDashboard !== undefined ? isParentDashboard : !isKidDashboard;
   
   return (
     <motion.div
@@ -92,33 +97,61 @@ export default function CourseCard({ course, index }) {
             <span className="ml-1 text-xs text-slate-400">({course.reviews || 0} reviews)</span>
           </div>
 
-          {/* Child Links Section - Preserved and enhanced */}
-          <div className="flex gap-2 justify-end">
-            <Link 
-              to={`/child/1/${course.id}`} 
-              className="flex items-center gap-1 bg-[#0b3d91] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-800 transition-colors"
-            >
-              <Users size={10} className="flex-shrink-0" />
-              child1
-            </Link>
-            <Link 
-              to={`/child/2/${course.id}`} 
-              className="flex items-center gap-1 border border-[#0b3d91] text-[#0b3d91] px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-50 transition-colors"
-            >
-              <Users size={10} className="flex-shrink-0" />
-              child2
-            </Link>
-          </div>
+          {/* Child Links Section - Only shown in parent dashboard */}
+          {showChildLinks && (
+            <div className="flex gap-2 justify-end">
+              <Link 
+                to={`/child/1/${course.id}`} 
+                className="flex items-center gap-1 bg-[#0b3d91] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-800 transition-colors"
+              >
+                <Users size={10} className="flex-shrink-0" />
+                child1
+              </Link>
+              <Link 
+                to={`/child/2/${course.id}`} 
+                className="flex items-center gap-1 border border-[#0b3d91] text-[#0b3d91] px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-50 transition-colors"
+              >
+                <Users size={10} className="flex-shrink-0" />
+                child2
+              </Link>
+            </div>
+          )}
         </div>
         
-        {/* View Course Button */}
+        {/* Course Action Button - Conditional based on enrollment */}
         <div className="pt-2">
-          <Link 
-            to={`/course/${course.id}`} 
-            className="w-full block text-center bg-[#0b3d91] text-white py-2 rounded-full hover:bg-blue-800 transition-colors text-sm font-medium"
-          >
-            View Course
-          </Link>
+          {course.enrolled ? (
+            <>
+              {/* Progress Bar for enrolled courses */}
+              <div className="mb-2">
+                <div className="flex justify-between text-xs text-gray-600 mb-1">
+                  <span>Progress</span>
+                  <span>{course.progress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-green-500 h-2 rounded-full" 
+                    style={{ width: `${course.progress}%` }}
+                  ></div>
+                </div>
+              </div>
+              
+              {/* Continue Learning Button */}
+              <Link 
+                to={`/course/${course.id}/learn`} 
+                className="w-full block text-center bg-green-600 text-white py-2 rounded-full hover:bg-green-700 transition-colors text-sm font-medium"
+              >
+                Continue Learning
+              </Link>
+            </>
+          ) : (
+            <button 
+              className="w-full block text-center bg-[#0b3d91] text-white py-2 rounded-full hover:bg-blue-800 transition-colors text-sm font-medium"
+              onClick={() => alert(`Enrolling in ${course.title}`)}
+            >
+              Enroll Now
+            </button>
+          )}
         </div>
       </div>
     </motion.div>

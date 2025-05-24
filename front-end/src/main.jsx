@@ -15,6 +15,7 @@ import AddCourse from './pages/AddCourse';
 import ManageCourses from './pages/ManageCourses';
 import NotFound from './pages/NotFound';
 import CourseView from './pages/CourseView';
+import KidDashboard from './pages/KidDashboard';
 export default function App() {
   return (
     <BrowserRouter>
@@ -37,7 +38,10 @@ export default function App() {
             <Route path="manage-courses" element={<ManageCourses />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-
+          <Route path="/kid/dashboard" element={<KidDashboard />} />
+          <Route path="/kid/courses" element={<KidDashboard />} />
+          <Route path="/kid/settings" element={<KidDashboard />} />
+          
       </Routes>
       </DataProvider>
     </BrowserRouter>
