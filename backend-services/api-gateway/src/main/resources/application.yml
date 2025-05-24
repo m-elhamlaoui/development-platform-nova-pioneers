@@ -7,9 +7,9 @@ spring:
 
   # Database configuration for token validation
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/novadb}
-    username: ${SPRING_DATASOURCE_USERNAME:pioneer}
-    password: ${SPRING_DATASOURCE_PASSWORD:nova25!X}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   # JPA configuration for token entity
@@ -29,8 +29,8 @@ spring:
 
 # JWT configuration - must match auth-service configuration
 jwt:
-  secret: ${JWT_SECRET:SB4cgMKW7XkP83H5z94FfHd8QXYZVaJ2GtRbnLm5uEvsUwC6DTjeKqNyA7pZkrx}
-  expiration: 86400000  # 24 hours in milliseconds
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}
 
 # Logging configuration
 logging:
