@@ -13,9 +13,12 @@ import com.nova_pioneers.teaching.model.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,9 @@ public class CourseService {
     private CourseMapperService mapperService;
     @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
+    private FileUploadService fileUploadService;
+
 
     // Original methods kept intact
     public List<Course> getAllCourses() {
@@ -374,4 +380,172 @@ public class CourseService {
         return lessons;
 
 }
+    @Transactional
+    public CourseDTO createCourseFromFrontend(Map<String, Object> frontendData,
+                                              MultipartFile thumbnailFile,
+                                              List<MultipartFile> imageFiles) {
+        try {
+            // Transform frontend data to backend Course entity
+            Course course = transformFrontendDataToCourse(frontendData);
+
+            // Handle thumbnail upload
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+                String thumbnailPath = fileUploadService.saveCourseImage(thumbnailFile, "thumbnail");
+                course.setThumbnailPath(thumbnailPath);
+            }
+
+            // Save course first to get ID
+            course = courseRepository.save(course);
+
+            // Handle lessons with images
+            List<Map<String, Object>> frontendLessons = (List<Map<String, Object>>) frontendData.get("lessons");
+            if (frontendLessons != null) {
+                saveLessonsFromFrontend(course, frontendLessons, imageFiles);
+            }
+
+            // Reload course with all lessons and content
+            List<Lesson> savedLessons = loadLessonsWithContentSections(course.getId());
+            return mapperService.mapToDTO(course, savedLessons);
+
+        } catch (Exception e) {
+            // Cleanup uploaded files if course creation fails
+            // ... cleanup logic
+            throw new RuntimeException("Failed to create course: " + e.getMessage(), e);
+        }
+    }
+
+    private Course transformFrontendDataToCourse(Map<String, Object> frontendData) {
+        Course course = new Course();
+
+        // Basic fields - direct mapping
+        course.setTitle((String) frontendData.get("title"));
+        course.setDescription((String) frontendData.get("description"));
+        course.setSubject((String) frontendData.get("subject"));
+        course.setCreatedDate(LocalDate.now());
+
+        // Transform grade_level to gradeLevel
+        course.setGradeLevel((String) frontendData.get("grade_level"));
+
+        // Transform size_category: "Medium" -> "M"
+        String frontendSize = (String) frontendData.get("size_category");
+        course.setSizeCategory(mapSizeCategory(frontendSize));
+
+        // Transform xp_value
+        Object xpValue = frontendData.get("xp_value");
+        if (xpValue instanceof Number) {
+            course.setXpValue(((Number) xpValue).intValue());
+        }
+
+        // Transform recommended_age: "11-14" -> 11 (take first number)
+        String recommendedAgeStr = (String) frontendData.get("recommended_age");
+        course.setRecommendedAge(parseRecommendedAge(recommendedAgeStr));
+
+        // Set teacher (you might want to get this from authentication context)
+        Teacher teacher = teacherRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Default teacher not found"));
+        course.setTeacher(teacher);
+
+        return course;
+    }
+
+    private String mapSizeCategory(String frontendSize) {
+        if (frontendSize == null) return "M";
+
+        switch (frontendSize.toLowerCase()) {
+            case "small":
+                return "S";
+            case "medium":
+                return "M";
+            case "large":
+                return "L";
+            default:
+                return "M";
+        }
+    }
+
+    private Integer parseRecommendedAge(String ageRange) {
+        if (ageRange == null || ageRange.trim().isEmpty()) {
+            return 8; // default
+        }
+
+        try {
+            // Handle formats like "11-14", "8-10", "12"
+            String[] parts = ageRange.split("-");
+            return Integer.parseInt(parts[0].trim());
+        } catch (NumberFormatException e) {
+            return 8; // default fallback
+        }
+    }
+
+    @Transactional
+    protected void saveLessonsFromFrontend(Course course, List<Map<String, Object>> frontendLessons,
+                                           List<MultipartFile> imageFiles) {
+        int imageIndex = 0;
+
+        for (int lessonIndex = 0; lessonIndex < frontendLessons.size(); lessonIndex++) {
+            Map<String, Object> frontendLesson = frontendLessons.get(lessonIndex);
+
+            // Create lesson entity
+            Lesson lesson = new Lesson();
+            lesson.setTitle((String) frontendLesson.get("title"));
+            lesson.setContent((String) frontendLesson.get("content"));
+            lesson.setSequenceOrder(((Number) frontendLesson.get("sequence_order")).intValue());
+            lesson.setCourse(course);
+
+            // Handle lesson image if available
+            if (imageFiles != null && imageIndex < imageFiles.size()) {
+                MultipartFile lessonImage = imageFiles.get(imageIndex);
+                if (lessonImage != null && !lessonImage.isEmpty()) {
+                    try {
+                        String imagePath = fileUploadService.saveLessonImage(lessonImage, "lesson");
+                        lesson.setImagePath(imagePath);
+                        imageIndex++;
+                    } catch (Exception e) {
+                        System.err.println("Failed to save lesson image: " + e.getMessage());
+                    }
+                }
+            }
+
+            // Save lesson to get ID
+            lesson = lessonRepository.save(lesson);
+
+            // Handle lesson_contents
+            List<Map<String, Object>> frontendContents = (List<Map<String, Object>>) frontendLesson.get("lesson_contents");
+            if (frontendContents != null) {
+                imageIndex = saveContentSectionsFromFrontend(lesson, frontendContents, imageFiles, imageIndex);
+            }
+        }
+    }
+
+    private int saveContentSectionsFromFrontend(Lesson lesson, List<Map<String, Object>> frontendContents,
+                                                List<MultipartFile> imageFiles, int currentImageIndex) {
+        int imageIndex = currentImageIndex;
+
+        for (Map<String, Object> frontendContent : frontendContents) {
+            ContentSection contentSection = new ContentSection();
+            contentSection.setSubheading((String) frontendContent.get("subheading"));
+            contentSection.setText((String) frontendContent.get("text"));
+            contentSection.setFunFact((String) frontendContent.get("fun_fact"));
+            contentSection.setSequenceOrder(((Number) frontendContent.get("sequence_order")).intValue());
+            contentSection.setLesson(lesson);
+
+            // Handle content image if available
+            if (imageFiles != null && imageIndex < imageFiles.size()) {
+                MultipartFile contentImage = imageFiles.get(imageIndex);
+                if (contentImage != null && !contentImage.isEmpty()) {
+                    try {
+                        String imagePath = fileUploadService.saveContentImage(contentImage, "content");
+                        contentSection.setImagePath(imagePath);
+                        imageIndex++;
+                    } catch (Exception e) {
+                        System.err.println("Failed to save content image: " + e.getMessage());
+                    }
+                }
+            }
+
+            contentSectionRepository.save(contentSection);
+        }
+
+        return imageIndex;
+    }
     }
