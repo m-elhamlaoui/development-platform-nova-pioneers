@@ -152,7 +152,9 @@ export default function Hero(){
                                     [&::-webkit-scrollbar-track]:bg-gray-100
                                     [&::-webkit-scrollbar-thumb]:bg-blue-300
                                     dark:[&::-webkit-scrollbar-track]:bg-gray-700
-                                    dark:[&::-webkit-scrollbar-thumb]:bg-blue-500">
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-blue-500
+                              
+                                    min-h-[95vh]">
                         <img className="max-w-full max-h-[100vh] rounded-lg" src={apodData.url} alt={apodData.title} />
                         <div className="absolute bottom-[-100px]left-0 right-0 bg-black bg-opacity-70 text-white p-4 rounded-b-lg" >
                             <h2 className="text-xl font-bold">{apodData.title}</h2>
