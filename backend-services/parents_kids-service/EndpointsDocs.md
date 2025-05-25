@@ -316,7 +316,6 @@ Generic endpoints for users to manage their own core `users` table information.
 
 *   **Endpoint:** `GET /courses/{courseId}`
 *   **Description:** Retrieves detailed information about a specific course, including its lessons and lesson contents. (Accessible to any authenticated user).
-    *   Note: While the database includes a `modules` table, this endpoint presents a flattened view where all lessons for the course are aggregated directly under the course object, ordered by module sequence and then lesson sequence within modules.
 *   **Path Parameters:**
     *   `courseId` (integer): The ID of the course.
 *   **Successful Response:** `200 OK`

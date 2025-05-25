@@ -10,4 +10,9 @@ public class TestController {
     public String testEndpoint() {
         return "Parenting service working";
     }
+
+    @GetMapping("/parents-kids/test")
+    public String testParentsKidsEndpoint() {
+        return "Parents & Kids service working - Base URL configured correctly";
+    }
 }
