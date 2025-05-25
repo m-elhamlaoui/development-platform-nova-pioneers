@@ -66,7 +66,7 @@ public class KidService {
         response.setEmail(user.getEmail());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
-        response.setRole(user.getRole().name());
+        response.setRole(user.getRole());
         response.setProfilePicture(user.getProfilePicture());
         response.setCreatedAt(user.getCreatedAt().toString());
         response.setIsActive(user.getIsActive());

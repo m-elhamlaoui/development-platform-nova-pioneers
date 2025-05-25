@@ -24,8 +24,8 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role")
+    private String role;
 
     @Column(name = "profile_picture")
     private String profilePicture;
@@ -35,10 +35,6 @@ public class User {
 
     @Column(name = "is_active")
     private Boolean isActive = true;
-
-    public enum Role {
-        parent, kid, teacher, admin
-    }
 
     // Constructors
     public User() {
@@ -85,11 +81,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

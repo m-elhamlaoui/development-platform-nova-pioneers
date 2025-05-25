@@ -31,30 +31,43 @@ public class ParentService {
     private PasswordEncoder passwordEncoder;
 
     public KidResponse createKidProfile(Integer parentId, CreateKidRequest request) {
-        // Create User entity
+        // Check if parentId is null
+        if (parentId == null) {
+            throw new IllegalArgumentException("Parent ID cannot be null");
+        }
+
+        User parent = userRepository.findById(parentId)
+                .orElseThrow(() -> new RuntimeException("Parent with ID " + parentId + " not found"));
+
+        // Verify parent has proper role - USING STRING COMPARISON
+        if (!"parent".equals(parent.getRole())) {
+            throw new RuntimeException(
+                    "User with ID " + parentId + " is not a parent. Current role: " + parent.getRole());
+        }
+
+        // Continue with kid creation
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        user.setRole(User.Role.kid);
+        user.setRole("kid"); // Set role to "kid"
         user.setProfilePicture(request.getProfilePicture());
         user.setCreatedAt(LocalDateTime.now());
         user.setIsActive(true);
 
         User savedUser = userRepository.save(user);
 
-        // Create Kid entity
         Kid kid = new Kid();
         kid.setUserId(savedUser.getUserId());
         kid.setBirthDate(LocalDate.parse(request.getBirthDate()));
-        kid.setTitle("Space Newby"); // Default title for new kids
+        kid.setTitle("Space Newby");
         kid.setTotalXp(0);
-        kid.setIsRestricted(request.getIsRestricted() != null ? request.getIsRestricted() : false);
+        // In ParentService.java
+        kid.setIsRestricted(request.getIsRestricted() != null ? request.getIsRestricted() : 0);
         kid.setParentId(parentId);
 
         Kid savedKid = kidRepository.save(kid);
-
         return mapToKidResponse(savedUser, savedKid);
     }
 
@@ -150,7 +163,7 @@ public class ParentService {
         response.setEmail(user.getEmail());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
-        response.setRole(user.getRole().name());
+        response.setRole(user.getRole());
         response.setProfilePicture(user.getProfilePicture());
         response.setCreatedAt(user.getCreatedAt().toString());
         response.setIsActive(user.getIsActive());
