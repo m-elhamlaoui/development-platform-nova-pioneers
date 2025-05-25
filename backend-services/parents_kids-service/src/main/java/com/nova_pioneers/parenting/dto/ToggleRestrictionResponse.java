@@ -12,13 +12,13 @@ public class ToggleRestrictionResponse {
     private String message;
 
     @JsonProperty("is_restricted")
-    private Boolean isRestricted;
+    private Integer isRestricted;
 
     // Constructors
     public ToggleRestrictionResponse() {
     }
 
-    public ToggleRestrictionResponse(Integer userId, Integer kidId, String message, Boolean isRestricted) {
+    public ToggleRestrictionResponse(Integer userId, Integer kidId, String message, Integer isRestricted) {
         this.userId = userId;
         this.kidId = kidId;
         this.message = message;
@@ -50,11 +50,11 @@ public class ToggleRestrictionResponse {
         this.message = message;
     }
 
-    public Boolean getIsRestricted() {
+    public Integer getIsRestricted() {
         return isRestricted;
     }
 
-    public void setIsRestricted(Boolean isRestricted) {
+    public void setIsRestricted(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
 }

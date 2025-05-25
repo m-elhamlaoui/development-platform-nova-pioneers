@@ -19,7 +19,7 @@ public class CreateKidRequest {
     private String profilePicture;
 
     @JsonProperty("is_restricted")
-    private Boolean isRestricted;
+    private Integer isRestricted;
 
     // Constructors
     public CreateKidRequest() {
@@ -74,11 +74,11 @@ public class CreateKidRequest {
         this.profilePicture = profilePicture;
     }
 
-    public Boolean getIsRestricted() {
+    public Integer getIsRestricted() {
         return isRestricted;
     }
 
-    public void setIsRestricted(Boolean isRestricted) {
+    public void setIsRestricted(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
 }

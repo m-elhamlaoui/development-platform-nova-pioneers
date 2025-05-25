@@ -43,7 +43,7 @@ public class CourseService {
 
         List<Course> courses;
 
-        if (kid.getIsRestricted()) {
+        if (kid.getIsRestricted() == 1) {
             // TODO: Implement suggested_courses table logic
             // For now, return empty list for restricted kids
             return List.of();

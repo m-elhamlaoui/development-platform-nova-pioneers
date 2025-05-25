@@ -23,7 +23,7 @@ public class Kid {
     private Integer totalXp = 0;
 
     @Column(name = "is_restricted")
-    private Boolean isRestricted = false;
+    private Integer isRestricted = 0;
 
     @Column(name = "parent_id", nullable = false)
     private Integer parentId;
@@ -73,11 +73,11 @@ public class Kid {
         this.totalXp = totalXp;
     }
 
-    public Boolean getIsRestricted() {
+    public Integer getIsRestricted() {
         return isRestricted;
     }
 
-    public void setIsRestricted(Boolean isRestricted) {
+    public void setIsRestricted(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
 

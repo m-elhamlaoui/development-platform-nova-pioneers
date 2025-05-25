@@ -4,22 +4,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ToggleRestrictionRequest {
     @JsonProperty("is_restricted")
-    private Boolean isRestricted;
+    private Integer isRestricted;
 
     // Constructors
     public ToggleRestrictionRequest() {
     }
 
-    public ToggleRestrictionRequest(Boolean isRestricted) {
+    public ToggleRestrictionRequest(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
 
     // Getters and Setters
-    public Boolean getIsRestricted() {
+    public Integer getIsRestricted() {
         return isRestricted;
     }
 
-    public void setIsRestricted(Boolean isRestricted) {
+    public void setIsRestricted(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
 }

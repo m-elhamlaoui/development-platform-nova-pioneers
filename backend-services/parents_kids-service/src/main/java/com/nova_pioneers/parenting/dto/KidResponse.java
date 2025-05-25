@@ -37,7 +37,7 @@ public class KidResponse {
     private Integer totalXp;
 
     @JsonProperty("is_restricted")
-    private Boolean isRestricted;
+    private Integer isRestricted;
 
     @JsonProperty("parent_id")
     private Integer parentId;
@@ -143,11 +143,11 @@ public class KidResponse {
         this.totalXp = totalXp;
     }
 
-    public Boolean getIsRestricted() {
+    public Integer getIsRestricted() {
         return isRestricted;
     }
 
-    public void setIsRestricted(Boolean isRestricted) {
+    public void setIsRestricted(Integer isRestricted) {
         this.isRestricted = isRestricted;
     }
 
