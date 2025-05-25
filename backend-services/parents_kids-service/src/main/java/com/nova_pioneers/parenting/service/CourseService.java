@@ -61,8 +61,10 @@ public class CourseService {
         Course course = courseRepository.findByIdAndIsActiveTrue(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        Teacher teacher = teacherRepository.findById(course.getTeacherId())
-                .orElse(null);
+        Teacher teacher = null;
+        if (course.getTeacherId() != null) {
+            teacher = teacherRepository.findById(course.getTeacherId()).orElse(null);
+        }
 
         List<Lesson> lessons = lessonRepository.findByCourseIdOrderBySequenceOrder(courseId);
 

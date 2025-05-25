@@ -3,13 +3,27 @@ package com.nova_pioneers.parenting.entities;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.*;
 
 @Entity
 @Table(name = "courses")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    // Remove this direct field
+    // @Column(name = "teacher_id")
+    // private Integer teacherId;
+
+    // Keep only the relationship field
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    private Teacher teacher;
 
     @Column(name = "teacher_id")
     private Integer teacherId;
@@ -21,6 +35,8 @@ public class Course {
     private String gradeLevel;
 
     private String subject;
+
+    @Column(name = "thumbnail_path")
     private String thumbnail;
 
     @Column(name = "created_date")
@@ -37,10 +53,6 @@ public class Course {
 
     @Column(name = "is_active")
     private Boolean isActive = true;
-
-    // Constructors, getters, setters
-    public Course() {
-    }
 
     public Integer getId() {
         return id;

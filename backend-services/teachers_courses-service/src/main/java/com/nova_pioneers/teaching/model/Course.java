@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Setter
 @Getter
-@EqualsAndHashCode(exclude = {"modules", "lessons", "ratings"})
+@EqualsAndHashCode(exclude = { "modules", "lessons", "ratings" })
 @Table(name = "courses")
 public class Course {
     @Id
@@ -53,6 +53,9 @@ public class Course {
     @Min(value = 4, message = "Minimum recommended age is 4")
     @Max(value = 18, message = "Maximum recommended age is 18")
     private Integer recommendedAge;
+
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 
     @NotNull(message = "Teacher is required")
     @ManyToOne

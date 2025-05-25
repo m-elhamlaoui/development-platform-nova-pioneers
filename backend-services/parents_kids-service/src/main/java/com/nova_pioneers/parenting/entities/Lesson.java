@@ -10,10 +10,12 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // Keep just the direct column mapping:
     @Column(name = "course_id")
     private Integer courseId;
 
     private String title;
+
     private String content;
 
     @Column(name = "resource_links", columnDefinition = "TEXT")
@@ -26,6 +28,7 @@ public class Lesson {
     public Lesson() {
     }
 
+    // Existing getters and setters
     public Integer getId() {
         return id;
     }
