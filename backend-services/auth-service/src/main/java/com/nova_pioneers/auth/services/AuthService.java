@@ -31,6 +31,10 @@ public class AuthService {
             throw new AuthenticationFailedException("Invalid email or password");
         }
 
+        if (!user.isActive()) {
+            throw new AuthenticationFailedException("Account is not active. Please wait for admin approval.");
+        }
+
         // Revoke any existing tokens for this user
         tokenService.revokeAllUserTokens(user);
 
