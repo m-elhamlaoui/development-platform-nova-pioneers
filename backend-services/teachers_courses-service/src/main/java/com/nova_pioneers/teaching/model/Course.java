@@ -55,6 +55,10 @@ public class Course {
     @Max(value = 18, message = "Maximum recommended age is 18")
     private Integer recommendedAge;
 
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+
+    @NotNull(message = "Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;

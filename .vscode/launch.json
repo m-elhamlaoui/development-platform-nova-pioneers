@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "BackendApplication",
+            "request": "launch",
+            "mainClass": "com.nova_pioneers.admin.BackendApplication",
+            "projectName": "admin-service"
+        },
+        {
+            "type": "java",
+            "name": "ApiGatewayApplication",
+            "request": "launch",
+            "mainClass": "com.nova_pioneers.api_gateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
+            "name": "BackendApplication(1)",
+            "request": "launch",
+            "mainClass": "com.nova_pioneers.auth.BackendApplication",
+            "projectName": "auth-service"
+        },
+        {
+            "type": "java",
+            "name": "BackendApplication(2)",
+            "request": "launch",
+            "mainClass": "com.nova_pioneers.parenting.BackendApplication",
+            "projectName": "parents_kids-service"
+        },
+        {
+            "type": "java",
+            "name": "BackendApplication(3)",
+            "request": "launch",
+            "mainClass": "com.nova_pioneers.teaching.BackendApplication",
+            "projectName": "teachers_courses-service"
+        }
+    ]
+}

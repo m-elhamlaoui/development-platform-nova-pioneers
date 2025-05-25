@@ -1,6 +1,8 @@
 package com.nova_pioneers.api_gateway.config;
 
+import com.nova_pioneers.api_gateway.filter.JwtAuthenticationFilter;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -24,27 +26,34 @@ public class RouteConfiguration {
         private String teachersCoursesServiceUri;
 
         @Bean
-        public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+        public RouteLocator customRouteLocator(RouteLocatorBuilder builder, JwtAuthenticationFilter jwtAuthenticationFilter) {
                 return builder.routes()
-                                // Admin Service Routes
-                                .route("admin-service", r -> r.path("/admin/**")
-                                                .filters(f -> f.stripPrefix(1))
-                                                .uri(adminServiceUri))
+                        // Admin Service Routes with JWT Filter
+                        .route("admin-service", r -> r.path("/admin/**")
+                                .filters(f -> f
+                                        .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+                                        .stripPrefix(1))
+                                .uri(adminServiceUri))
 
-                                // Auth Service Routes
-                                .route("auth-service", r -> r.path("/auth/**")
-                                                .filters(f -> f.stripPrefix(1))
-                                                .uri(authServiceUri))
+                        // Auth Service Routes (no JWT filter for login/signup)
+                        .route("auth-service", r -> r.path("/auth/**")
+                                .filters(f -> f.stripPrefix(1))
+                                .uri(authServiceUri))
 
-                                // Parents-Kids Service Routes
-                                .route("parents-kids-service", r -> r.path("/parents-kids/**")
-                                                .filters(f -> f.stripPrefix(1))
-                                                .uri(parentsKidsServiceUri))
+                        // Parents-Kids Service Routes with JWT Filter
+                        .route("parents-kids-service", r -> r.path("/parents-kids/**")
+                                .filters(f -> f
+                                        .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+                                        .stripPrefix(1))
+                                .uri(parentsKidsServiceUri))
 
-                                // Teachers-Courses Service Routes
-                                .route("teachers-courses-service", r -> r.path("/teachers-courses/**")
-                                                .filters(f -> f.stripPrefix(1))
-                                                .uri(teachersCoursesServiceUri))
-                                .build();
+                        // Teachers-Courses Service Routes with JWT Filter
+                        .route("teachers-courses-service", r -> r.path("/teachers-courses/**")
+                                .filters(f -> f
+                                        .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+                                        .stripPrefix(1))
+                                .uri(teachersCoursesServiceUri))
+
+                        .build();
         }
 }

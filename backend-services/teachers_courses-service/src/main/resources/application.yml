@@ -27,12 +27,4 @@ spring:
 
 # File upload directory - THIS IS KEY
 file:
-  upload:
-    dir: /app/uploads # This matches your requirement
-
-# Logging to debug file uploads
-logging:
-  level:
-    com.nova_pioneers.teaching: DEBUG
-    org.springframework.web.multipart: DEBUG
-    org.springframework.web.servlet.mvc.method.annotation: DEBUG
+  upload-dir: ./uploads
