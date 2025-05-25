@@ -27,14 +27,18 @@ services:
     ports:
       - "9000:9000"  # Exposed to internet via OCI security rule
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      ADMIN_SERVICE_URI: ${ADMIN_SERVICE_URI}
-      AUTH_SERVICE_URI: ${AUTH_SERVICE_URI}
-      PARENTS_KIDS_SERVICE_URI: ${PARENTS_KIDS_SERVICE_URI}
-      TEACHERS_COURSES_SERVICE_URI: ${TEACHERS_COURSES_SERVICE_URI}
+      ADMIN_SERVICE_URI: http://admin-service:9091
+      AUTH_SERVICE_URI: http://auth-service:9092
+      PARENTS_KIDS_SERVICE_URI: http://parents-kids-service:9093
+      TEACHERS_COURSES_SERVICE_URI: http://teachers-courses-service:9094
       JWT_SECRET: ${JWT_SECRET}
+      SPRING_PROFILES_ACTIVE: prod
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     depends_on:
       db:
         condition: service_healthy
@@ -49,71 +53,103 @@ services:
     networks:
       - prod_network
     restart: unless-stopped
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9000"
+      - "prometheus.io/path=/actuator/prometheus"
 
   # Auth Service
   auth-service:
     image: abderrahmane03/nova-pioneers:auth-service-latest
     container_name: nova-auth-prod
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     depends_on:
       db:
         condition: service_healthy
     networks:
       - prod_network
     restart: unless-stopped
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9092"
+      - "prometheus.io/path=/actuator/prometheus"
 
   # Admin Service
   admin-service:
     image: abderrahmane03/nova-pioneers:admin-service-latest
     container_name: nova-admin-prod
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     depends_on:
       db:
         condition: service_healthy
     networks:
       - prod_network
     restart: unless-stopped
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9091"
+      - "prometheus.io/path=/actuator/prometheus"
 
   # Parents Kids Service
   parents-kids-service:
     image: abderrahmane03/nova-pioneers:parents-kids-service-latest
     container_name: nova-parents-kids-prod
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     depends_on:
       db:
         condition: service_healthy
     networks:
       - prod_network
     restart: unless-stopped
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9093"
+      - "prometheus.io/path=/actuator/prometheus"
 
   # Teachers Courses Service
   teachers-courses-service:
     image: abderrahmane03/nova-pioneers:teachers-courses-service-latest
     container_name: nova-teachers-courses-prod
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     depends_on:
       db:
         condition: service_healthy
     networks:
       - prod_network
     restart: unless-stopped
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9094"
+      - "prometheus.io/path=/actuator/prometheus"
 
   # Frontend - exposed to internet
   frontend:
@@ -129,6 +165,64 @@ services:
       - prod_network
     restart: unless-stopped
 
+  # Production Monitoring Services
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: nova-prometheus-prod
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--web.external-url=http://your-oci-public-ip:9090'
+    restart: unless-stopped
+    ports:
+      - "9090:9090"  # Consider restricting access in production
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data_prod:/prometheus
+    networks:
+      - prod_network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: nova-grafana-prod
+    restart: unless-stopped
+    ports:
+      - "3000:3000"  # Consider restricting access in production
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-CHANGE_ME_IN_PRODUCTION}
+      GF_USERS_ALLOW_SIGN_UP: false
+      GF_SERVER_ROOT_URL: http://your-oci-public-ip:3000
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel
+    volumes:
+      - grafana_data_prod:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    networks:
+      - prod_network
+    depends_on:
+      - prometheus
+    labels:
+      org.label-schema.group: "monitoring"
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.13.2
+    container_name: nova-postgres-exporter-prod
+    restart: unless-stopped
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable"
+    networks:
+      - prod_network
+    depends_on:
+      - db
+    labels:
+      org.label-schema.group: "monitoring"
+
 networks:
   prod_network:
     driver: bridge
@@ -137,3 +231,7 @@ networks:
 volumes:
   postgres_data_prod:
     name: nova_postgres_data_prod
+  prometheus_data_prod:
+    name: nova_prometheus_data_prod
+  grafana_data_prod:
+    name: nova_grafana_data_prod

@@ -14,6 +14,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app_network
+      - monitoring_network
 
   admin-service:
     container_name: admin-service
@@ -31,11 +34,21 @@ services:
       SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
       FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     volumes:
       - ./backend-services/admin-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/admin-service/src:/build/src
       - ./backend-services/admin-service/target:/build/target
       - maven-repo:/root/.m2/repository
+    networks:
+      - app_network
+      - monitoring_network
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9091"
+      - "prometheus.io/path=/actuator/prometheus"
 
   auth-service:
     container_name: auth-service
@@ -55,11 +68,21 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
       FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     volumes:
       - ./backend-services/auth-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/auth-service/src:/build/src
       - ./backend-services/auth-service/target:/build/target
       - maven-repo:/root/.m2/repository
+    networks:
+      - app_network
+      - monitoring_network
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9092"
+      - "prometheus.io/path=/actuator/prometheus"
 
   parents-kids-service:
     container_name: parents-kids-service
@@ -77,11 +100,21 @@ services:
       SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
       FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     volumes:
       - ./backend-services/parents_kids-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/parents_kids-service/src:/build/src
       - ./backend-services/parents_kids-service/target:/build/target
       - maven-repo:/root/.m2/repository
+    networks:
+      - app_network
+      - monitoring_network
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9093"
+      - "prometheus.io/path=/actuator/prometheus"
 
   teachers-courses-service:
     container_name: teachers-courses-service
@@ -99,11 +132,21 @@ services:
       SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
       FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     volumes:
       - ./backend-services/teachers_courses-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/teachers_courses-service/src:/build/src
       - ./backend-services/teachers_courses-service/target:/build/target
       - maven-repo:/root/.m2/repository
+    networks:
+      - app_network
+      - monitoring_network
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9094"
+      - "prometheus.io/path=/actuator/prometheus"
 
   api-gateway:
     build:
@@ -121,6 +164,9 @@ services:
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
+      # Monitoring configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
     ports:
       - "9000:9000"
     depends_on:
@@ -138,6 +184,13 @@ services:
       - ./backend-services/api-gateway/src:/app/src
       - ./backend-services/api-gateway/target:/app/target
       - maven-repo:/root/.m2/repository
+    networks:
+      - app_network
+      - monitoring_network
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9000"
+      - "prometheus.io/path=/actuator/prometheus"
 
   frontend:
     container_name: nova-pioneers-front-end
@@ -157,7 +210,77 @@ services:
       - CHOKIDAR_USEPOLLING=1
       - VITE_PORT=5173
     command: [ "npm", "run", "dev", "--", "--host" ]
+    networks:
+      - app_network
+
+  # Monitoring Services
+  prometheus:
+    image: prom/prometheus:v3.2.0
+    container_name: nova-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    networks:
+      - monitoring_network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  grafana:
+    image: grafana/grafana:12.0.1
+    container_name: nova-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-nova_admin_2024}
+      GF_USERS_ALLOW_SIGN_UP: false
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    networks:
+      - monitoring_network
+    depends_on:
+      - prometheus
+    labels:
+      org.label-schema.group: "monitoring"
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.13.2
+    container_name: nova-postgres-exporter
+    restart: unless-stopped
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable"
+    ports:
+      - "9187:9187"
+    networks:
+      - monitoring_network
+    depends_on:
+      - db
+    labels:
+      org.label-schema.group: "monitoring"
+
+networks:
+  app_network:
+    driver: bridge
+  monitoring_network:
+    driver: bridge
 
 volumes:
   postgres-data:
   maven-repo:
+  prometheus_data:
+  grafana_data:

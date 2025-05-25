@@ -1,0 +1,14 @@
+# monitoring/grafana/provisioning/dashboards/dashboard.yml
+apiVersion: 1
+
+providers:
+  - name: 'Nova Pioneers Dashboards'
+    orgId: 1
+    folder: 'Nova Pioneers'
+    folderUid: nova_pioneers_folder
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
