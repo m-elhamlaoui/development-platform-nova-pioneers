@@ -1,23 +1,39 @@
 server:
   port: 9093
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.batch_size: 50
   application:
     name: parents_kids-service
 
+logging:
+  level:
+    com.nova_pioneers.parenting: DEBUG
+    org.hibernate.SQL: INFO
+    org.springframework.web: INFO
+
 file:
   upload-dir: ./uploads
-
-
-
-
-

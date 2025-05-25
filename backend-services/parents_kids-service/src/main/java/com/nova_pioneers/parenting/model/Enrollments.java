@@ -1,14 +1,17 @@
 package com.nova_pioneers.parenting.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "enrollments", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"kid_id", "course_id"})
-    })
+        @UniqueConstraint(columnNames = { "kid_id", "course_id" })
+})
+@Data
+@NoArgsConstructor
 public class Enrollments {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "enrollment_id")
@@ -33,62 +36,4 @@ public class Enrollments {
 
     @Column(name = "xp_earned")
     private Integer xpEarned = 0;
-
-    // Getters and Setters
-
-    public Long getEnrollmentId() {
-        return enrollmentId;
-    }
-
-    public void setEnrollmentId(Long enrollmentId) {
-        this.enrollmentId = enrollmentId;
-    }
-
-    public Kidadd getKid() {
-        return kid;
-    }
-
-    public void setKid(Kidadd kid) {
-        this.kid = kid;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public ZonedDateTime getEnrolledAt() {
-        return enrolledAt;
-    }
-
-    public void setEnrolledAt(ZonedDateTime enrolledAt) {
-        this.enrolledAt = enrolledAt;
-    }
-
-    public ZonedDateTime getCompletedAt() {
-        return completedAt;
-    }
-
-    public void setCompletedAt(ZonedDateTime completedAt) {
-        this.completedAt = completedAt;
-    }
-
-    public Integer getProgressPercentage() {
-        return progressPercentage;
-    }
-
-    public void setProgressPercentage(Integer progressPercentage) {
-        this.progressPercentage = progressPercentage;
-    }
-
-    public Integer getXpEarned() {
-        return xpEarned;
-    }
-
-    public void setXpEarned(Integer xpEarned) {
-        this.xpEarned = xpEarned;
-    }
 }

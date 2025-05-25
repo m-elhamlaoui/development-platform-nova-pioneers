@@ -15,7 +15,7 @@ spring:
   # JPA configuration for token entity
   jpa:
     hibernate:
-      ddl-auto: none # Don't change schema, using auth-service's schema
+      ddl-auto: none  # Don't change schema, using auth-service's schema
     show-sql: false
     properties:
       hibernate:
@@ -30,7 +30,7 @@ spring:
 # JWT configuration - must match auth-service configuration
 jwt:
   secret: ${JWT_SECRET:SB4cgMKW7XkP83H5z94FfHd8QXYZVaJ2GtRbnLm5uEvsUwC6DTjeKqNyA7pZkrx}
-  expiration: 86400000 # 24 hours in milliseconds
+  expiration: 86400000  # 24 hours in milliseconds
 
 # Logging configuration
 logging:
