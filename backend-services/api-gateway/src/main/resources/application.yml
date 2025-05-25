@@ -5,11 +5,11 @@ spring:
   application:
     name: api-gateway
 
-  # Database configuration for token validation
+  # Database configuration using .env variables
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST:db}:${DB_PORT:5432}/${DB_NAME:novadb}
+    username: ${DB_USER:pioneer}
+    password: ${DB_PASSWORD:nova25!X}
     driver-class-name: org.postgresql.Driver
 
   # JPA configuration for token entity
@@ -27,10 +27,10 @@ spring:
     config:
       enabled: false
 
-# JWT configuration - must match auth-service configuration
+# JWT configuration using .env variables - must match auth-service configuration
 jwt:
   secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION:86400000}
+  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
 
 # Logging configuration
 logging:
