@@ -2,15 +2,15 @@ services:
   db:
     image: postgres:17
     environment:
-      POSTGRES_USER: pioneer
-      POSTGRES_PASSWORD: nova25!X
-      POSTGRES_DB: novadb
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5431:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pioneer -d novadb"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,11 +24,13 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
-      SPRING_DATASOURCE_USERNAME: pioneer
-      SPRING_DATASOURCE_PASSWORD: nova25!X
-      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
-      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
+      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
     volumes:
       - ./backend-services/admin-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/admin-service/src:/build/src
@@ -44,11 +46,15 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
-      SPRING_DATASOURCE_USERNAME: pioneer
-      SPRING_DATASOURCE_PASSWORD: nova25!X
-      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
-      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
     volumes:
       - ./backend-services/auth-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/auth-service/src:/build/src
@@ -64,11 +70,13 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
-      SPRING_DATASOURCE_USERNAME: pioneer
-      SPRING_DATASOURCE_PASSWORD: nova25!X
-      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
-      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
+      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
     volumes:
       - ./backend-services/parents_kids-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/parents_kids-service/src:/build/src
@@ -84,11 +92,13 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/novadb
-      SPRING_DATASOURCE_USERNAME: pioneer
-      SPRING_DATASOURCE_PASSWORD: nova25!X
-      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
-      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
+      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
     volumes:
       - ./backend-services/teachers_courses-service/src/main/resources/uploads:/app/uploads
       - ./backend-services/teachers_courses-service/src:/build/src
@@ -99,19 +109,31 @@ services:
     build:
       context: ./backend-services/api-gateway
     environment:
-      ADMIN_SERVICE_URI: "http://admin-service:9091"
-      AUTH_SERVICE_URI: "http://auth-service:9092"
-      PARENTS_KIDS_SERVICE_URI: "http://parents-kids-service:9093"
-      TEACHERS_COURSES_SERVICE_URI: "http://teachers-courses-service:9094"
-      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
-      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      ADMIN_SERVICE_URI: ${ADMIN_SERVICE_URI}
+      AUTH_SERVICE_URI: ${AUTH_SERVICE_URI}
+      PARENTS_KIDS_SERVICE_URI: ${PARENTS_KIDS_SERVICE_URI}
+      TEACHERS_COURSES_SERVICE_URI: ${TEACHERS_COURSES_SERVICE_URI}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DEVTOOLS_RESTART_ENABLED: ${SPRING_DEVTOOLS_RESTART_ENABLED}
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: ${SPRING_DEVTOOLS_LIVERELOAD_ENABLED}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
     ports:
       - "9000:9000"
     depends_on:
-      - admin-service
-      - auth-service
-      - parents-kids-service
-      - teachers-courses-service
+      db:
+        condition: service_healthy
+      admin-service:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      parents-kids-service:
+        condition: service_started
+      teachers-courses-service:
+        condition: service_started
     volumes:
       - ./backend-services/api-gateway/src:/app/src
       - ./backend-services/api-gateway/target:/app/target

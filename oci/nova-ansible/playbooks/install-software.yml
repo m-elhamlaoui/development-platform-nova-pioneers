@@ -1,0 +1,95 @@
+---
+- name: Install Nova Pioneers Software Stack
+  hosts: oci-vm-np
+  become: yes  # Use sudo
+  
+  tasks:
+    - name: Update Ubuntu packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install prerequisite packages
+      apt:
+        name:
+          - curl
+          - wget
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - lsb-release
+          - git
+          - htop
+          - tree
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Create docker-compose symlink
+      file:
+        src: /usr/local/bin/docker-compose
+        dest: /usr/bin/docker-compose
+        state: link
+
+    - name: Install Java 21
+      apt:
+        name:
+          - openjdk-21-jdk
+          - openjdk-21-jre
+        state: present
+
+    - name: Set JAVA_HOME for ubuntu user
+      lineinfile:
+        path: /home/ubuntu/.bashrc
+        line: 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64'
+        create: yes
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present
+
+    - name: Create application directory
+      file:
+        path: /opt/nova-pioneers
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'

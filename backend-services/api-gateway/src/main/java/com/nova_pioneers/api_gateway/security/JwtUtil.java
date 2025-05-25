@@ -4,13 +4,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -20,8 +20,8 @@ public class JwtUtil {
     private final SecretKey key;
 
     public JwtUtil(@Value("${jwt.secret}") String secret) {
-        // Create key from secret
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        // FIXED: Use raw string instead of Base64 decoding to match auth-service
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
