@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { get } from 'react-hook-form';
 const getApiBaseUrl = () => {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+  return isLocalhost ? 'http://localhost:9093' : 'http://http://141.144.226.68:9093'; // Replace with your actual production API URL
 };
 
 export default function ParentsMain({ kidsData, baseUrl = getApiBaseUrl() }) {
