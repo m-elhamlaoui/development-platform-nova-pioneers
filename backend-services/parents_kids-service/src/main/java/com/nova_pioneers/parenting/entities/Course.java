@@ -22,7 +22,7 @@ public class Course {
 
     // Keep only the relationship field
     @ManyToOne
-    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private Teacher teacher;
 
     @Column(name = "teacher_id")

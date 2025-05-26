@@ -14,6 +14,7 @@ import {
   Clock,
   Users
 } from 'lucide-react';
+import apiConfig from '../utils/apiConfig';
 
 // Modern stat card with gradient background
 const StatCard = ({ title, value, icon, color, gradientFrom, gradientTo }) => (

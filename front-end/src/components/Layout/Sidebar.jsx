@@ -21,6 +21,8 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
   // Safe access to teacher data with default values - REMOVED avatar property
   const safeTeacher = teacher || {
     name: "Teacher Name",
+    firstName: "",
+    lastName: "",
     email: "teacher@example.com",
     xpPoints: 0
   };
@@ -144,7 +146,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
               
               <div className="mt-3 text-center w-full">
                 <div className="font-semibold text-gray-800 text-lg whitespace-nowrap overflow-hidden text-ellipsis">
-                  {safeTeacher.name}
+                  {safeTeacher.firstName} {safeTeacher.lastName}
                 </div>
                 <div className="text-xs text-gray-500 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                   {safeTeacher.email}

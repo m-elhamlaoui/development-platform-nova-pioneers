@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Data
 @Setter
@@ -25,19 +24,23 @@ public class Teacher {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
     @Column(name = "certification_info")
     private String certificationInfo;
 
     @Column(name = "join_date")
-    private LocalDate joinDate;
+    private LocalDate joinDate = LocalDate.now();
 
     // Teacher's accumulated XP
     @Column(name = "accumulated_xp")
-    private Integer accumulatedXp;
+    private Integer accumulatedXp = 0;
 
     // Teacher title (Beginner, Super, Great, etc.)
     private String title;
 
     @OneToMany(mappedBy = "teacher")
     private List<Course> courses;
+
 }

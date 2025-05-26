@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
 import DraggableLessonList from '../components/DragDrop/DraggableLessonList';
 import ImageUpload from '../components/FileUpload/ImageUpload';
+import apiConfig from '../utils/apiConfig';
 
 const AddCourse = () => {
   const navigate = useNavigate();
@@ -178,8 +179,8 @@ const AddCourse = () => {
       }
       
       const url = isEditing 
-        ? `http://localhost:9094/api/courses/update-with-files/${existingCourse.id}`
-        : 'http://localhost:9094/api/courses/create-with-files';
+        ? `${apiConfig.courses}/update-with-files/${existingCourse.id}`
+        : `${apiConfig.courses}/create-with-files`;
       
       const method = isEditing ? 'PUT' : 'POST';
       
@@ -235,7 +236,7 @@ const AddCourse = () => {
       lessons: lessons,
       id: isEditing ? existingCourse.id : `course-${Date.now()}`,
       created_date: isEditing ? existingCourse.created_date : new Date().toISOString(),
-      teacherId: 1 // Add a default teacher ID or get from user context
+      teacherId: teacher?.id || 1  // Use the actual teacher ID
     };
     
     sendCourseToBackend(courseData);

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate import
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
 import { Heart, User, ChevronDown, Award, BookOpen } from "lucide-react";
+import apiConfig from '../utils/apiConfig';
+import { toast } from 'react-toastify';
 
 const CourseCard = ({ course, onEdit, onDelete, index }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -19,6 +21,19 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
         courseData: course 
       } 
     });
+  };
+
+  // Use the deleteCourse function from context
+  const { deleteCourse } = useData();
+
+  // Modify the delete handler
+  const handleDelete = async (courseId) => {
+    try {
+      await deleteCourse(courseId);
+      toast.success("Course deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete course");
+    }
   };
 
   return (
@@ -120,7 +135,7 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
               </button>
               <button
                 onClick={() => {
-                  onDelete(course.id);
+                  handleDelete(course.id);
                   setShowConfirmDelete(false);
                 }}
                 className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
