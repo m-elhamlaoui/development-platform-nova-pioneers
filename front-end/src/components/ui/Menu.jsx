@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import dashlogo from "../../assets/np-logo.png";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { House, BookMarked, Baby, Settings, LogOut, X } from "lucide-react";
 import { toast } from "react-toastify";
 
 export default function Menu() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showSettings, setShowSettings] = useState(false);
   const [profile, setProfile] = useState({ name: "", email: "" });
   const [kidsData, setKidsData] = useState([]);
@@ -184,29 +185,41 @@ export default function Menu() {
           </div>
           
           {/* Kids section - now with initials avatar */}
-          <div className="children-container">
+          {/* <div className="children-container">
             <h1 className="text-gray-600 font-semibold mb-2">Children</h1>
             <div className="children-list-container flex flex-col gap-2 max-h-[300px] overflow-y-auto">
-              {kidsData && kidsData.length > 0 ? (
-                kidsData.map((kid) => (
-                  <Link key={kid.user_id} className="child-link flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
-                    {/* Initials avatar instead of image */}
-                    <div className="w-[45px] h-[45px] bg-blue-900 text-white font-bold rounded-full flex items-center justify-center">
-                      {getInitialsAvatar(kid.first_name, kid.last_name)}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-sm">{kid.first_name} {kid.last_name}</div>
-                      <div className="text-xs text-gray-500">{kid.total_xp || 0} XP</div>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <div className="text-sm text-gray-500 text-center py-2">
-                  No kids added yet
-                </div>
-              )}
+              <ul className="w-full">
+              
+                {kidsData && kidsData.length > 0 ? (
+                  kidsData
+                    .filter(kid => kid !== null && kid !== undefined)
+                    .map((kid) => (
+                      <li key={kid.user_id || Math.random()} className="mb-2">
+                        <Link 
+                          to={`/kids/${kid.user_id}`}
+                          className={`block px-4 py-2 rounded-lg text-sm ${
+                            location.pathname.includes(`/kids/${kid.user_id}`) 
+                              ? "bg-blue-100 text-blue-800" 
+                              : "hover:bg-gray-100"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-blue-100 text-blue-800">
+                              {kid.first_name ? kid.first_name.charAt(0) : "K"}
+                            </div>
+                            {kid.first_name || "Kid"}'s Dashboard
+                          </div>
+                        </Link>
+                      </li>
+                    ))
+                ) : (
+                  <li className="text-sm text-gray-500 italic px-4">
+                    No kids added yet
+                  </li>
+                )}
+              </ul>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="menu-lower-section">
