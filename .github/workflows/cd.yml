@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-and-push, build-frontend]
 
-    steps:
+    steps:  # ← Fixed: moved this to align with job properties
       - name: Deploy to OCI VM
         uses: appleboy/ssh-action@v1.2.1
         with:
@@ -63,7 +63,10 @@ jobs:
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
             # Navigate to project directory
-            cd /opt/nova-pioneers
+            cd ~/development-platform-nova-pioneers
+            
+            
+            git pull origin main
             
             # Create .env file from secrets
             cat > .env << EOF
@@ -83,10 +86,10 @@ jobs:
             UPLOAD_DIR=./uploads
             EOF
             
-            # Pull latest images
+            # Pull latest Docker images
             docker-compose -f docker-compose.prod.yml pull
             
-            # Restart services
+            # Restart services with latest code and images
             docker-compose -f docker-compose.prod.yml up -d
             
             # Clean up old images
