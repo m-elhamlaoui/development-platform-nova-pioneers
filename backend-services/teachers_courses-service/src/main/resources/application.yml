@@ -31,7 +31,3 @@ spring:
 
 file:
   upload-dir: ./uploads
-
-
-
-
