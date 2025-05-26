@@ -21,7 +21,8 @@ import AdminHome from './components/AdminHome';
 import ManageUsers from './components/ManageUsers';
 import ConfirmTeachers from './components/ConfirmTeachers';
 import ManageAlerts from './components/ManageAlerts';
-
+import KidSettings from './pages/KidSettings';
+import CourseLearning from './pages/CourseLearning';
 export default function App() {
   return (
     <BrowserRouter>
@@ -51,9 +52,10 @@ export default function App() {
             <Route path="manage-alerts" element={<ManageAlerts />} />
           </Route>
 
-          <Route path="/kid/dashboard" element={<KidDashboard />} />
-          <Route path="/kid/courses" element={<KidDashboard />} />
-          <Route path="/kid/settings" element={<KidDashboard />} />
+          <Route path="/kid/dashboard" element={<KidDashboard baseUrl="http://localhost:9093" />} />
+          <Route path="/course/:courseId/view" element={<CourseView baseUrl="http://localhost:9093" />} />
+          <Route path="/course/:courseId/learn" element={<CourseLearning baseUrl="http://localhost:9093" />} />
+          <Route path="/kid/settings" element={<KidSettings baseUrl="http://localhost:9093" />} />
           <Route path="*" element={<NotFound />} />
 
         </Routes>

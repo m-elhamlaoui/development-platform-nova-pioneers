@@ -1,321 +1,268 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Home, 
-  BookOpen, 
-  Award, 
-  Settings, 
-  LogOut, 
-  ChevronRight,
-  User,
-  Star,
-  ChevronDown,
-  X,
-  Rocket,
-  Globe, // Replacing Planet with Globe which exists in lucide-react
-  UserCheck,
-  Mail
-} from 'lucide-react';
+import { Home, GraduationCap, Award, Settings, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import dashlogo from "../assets/np-logo.png";
 
-const KidSidebar = ({ kidData }) => {
+const KidSidebar = ({ baseUrl = "http://localhost:9093" }) => {
+  const [kidData, setKidData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [expanded, setExpanded] = useState(true);
-  const [showAchievements, setShowAchievements] = useState(false);
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
   
-  // Mock space titles
-  const spaceTitles = [
-    "Nova Explorer", 
-    "Star Voyager", 
-    "Cosmic Ranger", 
-    "Galaxy Pioneer",
-    "Asteroid Adventurer"
-  ];
+  // Get kid ID from storage
+  const getKidId = () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || '{}');
+      return user.id || null;
+    } catch (err) {
+      console.error('Error parsing user data:', err);
+      return null;
+    }
+  };
   
-  // Use title from kidData or a default one
-  const spaceTitle = kidData.title || spaceTitles[0];
+  const kidId = getKidId();
   
-  const sidebarItems = [
-    { 
-      icon: <Home size={20} />, 
-      name: 'Dashboard', 
-      path: '/kid/dashboard' 
-    },
-    
-  ];
-  
+  // Logout function
   const handleLogout = () => {
-    // Implement logout functionality
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    toast.success('Logged out successfully');
     navigate('/login');
   };
   
-  // Form state for settings modal
-  const [formData, setFormData] = useState({
-    name: kidData.name || '',
-    email: kidData.email || ''
-  });
-  
-  const handleFormChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  // Determine badge based on XP
+  const determineBadge = (xp) => {
+    // Ensure xp is a number
+    const numXp = Number(xp) || 0;
+    
+    if (numXp >= 30000) return 'Astronaut';
+    if (numXp >= 15000) return 'Explorer';
+    if (numXp >= 5000) return 'Scientist';
+    if (numXp >= 1000) return 'Champion';
+    return 'Beginner';
   };
   
-  const handleSettingsSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically update user data via API
-    console.log('Updated settings:', formData);
-    // Close modal after saving
-    setShowSettingsModal(false);
+  // Determine badge color
+  const determineBadgeColor = (xp) => {
+    // Ensure xp is a number
+    const numXp = Number(xp) || 0;
+    
+    if (numXp >= 30000) return 'bg-black';
+    if (numXp >= 15000) return 'bg-green-400';
+    if (numXp >= 5000) return 'bg-purple-500';
+    if (numXp >= 1000) return 'bg-yellow-500';
+    return 'bg-blue-400';
+  };
+  
+  // Fetch kid data from backend
+  useEffect(() => {
+    const fetchKidData = async () => {
+      if (!kidId) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        
+        const response = await fetch(`${baseUrl}/kids/${kidId}/profile`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch kid data: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setKidData(data);
+      } catch (err) {
+        console.error("Error fetching kid data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchKidData();
+  }, [kidId, baseUrl]);
+  
+  // Calculate progress to next badge
+  const calculateNextBadgeProgress = (xp) => {
+    const numXp = Number(xp) || 0;
+    
+    if (numXp >= 30000) return 100; // Max level
+    if (numXp >= 15000) return Math.min(100, ((numXp - 15000) / (30000 - 15000)) * 100);
+    if (numXp >= 5000) return Math.min(100, ((numXp - 5000) / (15000 - 5000)) * 100);
+    if (numXp >= 1000) return Math.min(100, ((numXp - 1000) / (5000 - 1000)) * 100);
+    return Math.min(100, (numXp / 1000) * 100);
+  };
+  
+  // Get next badge name
+  const getNextBadgeName = (xp) => {
+    const numXp = Number(xp) || 0;
+    
+    if (numXp >= 30000) return null; // Already at max level
+    if (numXp >= 15000) return 'Astronaut';
+    if (numXp >= 5000) return 'Explorer';
+    if (numXp >= 1000) return 'Scientist';
+    return 'Champion';
+  };
+  
+  // Get XP to next badge
+  const getXpToNextBadge = (xp) => {
+    const numXp = Number(xp) || 0;
+    
+    if (numXp >= 30000) return 0; // Already at max level
+    if (numXp >= 15000) return 30000 - numXp;
+    if (numXp >= 5000) return 15000 - numXp;
+    if (numXp >= 1000) return 5000 - numXp;
+    return 1000 - numXp;
   };
   
   return (
     <>
       <motion.div
-        initial={{ width: expanded ? 250 : 80 }}
-        animate={{ width: expanded ? 250 : 80 }}
-        transition={{ duration: 0.3 }}
-        className="bg-white border-r border-gray-200 h-screen sticky top-0 overflow-y-auto"
+        initial={{ x: collapsed ? -250 : 0 }}
+        animate={{ x: collapsed ? -250 : 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className={`bg-white border-r border-gray-200 h-screen ${collapsed ? 'w-0' : 'w-[270px]'} flex-shrink-0 sticky top-0 z-10`}
       >
-        <div className="p-4">
-          <div className="flex items-center justify-between">
-            {expanded && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-                className="text-xl font-bold text-blue-600"
-              >
-                Nova Kids
-              </motion.div>
-            )}
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="p-2 rounded-lg hover:bg-gray-100"
-            >
-              <ChevronRight
-                className={`h-5 w-5 text-gray-500 transition-transform ${
-                  expanded ? 'rotate-180' : ''
-                }`}
-              />
-            </button>
-          </div>
-        </div>
-        
-        {/* Space-themed user profile */}
-        <div className={`px-4 mb-6 ${expanded ? 'py-4' : 'py-2 flex justify-center'}`}>
-          <div className={`flex ${expanded ? 'flex-row' : 'flex-col'} items-center`}>
-            <div className={`flex-shrink-0 relative ${expanded ? 'mr-3' : 'mb-2'}`}>
-              {/* Space-themed profile icon */}
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-800 flex items-center justify-center text-white overflow-hidden">
-                <div className="absolute inset-0 opacity-30">
-                  <div className="absolute top-1 left-1 w-1 h-1 bg-white rounded-full"></div>
-                  <div className="absolute top-3 left-6 w-0.5 h-0.5 bg-white rounded-full"></div>
-                  <div className="absolute top-5 left-2 w-0.5 h-0.5 bg-white rounded-full"></div>
-                  <div className="absolute top-7 left-4 w-1 h-1 bg-white rounded-full"></div>
-                  <div className="absolute top-2 right-2 w-0.5 h-0.5 bg-white rounded-full"></div>
-                  <div className="absolute bottom-2 left-3 w-1 h-1 bg-white rounded-full"></div>
-                </div>
-                <Rocket className="w-6 h-6 rotate-45" />
-              </div>
-              <div className="absolute -bottom-1 -right-1 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
-            </div>
+        <div className="flex flex-col h-full">
+          {/* Logo and Kid Info */}
+          <div className="p-4 text-center border-b border-gray-200">
+            <img 
+              src={dashlogo} 
+              alt="Nova Pioneers Logo" 
+              className="w-16 h-16 mx-auto rounded-full object-cover border-4 border-blue-600" 
+            />
             
-            {expanded && (
-              <div className="flex flex-col overflow-hidden">
-                <span className="font-medium text-gray-800 truncate">{kidData.name}</span>
-                <span className="text-xs text-indigo-600 font-medium">{spaceTitle}</span>
+            {!loading && kidData ? (
+              <div className="mt-3">
+                <h2 className="font-bold text-lg">
+                  {kidData.first_name} {kidData.last_name}
+                </h2>
+                <span className={`inline-block mt-1 px-3 py-1 ${determineBadgeColor(kidData.total_xp)} text-white text-xs rounded-full`}>
+                  {determineBadge(kidData.total_xp)}
+                </span>
+                
+                {/* XP Progress Bar */}
+                <div className="mt-3">
+                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>{kidData.total_xp?.toLocaleString() || 0} XP</span>
+                    {getNextBadgeName(kidData.total_xp) && (
+                      <span>{getXpToNextBadge(kidData.total_xp)?.toLocaleString()} XP to {getNextBadgeName(kidData.total_xp)}</span>
+                    )}
+                  </div>
+                  <div className="w-full bg-gray-100 rounded-full h-1.5">
+                    <div 
+                      className="bg-blue-600 h-1.5 rounded-full" 
+                      style={{width: `${calculateNextBadgeProgress(kidData.total_xp)}%`}}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ) : loading ? (
+              <div className="mt-3 flex flex-col items-center">
+                <div className="animate-pulse w-32 h-5 bg-gray-200 rounded-md mb-2"></div>
+                <div className="animate-pulse w-20 h-6 bg-gray-200 rounded-full"></div>
+              </div>
+            ) : (
+              <div className="mt-3">
+                <p className="text-red-500">Failed to load profile</p>
               </div>
             )}
           </div>
-        </div>
-        
-        {/* Navigation */}
-        <div className="px-2 flex-grow">
-          {sidebarItems.map((item) => (
-            <div key={item.name}>
-              <Link
-                to={item.hasDropdown ? '#' : item.path}
-                onClick={item.hasDropdown ? item.toggle : undefined}
-                className={`flex items-center py-2 px-3 mb-1 rounded-lg transition-colors ${
-                  location.pathname === item.path
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <div className="flex-shrink-0">{item.icon}</div>
-                
-                {expanded && (
-                  <>
-                    <span className="ml-3 flex-1">{item.name}</span>
-                    {item.hasDropdown && (
-                      <ChevronDown 
-                        size={16} 
-                        className={`transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
-                      />
-                    )}
-                  </>
-                )}
-              </Link>
-              
-              {/* Dropdown items */}
-              {expanded && item.hasDropdown && item.isOpen && item.children && (
-                <div className="ml-9 space-y-1 mt-1 mb-2">
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.name}
-                      to={child.path}
-                      className={`block text-sm py-2 px-3 rounded-lg transition-colors ${
-                        location.pathname === child.path
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                    >
-                      {child.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        
-        {/* Bottom actions: Settings and Logout */}
-        <div className="px-2 pt-4 pb-4 border-t border-gray-100 mt-auto">
-          {/* Settings Button - Now at bottom */}
-          <button
-            onClick={() => setShowSettingsModal(true)}
-            className={`flex items-center py-2 px-3 mb-2 w-full rounded-lg text-gray-700 hover:bg-gray-100 transition-colors ${
-              !expanded && 'justify-center'
-            }`}
-          >
-            <Settings size={20} />
-            {expanded && <span className="ml-3">Settings</span>}
-          </button>
           
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className={`flex items-center py-2 px-3 w-full rounded-lg text-red-600 hover:bg-red-50 transition-colors ${
-              !expanded && 'justify-center'
-            }`}
-          >
-            <LogOut size={20} />
-            {expanded && <span className="ml-3">Log Out</span>}
-          </button>
+          {/* Navigation Menu */}
+          <nav className="flex-1 overflow-y-auto py-4">
+            <ul className="space-y-1 px-3">
+              <li>
+                <Link 
+                  to="/kid/dashboard" 
+                  className={`flex items-center px-4 py-3 rounded-lg ${
+                    location.pathname === '/dashboard' 
+                      ? 'bg-blue-100 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Home className="w-5 h-5 mr-3" />
+                  Dashboard
+                </Link>
+              </li>
+              {/* <li>
+                <Link 
+                  to="/kid/my-courses" 
+                  className={`flex items-center px-4 py-3 rounded-lg ${
+                    location.pathname === '/my-courses' 
+                      ? 'bg-blue-100 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <GraduationCap className="w-5 h-5 mr-3" />
+                  My Courses
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/achievements" 
+                  className={`flex items-center px-4 py-3 rounded-lg ${
+                    location.pathname === '/achievements' 
+                      ? 'bg-blue-100 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Award className="w-5 h-5 mr-3" />
+                  Achievements
+                </Link>
+              </li> */}
+            </ul>
+          </nav>
+          
+          {/* Bottom Actions */}
+          <div className="p-4 border-t border-gray-200">
+            <ul className="space-y-1">
+              <li>
+                <Link 
+                  to="/kid/settings" 
+                  className="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <Settings className="w-5 h-5 mr-3" />
+                  Settings
+                </Link>
+              </li>
+              <li>
+                <button 
+                  onClick={handleLogout}
+                  className="flex items-center w-full text-left px-4 py-3 rounded-lg text-red-600 hover:bg-red-50"
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Log Out
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </motion.div>
       
-      {/* Settings Modal */}
-      <AnimatePresence>
-        {showSettingsModal && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-xl shadow-xl max-w-md w-full"
-            >
-              <div className="flex items-center justify-between p-5 border-b border-gray-100">
-                <h2 className="text-xl font-bold text-gray-800">Edit Profile</h2>
-                <button 
-                  onClick={() => setShowSettingsModal(false)}
-                  className="text-gray-400 hover:text-gray-600 focus:outline-none"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              
-              <form onSubmit={handleSettingsSubmit} className="p-5">
-                <div className="mb-6 flex justify-center">
-                  <div className="relative">
-                    <div className="h-24 w-24 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-800 flex items-center justify-center text-white overflow-hidden">
-                      <div className="absolute inset-0 opacity-30">
-                        <div className="absolute top-2 left-2 w-1 h-1 bg-white rounded-full"></div>
-                        <div className="absolute top-6 left-12 w-1 h-1 bg-white rounded-full"></div>
-                        <div className="absolute top-10 left-4 w-1 h-1 bg-white rounded-full"></div>
-                        <div className="absolute top-14 left-8 w-1.5 h-1.5 bg-white rounded-full"></div>
-                        <div className="absolute top-4 right-4 w-1 h-1 bg-white rounded-full"></div>
-                        <div className="absolute bottom-4 left-6 w-2 h-2 bg-white rounded-full"></div>
-                      </div>
-                      <Rocket className="w-12 h-12 rotate-45" />
-                    </div>
-                    
-                    <button
-                      type="button"
-                      className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors shadow-md"
-                    >
-                      <Settings size={16} />
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <UserCheck size={16} className="text-gray-400" />
-                      </div>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleFormChange}
-                        className="pl-10 w-full py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Your name"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Mail size={16} className="text-gray-400" />
-                      </div>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleFormChange}
-                        className="pl-10 w-full py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
-                  </div>
-                  
-         
-                </div>
-                
-                <div className="mt-6 flex space-x-3">
-                  <button
-                    type="button"
-                    onClick={() => setShowSettingsModal(false)}
-                    className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
+      {/* Collapse toggle button */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className="fixed left-[270px] bottom-4 z-20 bg-white border border-gray-200 rounded-full p-2 shadow-md hover:bg-gray-50"
+        style={{ left: collapsed ? '1rem' : '270px' }}
+      >
+        {collapsed ? (
+          <ChevronRight className="w-4 h-4" />
+        ) : (
+          <ChevronLeft className="w-4 h-4" />
         )}
-      </AnimatePresence>
+      </button>
     </>
   );
 };
