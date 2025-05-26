@@ -5,7 +5,7 @@ import { Loader2, Save } from 'lucide-react';
 import KidSidebar from '../components/KidSidebar';
 const getApiBaseUrl = () => {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  return isLocalhost ? 'http://localhost:9093' : 'http://http://141.144.226.68:9093'; // Replace with your actual production API URL
+  return isLocalhost ? 'http://localhost:9093' : 'http://141.144.226.68:9093'; // Replace with your actual production API URL
 };
 const KidSettings = ({ baseUrl = getApiBaseUrl() }) => {
   const navigate = useNavigate();

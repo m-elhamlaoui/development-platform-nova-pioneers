@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 const getApiBaseUrl = () => {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  return isLocalhost ? 'http://localhost:9092' : 'http://http://141.144.226.68:9092'; // Replace with your actual production API URL
+  return isLocalhost ? 'http://localhost:9092' : 'http://141.144.226.68:9092'; // Replace with your actual production API URL
 };
 const Signupteacher = () => {
   const location = useLocation();
