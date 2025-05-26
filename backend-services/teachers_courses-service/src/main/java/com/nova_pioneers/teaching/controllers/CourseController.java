@@ -406,4 +406,18 @@ public class CourseController {
 
         return ResponseEntity.ok(response);
     }
+
+    // Add a specific endpoint for limited course results
+    @GetMapping("/recent")
+    public ResponseEntity<List<Course>> getRecentCourses(
+            @RequestParam(defaultValue = "3") int limit) {
+        List<Course> allCourses = courseService.getAllCourses();
+
+        // Limit the results
+        if (limit > 0 && allCourses.size() > limit) {
+            allCourses = allCourses.subList(0, limit);
+        }
+
+        return ResponseEntity.ok(allCourses);
+    }
 }

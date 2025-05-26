@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
     Page<Rating> findByCourseIdOrderByRatedAtDesc(Integer courseId, Pageable pageable);
-    
+
     Optional<Rating> findByUserIdAndCourseId(Integer userId, Integer courseId);
-    
+
     @Query("SELECT AVG(r.ratingValue) FROM Rating r WHERE r.courseId = :courseId")
     Double getAverageRatingByCourseId(@Param("courseId") Integer courseId);
-    
+
     Long countByCourseId(Integer courseId);
 }

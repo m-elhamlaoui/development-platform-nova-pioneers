@@ -28,7 +28,7 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         
         // Real API call to get recent courses
-        const coursesResponse = await fetch(`http://localhost:9094/api/courses?limit=3`, {
+        const coursesResponse = await fetch(` http://localhost:9093/kids/2/courses?limit=3`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -45,6 +45,7 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
           const responseText = await coursesResponse.text();
           console.log("Raw API response:", responseText);
           coursesData = JSON.parse(responseText);
+          console.log("Parsed courses data:", coursesData);
         } catch (parseError) {
           console.error("JSON parse error:", parseError);
           // Use fallback data if JSON parsing fails
