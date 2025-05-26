@@ -25,19 +25,19 @@ import ManageAlerts from './components/ManageAlerts';
 export default function App() {
   return (
     <BrowserRouter>
-    <DataProvider>
-      <Routes>
+      <DataProvider>
+        <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           {/* <Route path="*" element={<NoPage />} /> */}
-          <Route path="/Signupteacher" element={<Signupteacher />}/>
-          <Route path="/parents-dashboard" element={<ParentsDashboard />}/>
-          <Route path="/parents-dashboard/lessons" element={<ParentsDashboardLessons />}/>
-          <Route path="/parents-dashboard/kids" element={<ParentsDashboardKids />}/>
+          <Route path="/Signupteacher" element={<Signupteacher />} />
+          <Route path="/parents-dashboard" element={<ParentsDashboard />} />
+          <Route path="/parents-dashboard/lessons" element={<ParentsDashboardLessons />} />
+          <Route path="/parents-dashboard/kids" element={<ParentsDashboardKids />} />
           <Route path="/course" element={<CourseView />} />
-          <Route path="/course/:courseId" element={<CourseView />} />
-            
+          <Route path="/course/:courseId/view" element={<CourseView />} />
+
           <Route path="/teachers" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="add-course" element={<AddCourse />} />
@@ -56,7 +56,7 @@ export default function App() {
           <Route path="/kid/settings" element={<KidDashboard />} />
           <Route path="*" element={<NotFound />} />
 
-      </Routes>
+        </Routes>
       </DataProvider>
     </BrowserRouter>
   );

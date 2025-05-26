@@ -1,5 +1,7 @@
+# Update application.yml
 server:
   port: 9094
+
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -14,5 +16,15 @@ spring:
   application:
     name: teachers_courses-service
 
+  # File upload configuration - IMPORTANT
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB # Increased for multiple files
+      max-request-size: 100MB # Total request size
+      file-size-threshold: 2KB
+      location: ${java.io.tmpdir} # Temporary storage during upload
+
+# File upload directory - THIS IS KEY
 file:
   upload-dir: ./uploads

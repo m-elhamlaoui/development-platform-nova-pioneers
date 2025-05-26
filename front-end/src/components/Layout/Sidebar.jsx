@@ -18,12 +18,11 @@ import {
 const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
   const { teacher, getXpLevel } = useData();
   
-  // Safe access to teacher data with default values
+  // Safe access to teacher data with default values - REMOVED avatar property
   const safeTeacher = teacher || {
     name: "Teacher Name",
     email: "teacher@example.com",
-    xpPoints: 0,
-    avatar: "https://via.placeholder.com/80x80?text=T"
+    xpPoints: 0
   };
   
   const xpStatus = getXpLevel ? getXpLevel(safeTeacher.xpPoints || 0) : { 
@@ -45,6 +44,19 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
     e.preventDefault();
     setShowSettings(false);
     console.log("Updated Profile:", profile);
+  };
+
+  // Simple avatar component with just the first letter
+  const AvatarComponent = () => {
+    const firstLetter = safeTeacher.name ? safeTeacher.name.charAt(0).toUpperCase() : 'T';
+    
+    return (
+      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center border-2 border-white shadow-md">
+        <span className="text-white font-bold text-2xl">
+          {firstLetter}
+        </span>
+      </div>
+    );
   };
 
   // Show loading state if teacher data is not available
@@ -114,21 +126,15 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
         <div className="menu-upper-section space-y-4 overflow-visible">
           {/* Logo */}
           <div className="flex items-center justify-start">
-                <img className="w-[60px] align-left" src={dashlogo} alt="Logo" />
+            <img className="w-[60px] align-left" src={dashlogo} alt="Logo" />
           </div>
           
           {/* Modern Teacher Profile */}
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl shadow-sm w-[200px] mx-auto">
             <div className="flex flex-col items-center">
               <div className="relative">
-                <img 
-                  src={safeTeacher.avatar || "https://via.placeholder.com/80x80?text=T"} 
-                  alt={safeTeacher.name} 
-                  className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md"
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/80x80?text=T";
-                  }}
-                />
+                {/* REPLACED img with AvatarComponent */}
+                <AvatarComponent />
                 <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center ${xpStatus.color}`}>
                     <Award size={14} className="text-white" />

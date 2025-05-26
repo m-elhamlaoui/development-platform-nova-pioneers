@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'; // Add useEffect
-import { useNavigate, useLocation } from 'react-router-dom'; // Add useLocation
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useData } from '../context/DataContext';
@@ -8,31 +8,28 @@ import ImageUpload from '../components/FileUpload/ImageUpload';
 
 const AddCourse = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get location to access state
-  const { addCourse, updateCourse } = useData(); // Add updateCourse function
+  const location = useLocation();
+  const { addCourse, updateCourse } = useData();
   
-  // Check if we're editing an existing course
   const isEditing = location.state?.isEditing || false;
   const existingCourse = location.state?.courseData || null;
   
   const [lessons, setLessons] = useState([]);
   const [activeTab, setActiveTab] = useState('details');
-  const [thumbnail, setThumbnail] = useState('');
+  const [thumbnail, setThumbnail] = useState(null); // Changed to store File object
+  const [thumbnailPreview, setThumbnailPreview] = useState(''); // For preview
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   
   // Pre-fill form when editing
   useEffect(() => {
     if (isEditing && existingCourse) {
-      // Set thumbnail
-      setThumbnail(existingCourse.thumbnail || '');
+      setThumbnailPreview(existingCourse.thumbnail || '');
       
-      // Set lessons
       if (existingCourse.lessons && existingCourse.lessons.length > 0) {
         setLessons(existingCourse.lessons);
       }
       
-      // Pre-fill form values
       reset({
         title: existingCourse.title,
         grade_level: existingCourse.grade_level,
@@ -44,32 +41,204 @@ const AddCourse = () => {
       });
     }
   }, [isEditing, existingCourse, reset]);
+
+  // Handle thumbnail upload
+  const handleThumbnailChange = (file) => {
+    setThumbnail(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setThumbnailPreview(e.target.result);
+      reader.readAsDataURL(file);
+    } else {
+      setThumbnailPreview('');
+    }
+  };
+  
+  // Create FormData for multipart request
+  const createFormData = (courseData) => {
+    const formData = new FormData();
+    
+    // Create the course data object without file references
+    const courseDataForBackend = {
+      title: courseData.title,
+      description: courseData.description,
+      grade_level: courseData.grade_level,
+      subject: courseData.subject,
+      size_category: courseData.size_category,
+      xp_value: courseData.xp_value,
+      recommended_age: courseData.recommended_age,
+      lessons: courseData.lessons.map((lesson, lessonIndex) => ({
+        title: lesson.title,
+        content: lesson.content,
+        resource_links: lesson.resource_links || [],
+        sequence_order: lesson.sequence_order,
+        lesson_contents: lesson.lesson_contents ? lesson.lesson_contents.map((content, contentIndex) => ({
+          subheading: content.subheading,
+          text: content.text,
+          fun_fact: content.fun_fact,
+          sequence_order: content.sequence_order,
+        })) : []
+      }))
+    };
+    
+    // Add course data as JSON string
+    formData.append('courseData', JSON.stringify(courseDataForBackend));
+    
+    // Add thumbnail file
+    if (thumbnail) {
+      formData.append('thumbnail', thumbnail);
+    }
+    
+    // Collect all lesson content images into a single array
+    const allImages = [];
+    
+    courseData.lessons.forEach((lesson, lessonIndex) => {
+      if (lesson.lesson_contents) {
+        lesson.lesson_contents.forEach((content, contentIndex) => {
+          if (content.image_file) {
+            allImages.push(content.image_file);
+          }
+        });
+      }
+    });
+    
+    // Add all images as 'images' array (this matches backend expectation)
+    allImages.forEach((imageFile, index) => {
+      formData.append('images', imageFile);
+    });
+    
+    return formData;
+  };
+
+  // Send course to backend
+  const sendCourseToBackend = async (courseData) => {
+    try {
+      console.log('Preparing to send course data:', courseData);
+      
+      const formData = new FormData();
+      
+      // Create course data without file references
+      const courseDataForBackend = {
+        title: courseData.title,
+        description: courseData.description,
+        grade_level: courseData.grade_level,
+        subject: courseData.subject,
+        size_category: courseData.size_category,
+        xp_value: parseInt(courseData.xp_value),
+        recommended_age: courseData.recommended_age,
+        lessons: courseData.lessons.map(lesson => ({
+          title: lesson.title,
+          content: lesson.content,
+          resource_links: lesson.resource_links || [],
+          sequence_order: lesson.sequence_order,
+          lesson_contents: lesson.lesson_contents ? lesson.lesson_contents.map(content => ({
+            subheading: content.subheading,
+            text: content.text,
+            fun_fact: content.fun_fact,
+            sequence_order: content.sequence_order
+          })) : []
+        }))
+      };
+      
+      // Add course data as JSON
+      formData.append('courseData', JSON.stringify(courseDataForBackend));
+      
+      // Add thumbnail if it exists
+      if (thumbnail && thumbnail instanceof File) {
+        console.log('Adding thumbnail:', thumbnail.name, thumbnail.size);
+        formData.append('thumbnail', thumbnail);
+      } else {
+        console.log('No thumbnail to upload');
+      }
+      
+      // Collect and add lesson content images
+      let imageCount = 0;
+      courseData.lessons.forEach((lesson, lessonIndex) => {
+        if (lesson.lesson_contents) {
+          lesson.lesson_contents.forEach((content, contentIndex) => {
+            if (content.image_file && content.image_file instanceof File) {
+              console.log(`Adding content image ${imageCount}:`, content.image_file.name, content.image_file.size);
+              formData.append('images', content.image_file);
+              imageCount++;
+            }
+          });
+        }
+      });
+      
+      console.log(`Total images to upload: ${imageCount}`);
+      
+      // Log all FormData entries
+      console.log('FormData entries:');
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
+        } else {
+          console.log(`${key}: ${typeof value} - ${value.length > 100 ? value.substring(0, 100) + '...' : value}`);
+        }
+      }
+      
+      const url = isEditing 
+        ? `http://localhost:9094/api/courses/update-with-files/${existingCourse.id}`
+        : 'http://localhost:9094/api/courses/create-with-files';
+      
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      console.log(`Sending ${method} request to ${url}`);
+      
+      const response = await fetch(url, {
+        method: method,
+        body: formData,
+        // Don't set Content-Type - let browser handle it for multipart/form-data
+      });
+      
+      const responseText = await response.text();
+      console.log('Response status:', response.status);
+      console.log('Response text:', responseText);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}, response: ${responseText}`);
+      }
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Failed to parse JSON response:', e);
+        throw new Error('Invalid JSON response from server');
+      }
+      
+      if (result.success === false) {
+        throw new Error(result.error || 'Server returned an error');
+      }
+      
+      console.log('Course saved successfully:', result);
+      
+      // Update local state
+      if (isEditing) {
+        updateCourse(result.course || result);
+      } else {
+        addCourse(result.course || result);
+      }
+      
+      navigate('/teachers/manage-courses');
+      
+    } catch (error) {
+      console.error('Error saving course:', error);
+      alert(`Failed to save course: ${error.message}`);
+    }
+  };
   
   const onSubmitDetails = (data) => {
     const courseData = {
       ...data,
-      thumbnail,
       xp_value: parseInt(data.xp_value),
-      lessons
+      lessons: lessons,
+      id: isEditing ? existingCourse.id : `course-${Date.now()}`,
+      created_date: isEditing ? existingCourse.created_date : new Date().toISOString(),
+      teacherId: 1 // Add a default teacher ID or get from user context
     };
     
-    if (isEditing && existingCourse) {
-      // If editing, update the existing course with ID
-      updateCourse({
-        ...courseData,
-        id: existingCourse.id,
-        created_date: existingCourse.created_date || new Date().toISOString()
-      });
-    } else {
-      // If creating a new course
-      addCourse({
-        ...courseData,
-        id: Date.now().toString(),
-        created_date: new Date().toISOString()
-      });
-    }
-    
-    navigate('/teachers/manage-courses');
+    sendCourseToBackend(courseData);
   };
   
   const addLesson = () => {
@@ -99,7 +268,6 @@ const AddCourse = () => {
   };
   
   const handleReorder = (reorderedLessons) => {
-    // Update sequence_order based on new order
     const updatedLessons = reorderedLessons.map((lesson, index) => ({
       ...lesson,
       sequence_order: index + 1
@@ -144,11 +312,12 @@ const AddCourse = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Course Thumbnail</label>
                 <ImageUpload
-                  value={thumbnail}
-                  onChange={setThumbnail}
+                  value={thumbnailPreview}
+                  onChange={handleThumbnailChange}
                   className="mb-4"
+                  acceptFiles={true} // Modified to accept File objects
                 />
-                {!thumbnail && (
+                {!thumbnail && !thumbnailPreview && (
                   <p className="text-error-600 text-sm mt-1">Thumbnail is required</p>
                 )}
               </div>
@@ -269,7 +438,7 @@ const AddCourse = () => {
                 <button
                   type="button"
                   className="btn-outline"
-                  onClick={() => navigate('/teachers/manage-courses')} // Change this to go back to manage courses
+                  onClick={() => navigate('/teachers/manage-courses')}
                 >
                   Cancel
                 </button>
@@ -342,7 +511,7 @@ const AddCourse = () => {
                 className="btn-primary"
                 onClick={handleSubmit(onSubmitDetails)}
               >
-                {isEditing ? 'Update Course' : 'Create Course'} {/* Change button text based on mode */}
+                {isEditing ? 'Update Course' : 'Create Course'}
               </button>
             </div>
           </motion.div>
