@@ -3,8 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Clock, BarChart2, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import KidSidebar from '../components/KidSidebar';
-
-const CourseView = ({ baseUrl = "http://localhost:9093" }) => {
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
+const CourseView = ({ baseUrl = getApiBaseUrl() }) => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   
@@ -127,6 +130,31 @@ const CourseView = ({ baseUrl = "http://localhost:9093" }) => {
     }
     
     navigate(`/course/${courseId}/learn`);
+  };
+  
+  // Add the same badge functions
+  const determineBadge = (xp) => {
+    if (xp >= 2000) return "🌟 Master Explorer";
+    if (xp >= 1500) return "🏆 Champion Pioneer";
+    if (xp >= 1000) return "💎 Expert Adventurer";
+    if (xp >= 750) return "🚀 Space Pioneer";
+    if (xp >= 500) return "🔥 Advanced Explorer";
+    if (xp >= 300) return "⭐ Rising Star";
+    if (xp >= 150) return "🌱 Growing Pioneer";
+    if (xp >= 50) return "🎯 Junior Explorer";
+    return "🌟 New Pioneer";
+  };
+
+  const determineBadgeColor = (xp) => {
+    if (xp >= 2000) return "bg-gradient-to-r from-purple-500 to-pink-500 text-white";
+    if (xp >= 1500) return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white";
+    if (xp >= 1000) return "bg-gradient-to-r from-blue-500 to-purple-600 text-white";
+    if (xp >= 750) return "bg-gradient-to-r from-indigo-500 to-blue-600 text-white";
+    if (xp >= 500) return "bg-gradient-to-r from-red-500 to-pink-500 text-white";
+    if (xp >= 300) return "bg-gradient-to-r from-green-400 to-blue-500 text-white";
+    if (xp >= 150) return "bg-gradient-to-r from-green-400 to-green-600 text-white";
+    if (xp >= 50) return "bg-gradient-to-r from-blue-400 to-blue-600 text-white";
+    return "bg-gradient-to-r from-gray-400 to-gray-600 text-white";
   };
   
   // Loading state

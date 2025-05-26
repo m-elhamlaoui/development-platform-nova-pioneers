@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Search, User, Plus, Trash2, X, Edit, Loader2 } from "lucide-react";
 import { toast } from 'react-toastify';
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
 
-export default function KidsMain({ baseUrl = "http://localhost:9093" }) {
+export default function KidsMain({ baseUrl = getApiBaseUrl() }) {
   // State for kids data
   const [kids, setKids] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -129,11 +133,16 @@ export default function KidsMain({ baseUrl = "http://localhost:9093" }) {
     // Ensure xp is a number
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return 'Astronaut';
-    if (numXp >= 15000) return 'Explorer';
-    if (numXp >= 5000) return 'Scientist';
-    if (numXp >= 1000) return 'Champion';
-    return 'Beginner';
+    if (numXp >= 2000) return "🌟 Master Explorer";
+    if (numXp >= 1500) return "🏆 Champion Pioneer";
+    if (numXp >= 1000) return "💎 Expert Adventurer";
+    if (numXp >= 750) return "🚀 Space Pioneer";
+    if (numXp >= 500) return "🔥 Advanced Explorer";
+    if (numXp >= 300) return "⭐ Rising Star";
+    if (numXp >= 150) return "🌱 Growing Pioneer";
+    if (numXp >= 50) return "🎯 Junior Explorer";
+    return "🌟 New Pioneer";
+
   };
   
   // Determine badge color based on XP
@@ -141,12 +150,20 @@ export default function KidsMain({ baseUrl = "http://localhost:9093" }) {
     // Ensure xp is a number
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return 'bg-black';
-    if (numXp >= 15000) return 'bg-green-400';
-    if (numXp >= 5000) return 'bg-purple-500';
-    if (numXp >= 1000) return 'bg-yellow-500';
-    return 'bg-blue-400';
+ if (numXp >= 2000) return "bg-gradient-to-r from-purple-500 to-pink-500 text-white";
+    if (numXp >= 1500) return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white";
+    if (numXp >= 1000) return "bg-gradient-to-r from-blue-500 to-purple-600 text-white";
+    if (numXp >= 750) return "bg-gradient-to-r from-indigo-500 to-blue-600 text-white";
+    if (numXp >= 500) return "bg-gradient-to-r from-red-500 to-pink-500 text-white";
+    if (numXp >= 300) return "bg-gradient-to-r from-green-400 to-blue-500 text-white";
+    if (numXp >= 150) return "bg-gradient-to-r from-green-400 to-green-600 text-white";
+    if (numXp >= 50) return "bg-gradient-to-r from-blue-400 to-blue-600 text-white";
+    return "bg-gradient-to-r from-gray-400 to-gray-600 text-white";
+
+    
+
   };
+ 
 
   // Function to delete a kid with improved error handling
   const deleteKid = async (kidUserId) => {
@@ -379,12 +396,16 @@ export default function KidsMain({ baseUrl = "http://localhost:9093" }) {
     });
 
   // Badge options for the forms
-  const badgeOptions = [
-    { label: 'Beginner', color: 'bg-blue-400' },
-    { label: 'Champion', color: 'bg-yellow-500' },
-    { label: 'Scientist', color: 'bg-purple-500' },
-    { label: 'Explorer', color: 'bg-green-400' },
-    { label: 'Astronaut', color: 'bg-black' }
+const badgeOptions = [
+    { label: '🌟 New Pioneer', color: 'bg-gradient-to-r from-gray-400 to-gray-600' },
+    { label: '🎯 Junior Explorer', color: 'bg-gradient-to-r from-blue-400 to-blue-600' },
+    { label: '🌱 Growing Pioneer', color: 'bg-gradient-to-r from-green-400 to-green-600' },
+    { label: '⭐ Rising Star', color: 'bg-gradient-to-r from-green-400 to-blue-500' },
+    { label: '🔥 Advanced Explorer', color: 'bg-gradient-to-r from-red-500 to-pink-500' },
+    { label: '🚀 Space Pioneer', color: 'bg-gradient-to-r from-indigo-500 to-blue-600' },
+    { label: '💎 Expert Adventurer', color: 'bg-gradient-to-r from-blue-500 to-purple-600' },
+    { label: '🏆 Champion Pioneer', color: 'bg-gradient-to-r from-yellow-400 to-orange-500' },
+    { label: '🌟 Master Explorer', color: 'bg-gradient-to-r from-purple-500 to-pink-500' }
   ];
 
   return (
@@ -489,12 +510,12 @@ export default function KidsMain({ baseUrl = "http://localhost:9093" }) {
                               <div 
                                 className="bg-emerald-500 h-1.5 rounded-full" 
                                 style={{
-                                  width: `${Math.min(100, (totalXp / 30000) * 100)}%`
+                                  width: `${Math.min(100, (totalXp / 2000) * 100)}%`
                                 }}
                               ></div>
                             </div>
                             <span className="text-xs text-gray-500 mt-1">
-                              {badge === "Astronaut" ? "Max Level" : `${Math.floor((totalXp / 30000) * 100)}% to Astronaut`}
+                              {totalXp >= 2000 ? "Max Level" : `${Math.floor((totalXp / 2000) * 100)}% to Master Explorer`}
                             </span>
                           </div>
                         </td>

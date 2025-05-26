@@ -23,6 +23,7 @@ import ConfirmTeachers from './components/ConfirmTeachers';
 import ManageAlerts from './components/ManageAlerts';
 import KidSettings from './pages/KidSettings';
 import CourseLearning from './pages/CourseLearning';
+import ParentCourseView from "./pages/ParentCourseView";
 export default function App() {
   return (
     <BrowserRouter>
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/parents-dashboard/kids" element={<ParentsDashboardKids />} />
           <Route path="/course" element={<CourseView />} />
           <Route path="/course/:courseId/view" element={<CourseView />} />
+          <Route path="parent/course/:courseId/view" element={<ParentCourseView baseUrl="http://localhost:9093" />} />
 
           <Route path="/teachers" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />

@@ -5,7 +5,13 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import dashlogo from "../assets/np-logo.png";
 
-const KidSidebar = ({ baseUrl = "http://localhost:9093" }) => {
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
+
+
+const KidSidebar = ({ baseUrl = getApiBaseUrl() }) => {
   const [kidData, setKidData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
@@ -35,28 +41,34 @@ const KidSidebar = ({ baseUrl = "http://localhost:9093" }) => {
     navigate('/login');
   };
   
-  // Determine badge based on XP
+  // Determine badge based on XP with beautiful titles
   const determineBadge = (xp) => {
-    // Ensure xp is a number
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return 'Astronaut';
-    if (numXp >= 15000) return 'Explorer';
-    if (numXp >= 5000) return 'Scientist';
-    if (numXp >= 1000) return 'Champion';
-    return 'Beginner';
+    if (numXp >= 2000) return "🌟 Master Explorer";
+    if (numXp >= 1500) return "🏆 Champion Pioneer";
+    if (numXp >= 1000) return "💎 Expert Adventurer";
+    if (numXp >= 750) return "🚀 Space Pioneer";
+    if (numXp >= 500) return "🔥 Advanced Explorer";
+    if (numXp >= 300) return "⭐ Rising Star";
+    if (numXp >= 150) return "🌱 Growing Pioneer";
+    if (numXp >= 50) return "🎯 Junior Explorer";
+    return "🌟 New Pioneer";
   };
   
-  // Determine badge color
+  // Determine badge color with gradients
   const determineBadgeColor = (xp) => {
-    // Ensure xp is a number
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return 'bg-black';
-    if (numXp >= 15000) return 'bg-green-400';
-    if (numXp >= 5000) return 'bg-purple-500';
-    if (numXp >= 1000) return 'bg-yellow-500';
-    return 'bg-blue-400';
+    if (numXp >= 2000) return "bg-gradient-to-r from-purple-500 to-pink-500 text-white";
+    if (numXp >= 1500) return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white";
+    if (numXp >= 1000) return "bg-gradient-to-r from-blue-500 to-purple-600 text-white";
+    if (numXp >= 750) return "bg-gradient-to-r from-indigo-500 to-blue-600 text-white";
+    if (numXp >= 500) return "bg-gradient-to-r from-red-500 to-pink-500 text-white";
+    if (numXp >= 300) return "bg-gradient-to-r from-green-400 to-blue-500 text-white";
+    if (numXp >= 150) return "bg-gradient-to-r from-green-400 to-green-600 text-white";
+    if (numXp >= 50) return "bg-gradient-to-r from-blue-400 to-blue-600 text-white";
+    return "bg-gradient-to-r from-gray-400 to-gray-600 text-white";
   };
   
   // Fetch kid data from backend
@@ -97,33 +109,45 @@ const KidSidebar = ({ baseUrl = "http://localhost:9093" }) => {
   const calculateNextBadgeProgress = (xp) => {
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return 100; // Max level
-    if (numXp >= 15000) return Math.min(100, ((numXp - 15000) / (30000 - 15000)) * 100);
-    if (numXp >= 5000) return Math.min(100, ((numXp - 5000) / (15000 - 5000)) * 100);
-    if (numXp >= 1000) return Math.min(100, ((numXp - 1000) / (5000 - 1000)) * 100);
-    return Math.min(100, (numXp / 1000) * 100);
+    if (numXp >= 2000) return 100; // Max level
+    if (numXp >= 1500) return Math.min(100, ((numXp - 1500) / (2000 - 1500)) * 100);
+    if (numXp >= 1000) return Math.min(100, ((numXp - 1000) / (1500 - 1000)) * 100);
+    if (numXp >= 750) return Math.min(100, ((numXp - 750) / (1000 - 750)) * 100);
+    if (numXp >= 500) return Math.min(100, ((numXp - 500) / (750 - 500)) * 100);
+    if (numXp >= 300) return Math.min(100, ((numXp - 300) / (500 - 300)) * 100);
+    if (numXp >= 150) return Math.min(100, ((numXp - 150) / (300 - 150)) * 100);
+    if (numXp >= 50) return Math.min(100, ((numXp - 50) / (150 - 50)) * 100);
+    return Math.min(100, (numXp / 50) * 100);
   };
   
   // Get next badge name
   const getNextBadgeName = (xp) => {
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return null; // Already at max level
-    if (numXp >= 15000) return 'Astronaut';
-    if (numXp >= 5000) return 'Explorer';
-    if (numXp >= 1000) return 'Scientist';
-    return 'Champion';
+    if (numXp >= 2000) return null; // Already at max level
+    if (numXp >= 1500) return "🌟 Master Explorer";
+    if (numXp >= 1000) return "🏆 Champion Pioneer";
+    if (numXp >= 750) return "💎 Expert Adventurer";
+    if (numXp >= 500) return "🚀 Space Pioneer";
+    if (numXp >= 300) return "🔥 Advanced Explorer";
+    if (numXp >= 150) return "⭐ Rising Star";
+    if (numXp >= 50) return "🌱 Growing Pioneer";
+    return "🎯 Junior Explorer";
   };
   
   // Get XP to next badge
   const getXpToNextBadge = (xp) => {
     const numXp = Number(xp) || 0;
     
-    if (numXp >= 30000) return 0; // Already at max level
-    if (numXp >= 15000) return 30000 - numXp;
-    if (numXp >= 5000) return 15000 - numXp;
-    if (numXp >= 1000) return 5000 - numXp;
-    return 1000 - numXp;
+    if (numXp >= 2000) return 0; // Already at max level
+    if (numXp >= 1500) return 2000 - numXp;
+    if (numXp >= 1000) return 1500 - numXp;
+    if (numXp >= 750) return 1000 - numXp;
+    if (numXp >= 500) return 750 - numXp;
+    if (numXp >= 300) return 500 - numXp;
+    if (numXp >= 150) return 300 - numXp;
+    if (numXp >= 50) return 150 - numXp;
+    return 50 - numXp;
   };
   
   return (
@@ -148,24 +172,34 @@ const KidSidebar = ({ baseUrl = "http://localhost:9093" }) => {
                 <h2 className="font-bold text-lg">
                   {kidData.first_name} {kidData.last_name}
                 </h2>
-                <span className={`inline-block mt-1 px-3 py-1 ${determineBadgeColor(kidData.total_xp)} text-white text-xs rounded-full`}>
-                  {determineBadge(kidData.total_xp)}
+                <span className={`inline-block mt-1 px-3 py-1 ${determineBadgeColor(kidData.total_xp)} text-xs rounded-full font-medium`}>
+                  {kidData.title || determineBadge(kidData.total_xp)}
                 </span>
                 
                 {/* XP Progress Bar */}
                 <div className="mt-3">
                   <div className="flex justify-between text-xs text-gray-500 mb-1">
-                    <span>{kidData.total_xp?.toLocaleString() || 0} XP</span>
+                    <span>⚡ {kidData.total_xp?.toLocaleString() || 0} XP</span>
                     {getNextBadgeName(kidData.total_xp) && (
-                      <span>{getXpToNextBadge(kidData.total_xp)?.toLocaleString()} XP to {getNextBadgeName(kidData.total_xp)}</span>
+                      <span>{getXpToNextBadge(kidData.total_xp)?.toLocaleString()} to next</span>
                     )}
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-1.5">
+                  <div className="w-full bg-gray-100 rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-1.5 rounded-full" 
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500" 
                       style={{width: `${calculateNextBadgeProgress(kidData.total_xp)}%`}}
                     ></div>
                   </div>
+                  {getNextBadgeName(kidData.total_xp) && (
+                    <div className="text-xs text-gray-500 mt-1 text-center">
+                      Next: {getNextBadgeName(kidData.total_xp)}
+                    </div>
+                  )}
+                  {!getNextBadgeName(kidData.total_xp) && (
+                    <div className="text-xs text-purple-600 mt-1 text-center font-medium">
+                      🏆 Max Level Achieved!
+                    </div>
+                  )}
                 </div>
               </div>
             ) : loading ? (
@@ -187,7 +221,7 @@ const KidSidebar = ({ baseUrl = "http://localhost:9093" }) => {
                 <Link 
                   to="/kid/dashboard" 
                   className={`flex items-center px-4 py-3 rounded-lg ${
-                    location.pathname === '/dashboard' 
+                    location.pathname === '/kid/dashboard' 
                       ? 'bg-blue-100 text-blue-700 font-medium' 
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}

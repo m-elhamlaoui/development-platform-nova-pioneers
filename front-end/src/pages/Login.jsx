@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9092' : 'https://http://141.144.226.68/9092'; // Replace with your actual production API URL
+};
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -60,7 +63,7 @@ const Login = () => {
     try {
       setLoading(true);
       
-      const response = await fetch('http://localhost:9092/auth/signin', {
+      const response = await fetch(`${getApiBaseUrl()}/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +111,7 @@ const Login = () => {
       } else if (data.role === 'kid') {
         navigate('/kid/dashboard');
       } else {
-        navigate('/dashboard');
+        navigate('/');
       }
       
     } catch (error) {

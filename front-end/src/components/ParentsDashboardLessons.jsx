@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Menu from "../components/ui/Menu";
 import LessonsMain from './LessonsMain';
 
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
+
+
+
 export default function ParentsDashboardLessons() {
   const [kidsData, setKidsData] = useState([]);
   const navigate = useNavigate();
@@ -18,7 +25,7 @@ export default function ParentsDashboardLessons() {
           return;
         }
 
-        const response = await fetch(`http://localhost:9093/parents/${userData.id}/kids`, {
+        const response = await fetch(`${getApiBaseUrl()}/parents/${userData.id}/kids`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -46,7 +53,7 @@ export default function ParentsDashboardLessons() {
   return (
     <div className='dashboard'>
       <Menu />
-      <LessonsMain kidsData={kidsData} baseUrl="http://localhost:9093" />
+      <LessonsMain kidsData={kidsData} baseUrl={getApiBaseUrl()} />
     </div>
   );
 }

@@ -5,7 +5,12 @@ import container from "../assets/hell-cont.png";
 import Course from './Course.jsx';
 import { toast } from 'react-toastify';
 
-export default function ParentsMain({ parentData, kidsData, onToggleRestriction, baseUrl = "http://localhost:9093" }) {
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
+
+export default function ParentsMain({ parentData, kidsData, onToggleRestriction, baseUrl = getApiBaseUrl() }) {
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeKidId, setActiveKidId] = useState(null);
@@ -265,7 +270,7 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
         course={course} 
         index={index} 
         isParentDashboard={false}
-        onClick={() => navigate(`/course/${course.id}/view`)}
+        onClick={() => navigate(`/parent/course/${course.id}/view`)} // Changed from /course/ to /parent/course/
       >
         {/* Custom child enrollment buttons with null checks */}
         <div className="pt-3 grid gap-2">

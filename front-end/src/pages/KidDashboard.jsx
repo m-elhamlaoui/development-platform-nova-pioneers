@@ -4,7 +4,12 @@ import { User, Search, BookOpen, BarChart2, Clock, ChevronRight, CircleSlash, Lo
 import { toast } from 'react-toastify';
 import KidSidebar from '../components/KidSidebar';
 
-const KidDashboard = ({ baseUrl = "http://localhost:9093" }) => {
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
+
+const KidDashboard = ({ baseUrl = getApiBaseUrl() }) => {
   const navigate = useNavigate();
   
   // State variables
@@ -28,28 +33,53 @@ const KidDashboard = ({ baseUrl = "http://localhost:9093" }) => {
   
   const kidId = getKidId();
   
-  // Determine badge based on XP
+  // Determine badge based on XP with beautiful titles
   const determineBadge = (xp) => {
-    // Ensure xp is a number
-    const numXp = Number(xp) || 0;
-    
-    if (numXp >= 30000) return 'Astronaut';
-    if (numXp >= 15000) return 'Explorer';
-    if (numXp >= 5000) return 'Scientist';
-    if (numXp >= 1000) return 'Champion';
-    return 'Beginner';
+    if (xp >= 2000) return "🌟 Master Explorer";
+    if (xp >= 1500) return "🏆 Champion Pioneer";
+    if (xp >= 1000) return "💎 Expert Adventurer";
+    if (xp >= 750) return "🚀 Space Pioneer";
+    if (xp >= 500) return "🔥 Advanced Explorer";
+    if (xp >= 300) return "⭐ Rising Star";
+    if (xp >= 150) return "🌱 Growing Pioneer";
+    if (xp >= 50) return "🎯 Junior Explorer";
+    return "🌟 New Pioneer";
   };
   
-  // Determine badge color based on XP
+  // Determine badge color based on XP with gradient colors
   const determineBadgeColor = (xp) => {
-    // Ensure xp is a number
-    const numXp = Number(xp) || 0;
-    
-    if (numXp >= 30000) return 'bg-black';
-    if (numXp >= 15000) return 'bg-green-400';
-    if (numXp >= 5000) return 'bg-purple-500';
-    if (numXp >= 1000) return 'bg-yellow-500';
-    return 'bg-blue-400';
+    if (xp >= 2000) return "bg-gradient-to-r from-purple-500 to-pink-500 text-white"; // Master
+    if (xp >= 1500) return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white"; // Champion
+    if (xp >= 1000) return "bg-gradient-to-r from-blue-500 to-purple-600 text-white"; // Expert
+    if (xp >= 750) return "bg-gradient-to-r from-indigo-500 to-blue-600 text-white"; // Space
+    if (xp >= 500) return "bg-gradient-to-r from-red-500 to-pink-500 text-white"; // Advanced
+    if (xp >= 300) return "bg-gradient-to-r from-green-400 to-blue-500 text-white"; // Rising Star
+    if (xp >= 150) return "bg-gradient-to-r from-green-400 to-green-600 text-white"; // Growing
+    if (xp >= 50) return "bg-gradient-to-r from-blue-400 to-blue-600 text-white"; // Junior
+    return "bg-gradient-to-r from-gray-400 to-gray-600 text-white"; // New
+  };
+
+  // Get next title and XP needed
+  const getNextTitleInfo = (currentXp) => {
+    const titles = [
+      { xp: 50, title: "🎯 Junior Explorer" },
+      { xp: 150, title: "🌱 Growing Pioneer" },
+      { xp: 300, title: "⭐ Rising Star" },
+      { xp: 500, title: "🔥 Advanced Explorer" },
+      { xp: 750, title: "🚀 Space Pioneer" },
+      { xp: 1000, title: "💎 Expert Adventurer" },
+      { xp: 1500, title: "🏆 Champion Pioneer" },
+      { xp: 2000, title: "🌟 Master Explorer" }
+    ];
+
+    const nextTitle = titles.find(title => currentXp < title.xp);
+    if (nextTitle) {
+      return {
+        title: nextTitle.title,
+        xpNeeded: nextTitle.xp - currentXp
+      };
+    }
+    return null; // Already at max level
   };
   
   // Format date nicely
@@ -285,34 +315,71 @@ const KidDashboard = ({ baseUrl = "http://localhost:9093" }) => {
       
       <div className="flex-1 p-6">
         <div className="max-w-6xl mx-auto">
-          {/* Welcome section */}
-          <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-8">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">
-                Welcome back, {kidData?.first_name || 'Explorer'}!
-              </h1>
-              <p className="text-gray-500 mt-1">
-                Keep learning and earning XP to unlock new badges!
-              </p>
-            </div>
-            
-            {kidData && (
-              <div className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4">
-                <div className="flex flex-col items-center">
-                  <span className="text-sm text-gray-500">Your Badge</span>
-                  <span className={`mt-1 px-3 py-1 ${determineBadgeColor(kidData.total_xp)} text-white text-xs rounded-full font-medium`}>
-                    {determineBadge(kidData.total_xp)}
-                  </span>
+          {kidData && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                    {kidData.first_name?.charAt(0)}{kidData.last_name?.charAt(0)}
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-800">
+                      Welcome back, {kidData.first_name}! 👋
+                    </h1>
+                    <div className="flex items-center space-x-3 mt-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${determineBadgeColor(kidData.total_xp || 0)}`}>
+                        {kidData.title || determineBadge(kidData.total_xp || 0)}
+                      </span>
+                      <span className="text-gray-600 flex items-center">
+                        ⚡ {kidData.total_xp || 0} XP
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="h-10 w-px bg-gray-200"></div>
-                <div>
-                  <span className="text-sm text-gray-500">Total XP</span>
-                  <p className="font-bold text-emerald-500">{(kidData.total_xp || 0).toLocaleString()} XP</p>
-                </div>
+                
+                {/* Progress to next title */}
+                {(() => {
+                  const nextInfo = getNextTitleInfo(kidData.total_xp || 0);
+                  return nextInfo ? (
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">Next Title:</p>
+                      <p className="text-lg font-semibold text-gray-800">{nextInfo.title}</p>
+                      <p className="text-sm text-blue-600">🎯 {nextInfo.xpNeeded} XP to go!</p>
+                    </div>
+                  ) : (
+                    <div className="text-right">
+                      <p className="text-lg font-semibold text-purple-600">🏆 Max Level Achieved!</p>
+                      <p className="text-sm text-gray-600">You're a true master!</p>
+                    </div>
+                  );
+                })()}
               </div>
-            )}
-          </div>
-          
+              
+              {/* XP Progress Bar */}
+              {(() => {
+                const nextInfo = getNextTitleInfo(kidData.total_xp || 0);
+                if (nextInfo) {
+                  const currentXp = kidData.total_xp || 0;
+                  const prevTitleXp = currentXp - nextInfo.xpNeeded > 0 ? 
+                    nextInfo.xp - nextInfo.xpNeeded - (nextInfo.xp - currentXp) : 0;
+                  const progressPercent = ((currentXp - prevTitleXp) / (nextInfo.xp - prevTitleXp)) * 100;
+                  
+                  return (
+                    <div className="mt-4">
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div 
+                          className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min(progressPercent, 100)}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+            </div>
+          )}
+
           {/* Search and filters */}
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
             <div className="bg-white rounded-lg flex items-center px-4 py-2 w-full sm:w-auto flex-grow shadow-sm border border-gray-100">

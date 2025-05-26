@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Loader2, Save } from 'lucide-react';
 import KidSidebar from '../components/KidSidebar';
-
-const KidSettings = ({ baseUrl = "http://localhost:9093" }) => {
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
+const KidSettings = ({ baseUrl = getApiBaseUrl() }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -42,7 +45,7 @@ const KidSettings = ({ baseUrl = "http://localhost:9093" }) => {
       try {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-        const response = await fetch(`${baseUrl}/kids/${kidId}`, {
+        const response = await fetch(`${baseUrl}/kids/${kidId}/profile`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -105,7 +108,7 @@ const KidSettings = ({ baseUrl = "http://localhost:9093" }) => {
         updateData.password = form.password;
       }
 
-      const response = await fetch(`${baseUrl}/kids/${kidId}`, {
+      const response = await fetch(`${baseUrl}/kids/${kidId}/profile`, {
         method: 'PUT',
         headers: {
           "Authorization": `Bearer ${token}`,
