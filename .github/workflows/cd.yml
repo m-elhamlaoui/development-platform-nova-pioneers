@@ -52,7 +52,7 @@ jobs:
   # Job 3: Deploy to OCI VM
   deploy:
     runs-on: ubuntu-latest
-    needs: [build-and-push, build-frontend]
+    needs: [build-and-push, build-and-push-frontend]
 
     steps:  # ← Fixed: moved this to align with job properties
       - name: Deploy to OCI VM
