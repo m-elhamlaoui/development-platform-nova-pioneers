@@ -1,13 +1,16 @@
 # Security rules for auth-service
 paths:
   # Public authentication endpoints
+  - pattern: "/auth/signup/parent"
+    authenticated: false
+
+  - pattern: "/auth/signup/teacher"
+    authenticated: false
+
   - pattern: "/auth/signin"
     authenticated: false
 
-  - pattern: "/auth/signup/**"
-    authenticated: false
-
-  # Token validation endpoint - public
+  # Token validation endpoint - public for gateway use
   - pattern: "/auth/token/validate"
     authenticated: false
 
@@ -21,4 +24,8 @@ paths:
 
   # Test endpoint
   - pattern: "/auth/api/test"
+    authenticated: false
+
+  # Default deny for unmatched auth paths
+  - pattern: "/auth/**"
     authenticated: false

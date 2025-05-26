@@ -1,24 +1,75 @@
 # Security rules for parents-kids-service
 paths:
-  # Parent-specific endpoints
-  - pattern: "/parents-kids/parent/**"
+  # User profile endpoints - any authenticated user
+  - pattern: "/parents-kids/users/me"
+    authenticated: true
+
+  # Parent-specific endpoints - parents and admins only
+  - pattern: "/parents-kids/parents/*/kids"
     roles: ["parent", "admin"]
     authenticated: true
 
-  # Kid-specific endpoints
-  - pattern: "/parents-kids/kid/**"
-    roles: ["parent", "kid", "admin"]
+  - pattern: "/parents-kids/parents/*/kids/*"
+    roles: ["parent", "admin"]
     authenticated: true
 
-  # Enrollment endpoints - parents and kids can access
-  - pattern: "/parents-kids/enrollment/**"
-    roles: ["parent", "kid", "admin"]
+  - pattern: "/parents-kids/parents/*/kids/*/toggle-restriction"
+    roles: ["parent", "admin"]
     authenticated: true
 
-  # Public information endpoints
-  - pattern: "/parents-kids/public/**"
+  # Kid profile endpoints - kids, parents, and admins
+  - pattern: "/parents-kids/kids/*/profile"
+    roles: ["kid", "parent", "admin"]
+    authenticated: true
+
+  # Kid course access - kids, parents, and admins
+  - pattern: "/parents-kids/kids/*/courses"
+    roles: ["kid", "parent", "admin"]
+    authenticated: true
+
+  # Enrollment endpoints - kids, parents, and admins
+  - pattern: "/parents-kids/kids/*/enrollments"
+    roles: ["kid", "parent", "admin"]
+    authenticated: true
+
+  - pattern: "/parents-kids/kids/*/enrollments/*"
+    roles: ["kid", "parent", "admin"]
+    authenticated: true
+
+  - pattern: "/parents-kids/kids/*/enrollments/*/progress"
+    roles: ["kid", "parent", "admin"]
+    authenticated: true
+
+  - pattern: "/parents-kids/kids/*/enrollments/*/complete"
+    roles: ["kid", "parent", "admin"]
+    authenticated: true
+
+  # Course details - public access
+  - pattern: "/parents-kids/courses/*/ratings"
     authenticated: false
 
-  # Test endpoint
-  - pattern: "/parents-kids/api/test"
+  - pattern: "/parents-kids/courses/*/ratings/stats"
     authenticated: false
+
+  - pattern: "/parents-kids/courses/*"
+    authenticated: false
+
+  # Rating management - authenticated users
+  - pattern: "/parents-kids/courses/*/ratings/me"
+    authenticated: true
+
+  # Course rating creation - authenticated users
+  - pattern: "/parents-kids/courses/*/ratings"
+    authenticated: true
+    methods: ["POST"]
+
+  # Test endpoints - public
+  - pattern: "/parents-kids/test"
+    authenticated: false
+
+  - pattern: "/parents-kids/parents-kids/test"
+    authenticated: false
+
+  # Default for unmatched paths - require authentication
+  - pattern: "/parents-kids/**"
+    authenticated: true
