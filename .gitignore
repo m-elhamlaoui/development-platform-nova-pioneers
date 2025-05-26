@@ -41,3 +41,5 @@ front-end/*.sw?
 oci/usefulforreport.md
 oci/nova-ansible/inventory/hosts.yml
 .env
+
+
