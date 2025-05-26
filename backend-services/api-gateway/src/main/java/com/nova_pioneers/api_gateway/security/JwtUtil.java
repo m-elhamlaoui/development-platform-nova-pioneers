@@ -1,84 +1,97 @@
 package com.nova_pioneers.api_gateway.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
 
-    @Value("${JWT_SECRET}")
-    private String jwtSecret;
+    private final SecretKey key;
 
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        // FIXED: Use raw string instead of Base64 decoding to match auth-service
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public String extractRole(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("role", String.class);
-    }
-
+    /**
+     * Extract user ID from token
+     */
     public Long extractUserId(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("userId", Long.class);
+        return Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
+    /**
+     * Extract role from token
+     */
+    public String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
+    /**
+     * Extract email from token
+     */
+    public String extractEmail(String token) {
+        return extractClaim(token, claims -> claims.get("email", String.class));
+    }
+
+    /**
+     * Extract expiration date from token
+     */
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public <T> T extractClaim(String token, java.util.function.Function<Claims, T> claimsResolver) {
+    /**
+     * Extract a specific claim from token
+     */
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * Extract all claims from token
+     */
     private Claims extractAllClaims(String token) {
-        try {
-            return Jwts.parser() // Updated for latest JJWT
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-        } catch (JwtException e) {
-            throw new RuntimeException("Invalid JWT token: " + e.getMessage());
-        }
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
+    /**
+     * Check if token is expired
+     */
     private Boolean isTokenExpired(String token) {
-        try {
-            return extractExpiration(token).before(new Date());
-        } catch (Exception e) {
-            return true;
-        }
+        return extractExpiration(token).before(new Date());
     }
 
+    /**
+     * Validate token
+     * @return true if token is valid, false otherwise
+     */
     public Boolean validateToken(String token) {
         try {
-            extractAllClaims(token);
+            // Verify signature and check if token is not expired
             return !isTokenExpired(token);
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) {
+            // Token is expired
+            return false;
+        } catch (MalformedJwtException | SecurityException | IllegalArgumentException e) {
+            // Token is invalid
             return false;
         }
-    }
-
-    public Boolean isValidTokenFormat(String authHeader) {
-        return authHeader != null && authHeader.startsWith("Bearer ");
-    }
-
-    public String extractTokenFromHeader(String authHeader) {
-        if (isValidTokenFormat(authHeader)) {
-            return authHeader.substring(7);
-        }
-        return null;
     }
 }

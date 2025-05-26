@@ -1,11 +1,14 @@
 package com.nova_pioneers.api_gateway.filter;
 
-import com.nova_pioneers.api_gateway.config.SecurityRulesLoader;
-import com.nova_pioneers.api_gateway.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nova_pioneers.api_gateway.repository.TokenRepository;
+import com.nova_pioneers.api_gateway.security.JwtUtil;
+import com.nova_pioneers.api_gateway.security.SecurityRulesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -14,77 +17,91 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
+public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+    private final TokenRepository tokenRepository;
+    private final SecurityRulesLoader securityRulesLoader;
 
-    @Autowired
-    private SecurityRulesLoader securityRulesLoader;
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, TokenRepository tokenRepository, SecurityRulesLoader securityRulesLoader) {
+        super(Config.class);
+        this.jwtUtil = jwtUtil;
+        this.tokenRepository = tokenRepository;
+        this.securityRulesLoader = securityRulesLoader;
+    }
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        String path = request.getPath().value();
-        String method = request.getMethod().name();
+    public GatewayFilter apply(Config config) {
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+            String path = request.getURI().getPath();
 
-        // Check if this path requires authentication
-        if (!securityRulesLoader.requiresAuthentication(path, method)) {
-            return chain.filter(exchange);
-        }
-
-        // Extract token from Authorization header
-        String authHeader = request.getHeaders().getFirst("Authorization");
-        String token = jwtUtil.extractTokenFromHeader(authHeader);
-
-        if (token == null) {
-            return onError(exchange, "Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
-        }
-
-        // Validate token (signature + expiration)
-        if (!jwtUtil.validateToken(token)) {
-            return onError(exchange, "Invalid or expired token", HttpStatus.UNAUTHORIZED);
-        }
-
-        try {
-            // Extract user info from token
-            String username = jwtUtil.extractUsername(token);
-            String role = jwtUtil.extractRole(token);
-            Long userId = jwtUtil.extractUserId(token);
-
-            // Check if user has permission to access this path
-            if (!securityRulesLoader.isAccessAllowed(path, method, role)) {
-                return onError(exchange, "Access denied for role: " + role, HttpStatus.FORBIDDEN);
+            // Check if path requires authentication
+            if (!securityRulesLoader.requiresAuthentication(path)) {
+                // No authentication required, proceed
+                return chain.filter(exchange);
             }
 
-            // Add user info to request headers for downstream services
-            ServerHttpRequest modifiedRequest = request.mutate()
-                    .header("X-User-Id", userId.toString())
-                    .header("X-User-Role", role)
-                    .header("X-Username", username)
-                    .build();
+            // Get Authorization header
+            String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
-            return chain.filter(exchange.mutate().request(modifiedRequest).build());
+            // Check if Authorization header is present and starts with "Bearer "
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                logger.warn("Missing or invalid Authorization header for path: {}", path);
+                return onError(exchange, "Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
+            }
 
-        } catch (Exception e) {
-            return onError(exchange, "Token processing error: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
+            // Extract token
+            String token = authHeader.substring(7);
+
+            try {
+                // Validate token signature and expiration
+                if (!jwtUtil.validateToken(token)) {
+                    logger.warn("Invalid JWT token for path: {}", path);
+                    return onError(exchange, "Invalid JWT token", HttpStatus.UNAUTHORIZED);
+                }
+
+                // Check if token is revoked in database
+                if (!tokenRepository.existsByTokenAndRevokedFalse(token)) {
+                    logger.warn("Revoked JWT token used for path: {}", path);
+                    return onError(exchange, "Token has been revoked", HttpStatus.UNAUTHORIZED);
+                }
+
+                // Extract user details from token
+                Long userId = jwtUtil.extractUserId(token);
+                String role = jwtUtil.extractRole(token);
+                String email = jwtUtil.extractEmail(token);
+
+                // Check if user has permission to access this path
+                if (!securityRulesLoader.isAccessAllowed(path, role)) {
+                    logger.warn("Access denied for role {} to path: {}", role, path);
+                    return onError(exchange, "Access denied", HttpStatus.FORBIDDEN);
+                }
+
+                // Add user details to request headers for downstream services
+                ServerHttpRequest modifiedRequest = request.mutate()
+                        .header("X-User-Id", userId.toString())
+                        .header("X-User-Role", role)
+                        .header("X-User-Email", email)
+                        .build();
+
+                // Create a new exchange with the modified request
+                return chain.filter(exchange.mutate().request(modifiedRequest).build());
+            } catch (Exception e) {
+                logger.error("Error processing JWT token", e);
+                return onError(exchange, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        };
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String message, HttpStatus status) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(status);
-        response.getHeaders().add("Content-Type", "application/json");
-
-        String errorBody = String.format("{\"error\": \"%s\", \"status\": %d}", message, status.value());
-
-        return response.writeWith(Mono.just(
-                response.bufferFactory().wrap(errorBody.getBytes())
-        ));
+        return response.setComplete();
     }
 
-    @Override
-    public int getOrder() {
-        return -1; // Execute before routing
+    public static class Config {
+        // Configuration properties if needed
     }
 }
