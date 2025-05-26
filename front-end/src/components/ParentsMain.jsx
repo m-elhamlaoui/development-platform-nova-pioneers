@@ -5,7 +5,12 @@ import container from "../assets/hell-cont.png";
 import Course from './Course.jsx';
 import { toast } from 'react-toastify';
 
-export default function ParentsMain({ parentData, kidsData, onToggleRestriction, baseUrl = "http://localhost:9093" }) {
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'http://141.144.226.68:9093'; // Replace with your actual production API URL
+};
+
+export default function ParentsMain({ parentData, kidsData, onToggleRestriction, baseUrl = getApiBaseUrl() }) {
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeKidId, setActiveKidId] = useState(null);
@@ -16,7 +21,11 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
   // Set the first kid as active by default if available
   useEffect(() => {
     if (kidsData && kidsData.length > 0 && !activeKidId) {
-      setActiveKidId(kidsData[0].user_id);
+      // Find the first non-null kid with a valid user_id
+      const validKid = kidsData.find(kid => kid && kid.user_id);
+      if (validKid) {
+        setActiveKidId(validKid.user_id);
+      }
     }
   }, [kidsData, activeKidId]);
 
@@ -28,7 +37,7 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         
         // Real API call to get recent courses
-        const coursesResponse = await fetch(`http://localhost:9094/api/courses?limit=3`, {
+        const coursesResponse = await fetch(` http://localhost:9093/courses?limit=3`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -45,6 +54,7 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
           const responseText = await coursesResponse.text();
           console.log("Raw API response:", responseText);
           coursesData = JSON.parse(responseText);
+          console.log("Parsed courses data:", coursesData);
         } catch (parseError) {
           console.error("JSON parse error:", parseError);
           // Use fallback data if JSON parsing fails
@@ -93,16 +103,24 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
           const enrollmentData = {};
           
           for (const kid of kidsData) {
-            const kidEnrollmentResponse = await fetch(`${baseUrl}/kids/${kid.user_id}/enrollments`, {
-              headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-              }
-            });
+            // Skip null or undefined kids or kids without user_id
+            if (!kid || !kid.user_id) continue;
             
-            if (kidEnrollmentResponse.ok) {
-              const kidEnrollments = await kidEnrollmentResponse.json();
-              enrollmentData[kid.user_id] = kidEnrollments.map(e => e.course_id);
+            try {
+              const kidEnrollmentResponse = await fetch(`${baseUrl}/kids/${kid.user_id}/enrollments`, {
+                headers: {
+                  "Authorization": `Bearer ${token}`,
+                  "Content-Type": "application/json"
+                }
+              });
+              
+              if (kidEnrollmentResponse.ok) {
+                const kidEnrollments = await kidEnrollmentResponse.json();
+                enrollmentData[kid.user_id] = kidEnrollments.map(e => e.course_id);
+              }
+            } catch (err) {
+              console.error(`Error fetching enrollments for kid ID ${kid.user_id}:`, err);
+              // Continue with other kids even if one fails
             }
           }
           
@@ -252,15 +270,15 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
         course={course} 
         index={index} 
         isParentDashboard={false}
-        onClick={() => navigate(`/course/${course.id}/view`)}
+        onClick={() => navigate(`/parent/course/${course.id}/view`)} // Changed from /course/ to /parent/course/
       >
-        {/* Custom child enrollment buttons - we'll add these as a slot to the Course component */}
+        {/* Custom child enrollment buttons with null checks */}
         <div className="pt-3 grid gap-2">
-          {kidsData && kidsData.map((kid) => {
+          {kidsData && kidsData.filter(kid => kid && kid.first_name && kid.last_name).map((kid) => {
             const isEnrolled = enrollments[kid.user_id]?.includes(course.id);
             return (
               <button 
-                key={kid.user_id}
+                key={kid.user_id || Math.random()}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (!isEnrolled) {
@@ -276,10 +294,11 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
               >
                 <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center flex-shrink-0">
                   <span className="text-xs font-bold text-[#0b3d91]">
-                    {kid.first_name.charAt(0)}{kid.last_name.charAt(0)}
+                    {kid.first_name?.charAt(0) || "?"}
+                    {kid.last_name?.charAt(0) || ""}
                   </span>
                 </div>
-                {kid.first_name} {isEnrolled ? "(Enrolled)" : "- Enroll"}
+                {kid.first_name || "Unknown"} {isEnrolled ? "(Enrolled)" : "- Enroll"}
               </button>
             );
           })}
@@ -353,14 +372,14 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
           </thead>
           <tbody>
             {kidsData && kidsData.length > 0 ? (
-              kidsData.map((kid) => (
-                <tr key={kid.user_id} className="hover:bg-gray-50 border-b border-gray-100">
+              kidsData.filter(kid => kid && kid.first_name).map((kid) => (
+                <tr key={kid.user_id || Math.random()} className="hover:bg-gray-50 border-b border-gray-100">
                   <td className='flex items-center gap-3 px-4 py-3'>
                     <div className="p-2 bg-[#0b3d91] rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-white" />
                     </div>
                     <div className="infos-kid-container">
-                      <p className="font-semibold text-sm">{kid.first_name} {kid.last_name}</p>
+                      <p className="font-semibold text-sm">{kid.first_name || ""} {kid.last_name || ""}</p>
                       <p className="text-xs text-gray-500">Born: {formatDate(kid.birth_date)}</p>
                     </div>
                   </td>
@@ -375,30 +394,6 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
                     </span>
                   </td>
                   <td className='font-bold text-[#69ebb7] px-4 py-3 text-center'>{kid.total_xp || 0} XP</td>
-                  {/* <td className='px-4 py-3 text-center'>
-                    <button 
-                      onClick={() => onToggleRestriction(kid.user_id, kid.is_restricted)}
-                      className="focus:outline-none hover:scale-110 transition-transform"
-                      title={kid.is_restricted === 1 ? "Unrestrict Access" : "Restrict Access"}
-                    >
-                      {kid.is_restricted === 1 ? 
-                        <Lock className='text-red-600' /> : 
-                        <Unlock className='text-[#69ebb7]' />
-                      }
-                    </button>
-                  </td> */}
-                  {/* <td className="px-4 py-3 text-center">
-                    <button
-                      onClick={() => setActiveKidId(kid.user_id)}
-                      className={`px-3 py-1 rounded transition-colors ${
-                        activeKidId === kid.user_id 
-                          ? "bg-blue-600 text-white" 
-                          : "bg-gray-200 hover:bg-gray-300"
-                      }`}
-                    >
-                      {activeKidId === kid.user_id ? "Viewing" : "View"}
-                    </button>
-                  </td> */}
                 </tr>
               ))
             ) : (

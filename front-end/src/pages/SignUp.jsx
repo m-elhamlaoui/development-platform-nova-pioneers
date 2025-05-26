@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9092' : 'http://141.144.226.68:9092'; // Replace with your actual production API URL
+};
 const SignUp = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -83,7 +86,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       
-      const response = await fetch('http://localhost:9092/signup/parent', {
+      const response = await fetch(`${getApiBaseUrl()}/signup/parent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

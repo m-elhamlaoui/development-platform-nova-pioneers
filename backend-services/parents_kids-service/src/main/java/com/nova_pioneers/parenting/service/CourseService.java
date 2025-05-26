@@ -44,14 +44,25 @@ public class CourseService {
         List<Course> courses;
 
         if (kid.getIsRestricted() == 1) {
-            // TODO: Implement suggested_courses table logic
-            // For now, return empty list for restricted kids
+            // For restricted kids, implement logic to get only assigned courses
+            // For now, we'll return an empty list
             return List.of();
         } else {
             // Return all courses with filters
             courses = courseRepository.findCoursesWithFilters(gradeLevel, subject, search);
         }
 
+        // Convert to DTO with all fields
+        return courses.stream()
+                .map(this::mapToCourseResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<CourseResponse> getAllCourses() {
+        // Fetch all active courses
+        List<Course> courses = courseRepository.findByIsActiveTrue();
+
+        // Convert to DTO with all fields
         return courses.stream()
                 .map(this::mapToCourseResponse)
                 .collect(Collectors.toList());
@@ -92,11 +103,35 @@ public class CourseService {
     private CourseResponse mapToCourseResponse(Course course) {
         CourseResponse response = new CourseResponse();
         response.setId(course.getId());
+        response.setTeacherId(course.getTeacherId());
+
+        // Get teacher name if available
+        Teacher teacher = null;
+        if (course.getTeacherId() != null) {
+            teacher = teacherRepository.findById(course.getTeacherId()).orElse(null);
+        }
+        response.setTeacherName(teacher != null ? teacher.getName() : "Unknown");
+
+        response.setTitle(course.getTitle());
+        response.setDescription(course.getDescription());
         response.setGradeLevel(course.getGradeLevel());
         response.setSubject(course.getSubject());
         response.setThumbnail(course.getThumbnail());
+
+        // Include all additional course details
+        response.setCreatedDate(course.getCreatedDate() != null ? course.getCreatedDate().toString() : null);
         response.setXpValue(course.getXpValue());
+        response.setSizeCategory(course.getSizeCategory());
         response.setRecommendedAge(course.getRecommendedAge());
+        response.setIsActive(course.getIsActive());
+
+        // Get ratings data
+        Double averageRating = ratingRepository.getAverageRatingByCourseId(course.getId());
+        Long reviewCount = ratingRepository.countByCourseId(course.getId());
+
+        response.setAverageRating(averageRating != null ? averageRating : 0.0);
+        response.setReviews(reviewCount != null ? reviewCount.intValue() : 0);
+
         return response;
     }
 

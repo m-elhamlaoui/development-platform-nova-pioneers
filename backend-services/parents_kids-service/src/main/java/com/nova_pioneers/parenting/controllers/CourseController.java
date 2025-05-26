@@ -21,9 +21,33 @@ public class CourseController {
             @PathVariable Integer kidUserId,
             @RequestParam(required = false) String gradeLevel,
             @RequestParam(required = false) String subject,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "0") Integer limit) {
 
         List<CourseResponse> courses = courseService.getCoursesForKid(kidUserId, gradeLevel, subject, search);
+
+        // Apply limit if specified
+        if (limit > 0 && limit < courses.size()) {
+            courses = courses.subList(0, limit);
+        }
+
+        return ResponseEntity.ok(courses);
+    }
+
+    @GetMapping("/courses")
+    public ResponseEntity<List<CourseResponse>> getAllCourses(
+            @RequestParam(required = false) String gradeLevel,
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "0") Integer limit) {
+
+        List<CourseResponse> courses = courseService.getAllCourses();
+
+        // Apply limit if specified
+        if (limit > 0 && limit < courses.size()) {
+            courses = courses.subList(0, limit);
+        }
+
         return ResponseEntity.ok(courses);
     }
 

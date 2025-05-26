@@ -54,6 +54,8 @@ services:
   auth-service:
     image: abderrahmane03/nova-pioneers:auth-service-latest
     container_name: nova-auth-prod
+    ports:
+      - "9092:9092"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
@@ -71,6 +73,8 @@ services:
   admin-service:
     image: abderrahmane03/nova-pioneers:admin-service-latest
     container_name: nova-admin-prod
+    ports:
+      - "9091:9091"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
@@ -87,6 +91,8 @@ services:
   parents-kids-service:
     image: abderrahmane03/nova-pioneers:parents-kids-service-latest
     container_name: nova-parents-kids-prod
+    ports:
+      - "9093:9093"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
@@ -103,6 +109,8 @@ services:
   teachers-courses-service:
     image: abderrahmane03/nova-pioneers:teachers-courses-service-latest
     container_name: nova-teachers-courses-prod
+    ports:
+      - "9094:9094"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
