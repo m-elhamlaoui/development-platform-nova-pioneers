@@ -30,7 +30,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/nova-pioneers:${{ matrix.service }}-latest
 
   # Job 2: Build and Push Frontend
-  build-frontend:
+  build-and-push-frontend:
     runs-on: ubuntu-latest
 
     steps:
