@@ -158,7 +158,7 @@ services:
     ports:
       - "5173:5173"  # Exposed to internet via OCI security rule
     environment:
-      VITE_API_BASE_URL: http://your-oci-public-ip:9000
+      VITE_API_BASE_URL: ${PROD_API_URL:-http://localhost:9000}
     depends_on:
       - api-gateway
     networks:
@@ -167,14 +167,14 @@ services:
 
   # Production Monitoring Services
   prometheus:
-    image: prom/prometheus:v2.47.0
+    image: prom/prometheus:v3.2.0
     container_name: nova-prometheus-prod
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention.time=30d'
       - '--web.enable-lifecycle'
-      - '--web.external-url=http://your-oci-public-ip:9090'
+      - '--web.external-url=${PROMETHEUS_EXTERNAL_URL:-http://localhost:9090}'
     restart: unless-stopped
     ports:
       - "9090:9090"  # Consider restricting access in production
@@ -187,24 +187,24 @@ services:
       org.label-schema.group: "monitoring"
 
   grafana:
-    image: grafana/grafana:10.1.0
+    image: grafana/grafana:12.0.1  # Also update version to match dev
     container_name: nova-grafana-prod
     restart: unless-stopped
     ports:
-      - "3000:3000"  # Consider restricting access in production
+      - "3000:3000"
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-CHANGE_ME_IN_PRODUCTION}
       GF_USERS_ALLOW_SIGN_UP: false
-      GF_SERVER_ROOT_URL: http://your-oci-public-ip:3000
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:3000} # We'll fix this in step 2
       GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel
     volumes:
       - grafana_data_prod:/var/lib/grafana
       - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards  # ← FIXED: This was wrong before
     networks:
-      - prod_network
+      - prod_network  # We'll fix networks in step 3
     depends_on:
       - prometheus
     labels:
