@@ -5,9 +5,12 @@ import Menu from "../components/ui/Menu";
 import ParentsMain from "../components/ParentsMain";
 import ParentsSide from "../components/ParentsSide";
 import "../css/dashboard.css";
-
+const getApiBaseUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocalhost ? 'http://localhost:9093' : 'https://http://141.144.226.68/9093'; // Replace with your actual production API URL
+};
 // Define the base URL as a constant
-const BASE_URL = "http://localhost:9093";
+const BASE_URL = getApiBaseUrl();
 
 export default function ParentsDashboard() {
   const [parentData, setParentData] = useState(null);

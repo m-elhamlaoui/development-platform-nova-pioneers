@@ -100,12 +100,58 @@ public class EnrollmentService {
         Enrollment enrollment = enrollmentRepository.findByEnrollmentIdAndUserId(enrollmentId, kidUserId)
                 .orElseThrow(() -> new RuntimeException("Enrollment not found"));
 
+        // Get the course to determine XP value
+        Course course = courseRepository.findById(enrollment.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
         enrollment.setCompletedAt(LocalDateTime.now());
         enrollment.setProgressPercentage(100);
 
+        // Award XP if not already awarded
+        if (enrollment.getXpEarned() == null || enrollment.getXpEarned() == 0) {
+            Integer courseXp = course.getXpValue() != null ? course.getXpValue() : 0;
+            enrollment.setXpEarned(courseXp);
+
+            // Update kid's total XP
+            Kid kid = kidRepository.findByUserId(kidUserId)
+                    .orElseThrow(() -> new RuntimeException("Kid not found"));
+
+            Integer currentTotalXp = kid.getTotalXp() != null ? kid.getTotalXp() : 0;
+            kid.setTotalXp(currentTotalXp + courseXp);
+
+            // Update title based on new XP
+            updateKidTitle(kid);
+
+            kidRepository.save(kid);
+        }
+
         Enrollment savedEnrollment = enrollmentRepository.save(enrollment);
-        Course course = courseRepository.findById(enrollment.getCourseId()).orElse(null);
         return mapToEnrollmentResponse(savedEnrollment, course);
+    }
+
+    // Helper method to update kid's title based on XP
+    private void updateKidTitle(Kid kid) {
+        Integer totalXp = kid.getTotalXp() != null ? kid.getTotalXp() : 0;
+
+        if (totalXp >= 2000) {
+            kid.setTitle("🌟 Master Explorer");
+        } else if (totalXp >= 1500) {
+            kid.setTitle("🏆 Champion Pioneer");
+        } else if (totalXp >= 1000) {
+            kid.setTitle("💎 Expert Adventurer");
+        } else if (totalXp >= 750) {
+            kid.setTitle("🚀 Space Pioneer");
+        } else if (totalXp >= 500) {
+            kid.setTitle("🔥 Advanced Explorer");
+        } else if (totalXp >= 300) {
+            kid.setTitle("⭐ Rising Star");
+        } else if (totalXp >= 150) {
+            kid.setTitle("🌱 Growing Pioneer");
+        } else if (totalXp >= 50) {
+            kid.setTitle("🎯 Junior Explorer");
+        } else {
+            kid.setTitle("🌟 New Pioneer");
+        }
     }
 
     private EnrollmentResponse mapToEnrollmentResponse(Enrollment enrollment, Course course) {
@@ -116,7 +162,7 @@ public class EnrollmentService {
         response.setEnrolledAt(enrollment.getEnrolledAt().toString());
         response.setCompletedAt(enrollment.getCompletedAt() != null ? enrollment.getCompletedAt().toString() : null);
         response.setProgressPercentage(enrollment.getProgressPercentage());
-        response.setXpEarned(enrollment.getXpEarned());
+        response.setXpEarned(enrollment.getXpEarned() != null ? enrollment.getXpEarned() : 0);
         response.setLastCompletedLessonId(enrollment.getLastCompletedLessonId());
         return response;
     }
