@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1041px" preserveAspectRatio="none" style="width:762px;height:1041px;background:#FFFFFF;" version="1.1" viewBox="0 0 762 1041" width="762px" zoomAndPan="magnify"><defs/><g><!--MD5=[7772a2c0eb0eced9484310deb93e32c2]
+cluster Gateway--><g id="cluster_Gateway"><rect fill="#FFFFFF" height="573.86" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="194" x="268" y="190"/><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="157" x="286.5" y="212.4209">API Gateway</text><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="69" x="330.5" y="238.0303">:9000</text></g><!--MD5=[c8f84d5b61469bf766512ba3eacf548b]
+entity CORS--><g id="elem_CORS"><rect fill="#FFFFFF" height="36.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="97" x="299.5" y="364.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="77" x="309.5" y="387.8551">CORS Filter</text></g><!--MD5=[5a015f5f1bba71835ca3f6cf4aed1988]
+entity JWT--><g id="elem_JWT"><rect fill="#FFFFFF" height="36.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="118" x="292" y="477.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="302" y="500.8551">JWT Auth Filter</text></g><!--MD5=[fcbb921f173b1d58926693d3e10c6deb]
+entity Rules--><g id="elem_Rules"><rect fill="#FFFFFF" height="36.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="118" x="292" y="590.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="302" y="613.8551">Security Rules</text></g><!--MD5=[953a8c67cfe21abaf9bf45dad8506ca8]
+entity Router--><g id="elem_Router"><rect fill="#FFFFFF" height="36.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="117" x="292.5" y="703.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="97" x="302.5" y="726.8551">Route Locator</text></g><!--MD5=[194a92f280a7d2c2f105939ff984a7cf]
+entity Frontend--><g id="elem_Frontend"><ellipse cx="401" cy="19" fill="#FFFFFF" rx="8" ry="8" style="stroke:#000000;stroke-width:1.0;"/><path d="M401,27 L401,54 M388,35 L414,35 M401,54 L388,69 M401,54 L414,69 " fill="none" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="63" x="369.5" y="83.9951">Frontend</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="50" x="369.5" y="100.292">(React)</text></g><!--MD5=[39222abbbfd087a4fdab60e627dc976f]
+entity Auth--><g id="elem_Auth"><rect fill="#FFFFFF" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="106" x="64" y="834.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="86" x="74" y="857.8551">Auth Service</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="41" x="74" y="874.152">:9092</text></g><!--MD5=[97ab183161fd5d1db7fba7485cf76add]
+entity Admin--><g id="elem_Admin"><rect fill="#FFFFFF" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="117" x="205.5" y="834.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="97" x="215.5" y="857.8551">Admin Service</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="41" x="215.5" y="874.152">:9091</text></g><!--MD5=[af70cac6757522592f4c15a8bc8bad5d]
+entity Parents--><g id="elem_Parents"><rect fill="#FFFFFF" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="161" x="357.5" y="834.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="141" x="367.5" y="857.8551">Parents-Kids Service</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="41" x="367.5" y="874.152">:9093</text></g><!--MD5=[d78705e9352f008b0ec783542534985e]
+entity Teachers--><g id="elem_Teachers"><rect fill="#FFFFFF" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="202" x="554" y="834.86"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="182" x="564" y="857.8551">Teachers-Courses Service</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="41" x="564" y="874.152">:9094</text></g><g id="elem_GMN186"><path d="M486,216.86 L486,287.3912 L702,287.3912 L702,226.86 L692,216.86 L486,216.86 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><path d="M692,216.86 L692,226.86 L702,226.86 L692,216.86 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="119" x="492" y="233.9269">Stateless Gateway</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="169" x="492" y="249.0597">- No Database Connection</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="195" x="492" y="264.1925">- JWT Signature Validation Only</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="171" x="492" y="279.3253">- Security Rules from YAML</text></g><g id="elem_GMN189"><path d="M11,948.86 L11,1034.5241 A0,0 0 0 0 11,1034.5241 L223,1034.5241 A0,0 0 0 0 223,1034.5241 L223,958.86 L213,948.86 L121,948.86 L117,888.06 L113,948.86 L11,948.86 A0,0 0 0 0 11,948.86 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><path d="M213,948.86 L213,958.86 L223,958.86 L213,948.86 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="56" x="17" y="965.9269">Handles:</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="119" x="17" y="981.0597">- User Registration</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="91" x="17" y="996.1925">- Login/Logout</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="130" x="17" y="1011.3253">- JWT Token Creation</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="191" x="17" y="1026.4581">- Token Storage &amp; Revocation</text></g><!--MD5=[c6dd312302da65f7b863fd53be257957]
+link Frontend to Gateway--><g id="link_Frontend_Gateway"><path d="M401,104.31 C401,118.3875 401,134.4419 401,150.6475 C401,158.7503 401,166.8909 401,174.8412 C401,178.8163 401,182.7438 401,186.5952 C401,187.5581 401,188.5161 401,189.469 " fill="none" id="Frontend-to-Gateway" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="401,189.469,405,180.469,401,184.469,397,180.469,401,189.469" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="95" x="446" y="147.0669">HTTP Requests</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="183" x="402" y="162.1997">Authorization: Bearer &lt;JWT&gt;</text></g><!--MD5=[731f442456eaffcf7ea6559d99eafbfe]
+link Gateway to CORS--><g id="link_Gateway_CORS"><path d="M400.96,253.45 C399.78,256.31 371.76,324.26 356.96,360.13 " fill="none" id="Gateway-to-CORS" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="355.05,364.76,362.1681,357.9532,356.9487,360.1345,354.7673,354.9152,355.05,364.76" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="95" x="373" y="330.9269">1. CORS Check</text></g><!--MD5=[9230d4ad287887ee0c289fecdb71deba]
+link CORS to JWT--><g id="link_CORS_JWT"><path d="M348.47,401.2 C348.99,420.43 349.83,451.49 350.4,472.52 " fill="none" id="CORS-to-JWT" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="350.53,477.64,354.2713,468.5294,350.3872,472.642,346.2746,468.7579,350.53,477.64" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="104" x="350" y="443.9269">2. JWT Validation</text></g><!--MD5=[8c6e38897a0170e0f42e68ceff129de8]
+link JWT to Rules--><g id="link_JWT_Rules"><path d="M351,514.2 C351,533.43 351,564.49 351,585.52 " fill="none" id="JWT-to-Rules" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="351,590.64,355,581.64,351,585.64,347,581.64,351,590.64" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="106" x="352" y="556.9269">3. Security Rules</text></g><!--MD5=[919e8ea4cc677832904a0fe5bab98abf]
+link Rules to Router--><g id="link_Rules_Router"><path d="M351,627.2 C351,646.43 351,677.49 351,698.52 " fill="none" id="Rules-to-Router" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="351,703.64,355,694.64,351,698.64,347,694.64,351,703.64" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="109" x="352" y="669.9269">4. Route Request</text></g><!--MD5=[e4254a60706d266cb66aa3f1cbff4ed2]
+link Router to Auth--><g id="link_Router_Auth"><path d="M320.7,740.1 C297.9,753.11 265.91,771.47 238,787.86 C213.35,802.33 186.03,818.68 163.59,832.18 " fill="none" id="Router-to-Auth" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="159.17,834.84,168.9454,833.6395,163.4575,832.2675,164.8295,826.7796,159.17,834.84" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="51" x="239" y="800.9269">/auth/**</text></g><!--MD5=[5e6a0fa2545e1e451ce4df378d7a3c1e]
+link Router to Admin--><g id="link_Router_Admin"><path d="M340.16,740 C325.85,762.62 300.42,802.8 282.91,830.47 " fill="none" id="Router-to-Admin" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="280.17,834.8,288.3669,829.3401,282.847,830.577,281.6101,825.057,280.17,834.8" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="62" x="308" y="800.9269">/admin/**</text></g><!--MD5=[92c78b9b52863804f4128f88727659fd]
+link Router to Parents--><g id="link_Router_Parents"><path d="M361.84,740 C376.15,762.62 401.58,802.8 419.09,830.47 " fill="none" id="Router-to-Parents" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="421.83,834.8,420.3899,825.057,419.153,830.577,413.6331,829.3401,421.83,834.8" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="101" x="403" y="800.9269">/parents-kids/**</text></g><!--MD5=[bb533988209fa41906d4d17cad0d0b50]
+link Router to Teachers--><g id="link_Router_Teachers"><path d="M396.85,739.98 C429.55,752.5 474.38,770.3 513,787.86 C543.25,801.62 576.36,818.42 602.99,832.38 " fill="none" id="Router-to-Teachers" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="607.54,834.77,601.4459,827.0329,603.1176,832.4371,597.7134,834.1088,607.54,834.77" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="133" x="549" y="800.9269">/teachers-courses/**</text></g><!--MD5=[471dbdf674a91bfcbbf506cb2debcb9a]
+link Gateway to GMN186--><g id="link_Gateway_GMN186"><path d="M462.2782,252.36 C462.388,252.36 462.4977,252.36 462.6074,252.36 C462.8269,252.36 463.0463,252.36 463.2658,252.36 C463.7047,252.36 464.1436,252.36 464.5825,252.36 C471.605,252.36 478.6275,252.36 485.65,252.36 " fill="none" id="Gateway-GMN186" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/></g><!--MD5=[bc0203b64e83091d6550ba5198df88b7]
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+actor "Frontend\n(React)" as Frontend
+component "API Gateway\n:9000" as Gateway {
+  component "CORS Filter" as CORS
+  component "JWT Auth Filter" as JWT
+  component "Security Rules" as Rules
+  component "Route Locator" as Router
+}
+
+component "Auth Service\n:9092" as Auth
+component "Admin Service\n:9091" as Admin  
+component "Parents-Kids Service\n:9093" as Parents
+component "Teachers-Courses Service\n:9094" as Teachers
+
+Frontend - -> Gateway : HTTP Requests\nAuthorization: Bearer <JWT>
+
+Gateway - -> CORS : 1. CORS Check
+CORS - -> JWT : 2. JWT Validation
+JWT - -> Rules : 3. Security Rules
+Rules - -> Router : 4. Route Request
+Router - -> Auth : /auth/**
+Router - -> Admin : /admin/**
+Router - -> Parents : /parents-kids/**
+Router - -> Teachers : /teachers-courses/**
+
+note right of Gateway
+  Stateless Gateway
+  - No Database Connection
+  - JWT Signature Validation Only
+  - Security Rules from YAML
+end note
+
+note bottom of Auth
+  Handles:
+  - User Registration
+  - Login/Logout  
+  - JWT Token Creation
+  - Token Storage & Revocation
+end note
+@enduml
+
+@startuml
+
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor white
+    FontColor black
+    FontName Verdana
+    HyperLinkColor blue
+    LineColor black
+    LineThickness 1
+    Margin 5
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  header {
+    LineThickness 0
+  }
+  node {
+    MaximumWidth 300
+  }
+  title {
+    FontSize 22
+    LineThickness 0
+  }
+</style>
+
+skinparam ArrowLollipopColor black
+skinparam BackgroundColor white
+skinparam DefaultFontName Verdana
+skinparam DefaultMonospacedFontName Courier
+skinparam LifelineStrategy nosolid
+skinparam ParticipantPadding 10
+skinparam SequenceLifeLineBorderColor black
+skinparam Shadowing false
+skinparam UseBetaStyle true
+
+skinparam Activity {
+  BackgroundColor white
+  BarColor black
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam Boundary {
+  FontColor black
+}
+skinparam Box {
+  Padding 5
+}
+skinparam CircledCharacter {
+  FontColor black
+  FontName Courier
+  Radius 9
+}
+skinparam Class {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassAttribute {
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassStereotype {
+  FontColor black
+  FontName Verdana
+}
+skinparam Footer {
+  FontColor black
+  FontName Verdana
+}
+skinparam Header {
+  FontColor black
+  FontName Verdana
+}
+skinparam Hyperlink {
+  Color blue
+}
+skinparam IconPackage {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPrivate {
+  Color black
+  BackgroundColor white
+}
+skinparam IconProtected {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPublic {
+  Color black
+  BackgroundColor white
+}
+skinparam Note {
+  FontColor black
+  FontName Verdana
+}
+skinparam Object {
+  BorderColor black
+}
+skinparam Package {
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam State {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeA {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeC {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeE {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeI {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeN {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam UseCaseStereoType {
+  FontColor black
+  FontName Verdana
+}
+skinparam componentStyle rectangle
+
+actor "Frontend\n(React)" as Frontend
+component "API Gateway\n:9000" as Gateway {
+  component "CORS Filter" as CORS
+  component "JWT Auth Filter" as JWT
+  component "Security Rules" as Rules
+  component "Route Locator" as Router
+}
+
+component "Auth Service\n:9092" as Auth
+component "Admin Service\n:9091" as Admin  
+component "Parents-Kids Service\n:9093" as Parents
+component "Teachers-Courses Service\n:9094" as Teachers
+
+Frontend - -> Gateway : HTTP Requests\nAuthorization: Bearer <JWT>
+
+Gateway - -> CORS : 1. CORS Check
+CORS - -> JWT : 2. JWT Validation
+JWT - -> Rules : 3. Security Rules
+Rules - -> Router : 4. Route Request
+Router - -> Auth : /auth/**
+Router - -> Admin : /admin/**
+Router - -> Parents : /parents-kids/**
+Router - -> Teachers : /teachers-courses/**
+
+note right of Gateway
+  Stateless Gateway
+  - No Database Connection
+  - JWT Signature Validation Only
+  - Security Rules from YAML
+end note
+
+note bottom of Auth
+  Handles:
+  - User Registration
+  - Login/Logout  
+  - JWT Token Creation
+  - Token Storage & Revocation
+end note
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

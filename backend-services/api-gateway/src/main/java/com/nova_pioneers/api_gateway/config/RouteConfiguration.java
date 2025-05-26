@@ -1,8 +1,6 @@
 package com.nova_pioneers.api_gateway.config;
 
-import com.nova_pioneers.api_gateway.filter.JwtAuthenticationFilter;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -26,32 +24,26 @@ public class RouteConfiguration {
         private String teachersCoursesServiceUri;
 
         @Bean
-        public RouteLocator customRouteLocator(RouteLocatorBuilder builder, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
                 return builder.routes()
-                        // Admin Service Routes with JWT Filter
+                        // Admin Service Routes (GlobalFilter handles JWT)
                         .route("admin-service", r -> r.path("/admin/**")
-                                .filters(f -> f
-                                        .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-                                        .stripPrefix(1))
+                                .filters(f -> f.stripPrefix(1))
                                 .uri(adminServiceUri))
 
-                        // Auth Service Routes (no JWT filter for login/signup)
+                        // Auth Service Routes (GlobalFilter handles JWT)
                         .route("auth-service", r -> r.path("/auth/**")
                                 .filters(f -> f.stripPrefix(1))
                                 .uri(authServiceUri))
 
-                        // Parents-Kids Service Routes with JWT Filter
+                        // Parents-Kids Service Routes (GlobalFilter handles JWT)
                         .route("parents-kids-service", r -> r.path("/parents-kids/**")
-                                .filters(f -> f
-                                        .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-                                        .stripPrefix(1))
+                                .filters(f -> f.stripPrefix(1))
                                 .uri(parentsKidsServiceUri))
 
-                        // Teachers-Courses Service Routes with JWT Filter
+                        // Teachers-Courses Service Routes (GlobalFilter handles JWT)
                         .route("teachers-courses-service", r -> r.path("/teachers-courses/**")
-                                .filters(f -> f
-                                        .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-                                        .stripPrefix(1))
+                                .filters(f -> f.stripPrefix(1))
                                 .uri(teachersCoursesServiceUri))
 
                         .build();
