@@ -20,7 +20,7 @@ export default function Hero(){
             try {
                 // Get API key from environment variable
                 const apiKey = import.meta.env.VITE_NASA_API_KEY;
-                const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`);
+                const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=6eaDLPAKTyulopyXgq9Tww3qu8ZgqMYFeJIfr9oc`);
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch APOD data');

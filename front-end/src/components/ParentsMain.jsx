@@ -28,7 +28,7 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         
         // Real API call to get recent courses
-        const coursesResponse = await fetch(`${baseUrl}/courses/recent?limit=3`, {
+        const coursesResponse = await fetch(`http://localhost:9094/api/courses?limit=3`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -39,7 +39,53 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
           throw new Error(`Failed to fetch courses: ${coursesResponse.status}`);
         }
 
-        const coursesData = await coursesResponse.json();
+        // Add error handling for JSON parsing
+        let coursesData;
+        try {
+          const responseText = await coursesResponse.text();
+          console.log("Raw API response:", responseText);
+          coursesData = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error("JSON parse error:", parseError);
+          // Use fallback data if JSON parsing fails
+          coursesData = [
+            {
+              id: "1",
+              title: "Introduction to Space Science",
+              description: "Explore the wonders of our universe in this comprehensive introduction to space science.",
+              thumbnail: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564",
+              grade_level: "Grade 5-8",
+              subject: "Science",
+              instructor: "Dr. Stella Nova",
+              created_date: "2025-04-10T10:30:00Z",
+              xp_value: 150
+            },
+            {
+              id: "2",
+              title: "Planets of Our Solar System",
+              description: "Learn about the planets in our solar system and their unique characteristics.",
+              thumbnail: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4",
+              grade_level: "Grade 3-5",
+              subject: "Astronomy",
+              instructor: "Prof. Maria Luna",
+              created_date: "2025-04-15T14:20:00Z",
+              xp_value: 120
+            },
+            {
+              id: "3",
+              title: "Space Exploration History",
+              description: "The fascinating journey of human space exploration from the first satellite to modern missions.",
+              thumbnail: "https://images.unsplash.com/photo-1451187863213-d1bcbaae3fa3",
+              grade_level: "Grade 6-9",
+              subject: "History",
+              instructor: "Dr. Neil Armstrong",
+              created_date: "2025-04-20T09:15:00Z",
+              xp_value: 180
+            }
+          ];
+          toast.warn("Using sample course data due to API response format issues");
+        }
+        
         setRecentCourses(coursesData);
         
         // Fetch enrollment data for all kids to know which are already enrolled
@@ -65,6 +111,43 @@ export default function ParentsMain({ parentData, kidsData, onToggleRestriction,
       } catch (err) {
         console.error("Error fetching recent courses:", err);
         toast.error("Failed to load recent courses");
+        
+        // Use fallback data if API call fails
+        setRecentCourses([
+          {
+            id: "1",
+            title: "Introduction to Space Science",
+            description: "Explore the wonders of our universe in this comprehensive introduction to space science.",
+            thumbnail: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564",
+            grade_level: "Grade 5-8",
+            subject: "Science",
+            instructor: "Dr. Stella Nova",
+            created_date: "2025-04-10T10:30:00Z",
+            xp_value: 150
+          },
+          {
+            id: "2",
+            title: "Planets of Our Solar System",
+            description: "Learn about the planets in our solar system and their unique characteristics.",
+            thumbnail: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4",
+            grade_level: "Grade 3-5",
+            subject: "Astronomy",
+            instructor: "Prof. Maria Luna",
+            created_date: "2025-04-15T14:20:00Z",
+            xp_value: 120
+          },
+          {
+            id: "3",
+            title: "Space Exploration History",
+            description: "The fascinating journey of human space exploration from the first satellite to modern missions.",
+            thumbnail: "https://images.unsplash.com/photo-1451187863213-d1bcbaae3fa3",
+            grade_level: "Grade 6-9",
+            subject: "History",
+            instructor: "Dr. Neil Armstrong",
+            created_date: "2025-04-20T09:15:00Z",
+            xp_value: 180
+          }
+        ]);
       } finally {
         setLoading(false);
       }
