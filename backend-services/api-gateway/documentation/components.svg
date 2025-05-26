@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="380px" preserveAspectRatio="none" style="width:962px;height:380px;background:#FFFFFF;" version="1.1" viewBox="0 0 962 380" width="962px" zoomAndPan="magnify"><defs/><g><!--MD5=[f43b5b675ff1252ba1face1b8c606f67]
+cluster API Gateway Components--><g id="cluster_API Gateway Components"><path d="M13.5,12.6885 L335.5,12.6885 A3.75,3.75 0 0 1 338,15.1885 L345,44.2979 L952.5,44.2979 A2.5,2.5 0 0 1 955,46.7979 L955,371.1885 A2.5,2.5 0 0 1 952.5,373.6885 L13.5,373.6885 A2.5,2.5 0 0 1 11,371.1885 L11,15.1885 A2.5,2.5 0 0 1 13.5,12.6885 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;" x1="11" x2="345" y1="44.2979" y2="44.2979"/><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="321" x="15" y="35.1094">API Gateway Components</text></g><!--MD5=[c8a4ca2d6c64894bc02deff77c19238f]
+entity CorsConfig--><g id="elem_CorsConfig"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="116" x="240" y="56.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="336" y="61.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="334" y="63.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="334" y="67.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="76" x="255" y="89.6836">CorsConfig</text></g><!--MD5=[4449b3c48c9216ac20b7ae67a027f182]
+entity CorsWebFilter--><g id="elem_CorsWebFilter"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="136" x="230" y="179.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="346" y="184.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="344" y="186.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="344" y="190.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="96" x="245" y="212.6836">CorsWebFilter</text></g><!--MD5=[939149f5ee60ab5416133c6f99003f29]
+entity JwtUtil--><g id="elem_JwtUtil"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="80" x="403" y="179.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="463" y="184.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="461" y="186.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="461" y="190.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="40" x="418" y="212.6836">JwtUtil</text></g><!--MD5=[f6c648b5564448830c8cabdb5f801d14]
+entity JWT Validation--><g id="elem_JWT Validation"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="135" x="225.5" y="307.1885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="340.5" y="312.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="338.5" y="314.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="338.5" y="318.1885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="95" x="240.5" y="340.1836">JWT Validation</text></g><!--MD5=[62e7de1d931550417ab6d328a945fa11]
+entity JwtAuthenticationFilter--><g id="elem_JwtAuthenticationFilter"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="192" x="423" y="56.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="595" y="61.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="593" y="63.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="593" y="67.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="152" x="438" y="89.6836">JwtAuthenticationFilter</text></g><!--MD5=[4a41fdd2c7993bd7bb1e2ad04ec4ed94]
+entity SecurityRulesLoader--><g id="elem_SecurityRulesLoader"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="181" x="519.5" y="179.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="680.5" y="184.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="678.5" y="186.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="678.5" y="190.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="141" x="534.5" y="212.6836">SecurityRulesLoader</text></g><!--MD5=[eba98af993e3fe70523c851288340824]
+entity YAML Files--><g id="elem_YAML Files"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="112" x="396" y="307.1885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="488" y="312.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="486" y="314.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="486" y="318.1885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="72" x="411" y="340.1836">YAML Files</text></g><!--MD5=[81fa31095b41e66aec87ecfb9363976a]
+entity Security Rules--><g id="elem_Security Rules"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="138" x="543" y="307.1885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="661" y="312.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="659" y="314.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="659" y="318.1885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="558" y="340.1836">Security Rules</text></g><!--MD5=[06f7f056e7797ae248f742ccfc85bc8e]
+entity RouteConfiguration--><g id="elem_RouteConfiguration"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="174" x="27" y="56.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="181" y="61.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="179" y="63.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="179" y="67.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="134" x="42" y="89.6836">RouteConfiguration</text></g><!--MD5=[3fa5b3a11da647409401251bfe26b3b3]
+entity RouteLocator--><g id="elem_RouteLocator"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="133" x="45.5" y="179.6885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="158.5" y="184.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="156.5" y="186.6885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="156.5" y="190.6885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="93" x="60.5" y="212.6836">RouteLocator</text></g><!--MD5=[dbcb2d043cf54e3358487c2eec58d00c]
+entity Backend Services--><g id="elem_Backend Services"><rect fill="#FFFFFF" height="46.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="163" x="27.5" y="307.1885"/><rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.0;" width="15" x="170.5" y="312.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="168.5" y="314.1885"/><rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.0;" width="4" x="168.5" y="318.1885"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="123" x="42.5" y="340.1836">Backend Services</text></g><g id="elem_GMN183"><path d="M650.5,59.6885 L650.5,75.6885 L615.24,79.6885 L650.5,83.6885 L650.5,99.9541 A0,0 0 0 0 650.5,99.9541 L895.5,99.9541 A0,0 0 0 0 895.5,99.9541 L895.5,69.6885 L885.5,59.6885 L650.5,59.6885 A0,0 0 0 0 650.5,59.6885 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><path d="M885.5,59.6885 L885.5,69.6885 L895.5,69.6885 L885.5,59.6885 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="224" x="656.5" y="76.7554">GlobalFilter - applies to all requests</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="223" x="656.5" y="91.8882">Order: -1 (executes before routing)</text></g><g id="elem_GMN186"><path d="M716.5,302.6885 L716.5,358.0869 A0,0 0 0 0 716.5,358.0869 L939.5,358.0869 A0,0 0 0 0 939.5,358.0869 L939.5,312.6885 L929.5,302.6885 L785.87,302.6885 L648.22,225.6885 L777.87,302.6885 L716.5,302.6885 A0,0 0 0 0 716.5,302.6885 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><path d="M929.5,302.6885 L929.5,312.6885 L939.5,312.6885 L929.5,302.6885 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="140" x="722.5" y="319.7554">Loads rules at startup</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="202" x="722.5" y="334.8882">Pattern matching with wildcards</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="135" x="722.5" y="350.021">Method-specific rules</text></g><!--MD5=[b65fbfd773f5e8a38be49d9173f8d1d5]
+link CorsConfig to CorsWebFilter--><g id="link_CorsConfig_CorsWebFilter"><path d="M298,102.8785 C298,123.0985 298,152.9985 298,174.6085 " fill="none" id="CorsConfig-to-CorsWebFilter" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="298,179.6385,302,170.6385,298,174.6385,294,170.6385,298,179.6385" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="48" x="299" y="145.7554">creates</text></g><!--MD5=[d39ec8df72a9ddde97c0ff4572d74f4f]
+link JwtUtil to JWT Validation--><g id="link_JwtUtil_JWT Validation"><path d="M416.53,225.8385 C390.48,247.6385 350.73,280.8885 323.4,303.7585 " fill="none" id="JwtUtil-to-JWT Validation" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="319.46,307.0485,328.9298,304.3424,323.2953,303.8405,323.7971,298.206,319.46,307.0485" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="54" x="377" y="268.7554">provides</text></g><!--MD5=[080b26ddb4b2d030d835ea856783a4c6]
+link JwtAuthenticationFilter to JwtUtil--><g id="link_JwtAuthenticationFilter_JwtUtil"><path d="M498.11,102.6985 C490.29,111.5985 481.68,122.2185 475,132.6885 C466.58,145.8685 459.1,161.6285 453.5,174.7485 " fill="none" id="JwtAuthenticationFilter-to-JwtUtil" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="451.52,179.4585,458.6991,172.716,453.4603,174.8503,451.326,169.6115,451.52,179.4585" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="30" x="476" y="145.7554">uses</text></g><!--MD5=[f106cfec96239770ea43cb7b940f42b3]
+link JwtAuthenticationFilter to SecurityRulesLoader--><g id="link_JwtAuthenticationFilter_SecurityRulesLoader"><path d="M535.69,102.8785 C551.08,123.3485 573.95,153.7585 590.25,175.4285 " fill="none" id="JwtAuthenticationFilter-to-SecurityRulesLoader" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="593.42,179.6385,591.22,170.0385,590.42,175.6385,584.82,174.8385,593.42,179.6385" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="30" x="570" y="145.7554">uses</text></g><!--MD5=[8ad9561c4464b4881cc3369ad81aeae1]
+link SecurityRulesLoader to YAML Files--><g id="link_SecurityRulesLoader_YAML Files"><path d="M582.12,225.8385 C554.67,247.6385 512.81,280.8885 484.02,303.7585 " fill="none" id="SecurityRulesLoader-to-YAML Files" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="479.87,307.0485,489.4088,304.5966,483.7896,303.9442,484.442,298.3251,479.87,307.0485" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="34" x="541" y="268.7554">loads</text></g><!--MD5=[510ed05b5b901787554bb17eadf56a42]
+link SecurityRulesLoader to Security Rules--><g id="link_SecurityRulesLoader_Security Rules"><path d="M610.35,225.8385 C610.69,247.0285 611.2,279.0585 611.56,301.8385 " fill="none" id="SecurityRulesLoader-to-Security Rules" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="611.64,306.8385,615.4851,297.7712,611.5543,301.8392,607.4863,297.9084,611.64,306.8385" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="43" x="612" y="268.7554">parses</text></g><!--MD5=[c1d52fa3defb6ae05dc86a7ecb92b555]
+link RouteConfiguration to RouteLocator--><g id="link_RouteConfiguration_RouteLocator"><path d="M113.63,102.8785 C113.3,123.0985 112.8,152.9985 112.45,174.6085 " fill="none" id="RouteConfiguration-to-RouteLocator" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="112.36,179.6385,116.5137,170.7084,112.4457,174.6392,108.5149,170.5712,112.36,179.6385" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="48" x="114" y="145.7554">creates</text></g><!--MD5=[5f7c650db8a96018088f40ba17002002]
+link RouteLocator to Backend Services--><g id="link_RouteLocator_Backend Services"><path d="M111.47,225.8385 C110.96,247.0285 110.2,279.0585 109.65,301.8385 " fill="none" id="RouteLocator-to-Backend Services" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="109.53,306.8385,113.7346,297.9322,109.6443,301.8398,105.7367,297.7494,109.53,306.8385" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="58" x="111" y="268.7554">routes to</text></g><!--MD5=[211555601de88096444862389ac8d8e2]
+@startuml
+!theme plain
+package "API Gateway Components" {
+  
+  [CorsConfig] - -> [CorsWebFilter] : creates
+  
+  [JwtUtil] - -> [JWT Validation] : provides
+  [JwtAuthenticationFilter] - -> [JwtUtil] : uses
+  [JwtAuthenticationFilter] - -> [SecurityRulesLoader] : uses
+  
+  [SecurityRulesLoader] - -> [YAML Files] : loads
+  [SecurityRulesLoader] - -> [Security Rules] : parses
+  
+  [RouteConfiguration] - -> [RouteLocator] : creates
+  [RouteLocator] - -> [Backend Services] : routes to
+  
+  note right of [JwtAuthenticationFilter]
+    GlobalFilter - applies to all requests
+    Order: -1 (executes before routing)
+  end note
+  
+  note bottom of [SecurityRulesLoader]
+    Loads rules at startup
+    Pattern matching with wildcards
+    Method-specific rules
+  end note
+}
+@enduml
+
+@startuml
+
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor white
+    FontColor black
+    FontName Verdana
+    HyperLinkColor blue
+    LineColor black
+    LineThickness 1
+    Margin 5
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  header {
+    LineThickness 0
+  }
+  node {
+    MaximumWidth 300
+  }
+  title {
+    FontSize 22
+    LineThickness 0
+  }
+</style>
+
+skinparam ArrowLollipopColor black
+skinparam BackgroundColor white
+skinparam DefaultFontName Verdana
+skinparam DefaultMonospacedFontName Courier
+skinparam LifelineStrategy nosolid
+skinparam ParticipantPadding 10
+skinparam SequenceLifeLineBorderColor black
+skinparam Shadowing false
+skinparam UseBetaStyle true
+
+skinparam Activity {
+  BackgroundColor white
+  BarColor black
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam Boundary {
+  FontColor black
+}
+skinparam Box {
+  Padding 5
+}
+skinparam CircledCharacter {
+  FontColor black
+  FontName Courier
+  Radius 9
+}
+skinparam Class {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassAttribute {
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassStereotype {
+  FontColor black
+  FontName Verdana
+}
+skinparam Footer {
+  FontColor black
+  FontName Verdana
+}
+skinparam Header {
+  FontColor black
+  FontName Verdana
+}
+skinparam Hyperlink {
+  Color blue
+}
+skinparam IconPackage {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPrivate {
+  Color black
+  BackgroundColor white
+}
+skinparam IconProtected {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPublic {
+  Color black
+  BackgroundColor white
+}
+skinparam Note {
+  FontColor black
+  FontName Verdana
+}
+skinparam Object {
+  BorderColor black
+}
+skinparam Package {
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam State {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeA {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeC {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeE {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeI {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeN {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam UseCaseStereoType {
+  FontColor black
+  FontName Verdana
+}
+package "API Gateway Components" {
+  
+  [CorsConfig] - -> [CorsWebFilter] : creates
+  
+  [JwtUtil] - -> [JWT Validation] : provides
+  [JwtAuthenticationFilter] - -> [JwtUtil] : uses
+  [JwtAuthenticationFilter] - -> [SecurityRulesLoader] : uses
+  
+  [SecurityRulesLoader] - -> [YAML Files] : loads
+  [SecurityRulesLoader] - -> [Security Rules] : parses
+  
+  [RouteConfiguration] - -> [RouteLocator] : creates
+  [RouteLocator] - -> [Backend Services] : routes to
+  
+  note right of [JwtAuthenticationFilter]
+    GlobalFilter - applies to all requests
+    Order: -1 (executes before routing)
+  end note
+  
+  note bottom of [SecurityRulesLoader]
+    Loads rules at startup
+    Pattern matching with wildcards
+    Method-specific rules
+  end note
+}
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

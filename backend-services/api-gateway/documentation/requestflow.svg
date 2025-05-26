@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1478px" preserveAspectRatio="none" style="width:1381px;height:1478px;background:#FFFFFF;" version="1.1" viewBox="0 0 1381 1478" width="1381px" zoomAndPan="magnify"><defs/><g><rect fill="#FFFFFF" height="1022.1797" style="stroke:#000000;stroke-width:1.0;" width="10" x="305.5" y="82.5625"/><rect fill="#FFFFFF" height="897.6484" style="stroke:#000000;stroke-width:1.0;" width="10" x="464.5" y="177.9609"/><rect fill="#FFFFFF" height="167.7969" style="stroke:#000000;stroke-width:1.0;" width="10" x="737.5" y="487.6875"/><rect fill="#FFFFFF" height="274.3281" style="stroke:#000000;stroke-width:1.0;" width="10" x="889.5" y="772.1484"/><rect fill="#FFFFFF" height="86.3984" style="stroke:#000000;stroke-width:1.0;" width="10" x="1162.5" y="930.9453"/><rect fill="#FFFFFF" height="1286.3281" style="stroke:#000000;stroke-width:1.0;" width="1359.5" x="15" y="139.6953"/><rect fill="#FFFFFF" height="1124.8594" style="stroke:#000000;stroke-width:1.0;" width="1339.5" x="25" y="250.2266"/><rect fill="#FFFFFF" height="963.3906" style="stroke:#000000;stroke-width:1.0;" width="1319.5" x="35" y="331.625"/><rect fill="#FFFFFF" height="597.7266" style="stroke:#000000;stroke-width:1.0;" width="1299.5" x="45" y="617.2188"/><rect fill="#FFFFFF" height="102.2031" style="stroke:none;stroke-width:1.0;" width="1299.5" x="45" y="1112.7422"/><rect fill="#FFFFFF" height="73.0703" style="stroke:none;stroke-width:1.0;" width="1319.5" x="35" y="1221.9453"/><rect fill="#FFFFFF" height="73.0703" style="stroke:none;stroke-width:1.0;" width="1339.5" x="25" y="1302.0156"/><rect fill="#FFFFFF" height="43.9375" style="stroke:none;stroke-width:1.0;" width="1359.5" x="15" y="1382.0859"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="103" x2="103" y1="36.2969" y2="1443.0234"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="310" x2="310" y1="36.2969" y2="1443.0234"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="469.5" x2="469.5" y1="36.2969" y2="1443.0234"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="742.5" x2="742.5" y1="36.2969" y2="1443.0234"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="894" x2="894" y1="36.2969" y2="1443.0234"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="1167" x2="1167" y1="36.2969" y2="1443.0234"/><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="77" x="65" y="5"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="63" x="72" y="24.9951">Frontend</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="77" x="65" y="1442.0234"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="63" x="72" y="1462.0186">Frontend</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="91" x="265" y="5"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="77" x="272" y="24.9951">CORS Filter</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="91" x="265" y="1442.0234"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="77" x="272" y="1462.0186">CORS Filter</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="112" x="413.5" y="5"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="420.5" y="24.9951">JWT Auth Filter</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="112" x="413.5" y="1442.0234"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="420.5" y="1462.0186">JWT Auth Filter</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="112" x="686.5" y="5"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="693.5" y="24.9951">Security Rules</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="112" x="686.5" y="1442.0234"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="98" x="693.5" y="1462.0186">Security Rules</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="111" x="839" y="5"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="97" x="846" y="24.9951">Route Locator</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="111" x="839" y="1442.0234"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="97" x="846" y="1462.0186">Route Locator</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="129" x="1103" y="5"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="115" x="1110" y="24.9951">Backend Service</text><rect fill="#FFFFFF" height="30.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;" width="129" x="1103" y="1442.0234"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="115" x="1110" y="1462.0186">Backend Service</text><rect fill="#FFFFFF" height="1022.1797" style="stroke:#000000;stroke-width:1.0;" width="10" x="305.5" y="82.5625"/><rect fill="#FFFFFF" height="897.6484" style="stroke:#000000;stroke-width:1.0;" width="10" x="464.5" y="177.9609"/><rect fill="#FFFFFF" height="167.7969" style="stroke:#000000;stroke-width:1.0;" width="10" x="737.5" y="487.6875"/><rect fill="#FFFFFF" height="274.3281" style="stroke:#000000;stroke-width:1.0;" width="10" x="889.5" y="772.1484"/><rect fill="#FFFFFF" height="86.3984" style="stroke:#000000;stroke-width:1.0;" width="10" x="1162.5" y="930.9453"/><polygon fill="#000000" points="293.5,78.5625,303.5,82.5625,293.5,86.5625,297.5,82.5625" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;" x1="103.5" x2="299.5" y1="82.5625" y2="82.5625"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="88" x="110.5" y="62.3638">HTTP Request</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="183" x="110.5" y="77.4966">Authorization: Bearer &lt;JWT&gt;</text><line style="stroke:#000000;stroke-width:1.0;" x1="315.5" x2="357.5" y1="111.6953" y2="111.6953"/><line style="stroke:#000000;stroke-width:1.0;" x1="357.5" x2="357.5" y1="111.6953" y2="124.6953"/><line style="stroke:#000000;stroke-width:1.0;" x1="316.5" x2="357.5" y1="124.6953" y2="124.6953"/><polygon fill="#000000" points="326.5,120.6953,316.5,124.6953,326.5,128.6953,322.5,124.6953" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="119" x="322.5" y="106.6294">Check CORS Policy</text><path d="M15,139.6953 L79,139.6953 L79,146.8281 L69,156.8281 L15,156.8281 L15,139.6953 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="1286.3281" style="stroke:#000000;stroke-width:1.0;" width="1359.5" x="15" y="139.6953"/><text fill="#000000" font-family="Verdana" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="30" y="152.7622">alt</text><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="100" x="94" y="151.9058">[CORS Allowed]</text><polygon fill="#000000" points="452.5,173.9609,462.5,177.9609,452.5,181.9609,456.5,177.9609" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;" x1="315.5" x2="458.5" y1="177.9609" y2="177.9609"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="130" x="322.5" y="172.895">Continue Processing</text><line style="stroke:#000000;stroke-width:1.0;" x1="474.5" x2="516.5" y1="222.2266" y2="222.2266"/><line style="stroke:#000000;stroke-width:1.0;" x1="516.5" x2="516.5" y1="222.2266" y2="235.2266"/><line style="stroke:#000000;stroke-width:1.0;" x1="475.5" x2="516.5" y1="235.2266" y2="235.2266"/><polygon fill="#000000" points="485.5,231.2266,475.5,235.2266,485.5,239.2266,481.5,235.2266" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="104" x="481.5" y="202.0278">Extract JWT from</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="136" x="481.5" y="217.1606">Authorization Header</text><path d="M25,250.2266 L89,250.2266 L89,257.3594 L79,267.3594 L25,267.3594 L25,250.2266 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="1124.8594" style="stroke:#000000;stroke-width:1.0;" width="1339.5" x="25" y="250.2266"/><text fill="#000000" font-family="Verdana" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="40" y="263.2935">alt</text><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="88" x="104" y="262.437">[JWT Present]</text><line style="stroke:#000000;stroke-width:1.0;" x1="474.5" x2="516.5" y1="303.625" y2="303.625"/><line style="stroke:#000000;stroke-width:1.0;" x1="516.5" x2="516.5" y1="303.625" y2="316.625"/><line style="stroke:#000000;stroke-width:1.0;" x1="475.5" x2="516.5" y1="316.625" y2="316.625"/><polygon fill="#000000" points="485.5,312.625,475.5,316.625,485.5,320.625,481.5,316.625" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="143" x="481.5" y="283.4263">Validate JWT Signature</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="78" x="481.5" y="298.5591">&amp; Expiration</text><path d="M35,331.625 L99,331.625 L99,338.7578 L89,348.7578 L35,348.7578 L35,331.625 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="963.3906" style="stroke:#000000;stroke-width:1.0;" width="1319.5" x="35" y="331.625"/><text fill="#000000" font-family="Verdana" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="50" y="344.6919">alt</text><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="71" x="114" y="343.8354">[JWT Valid]</text><line style="stroke:#000000;stroke-width:1.0;" x1="474.5" x2="516.5" y1="415.2891" y2="415.2891"/><line style="stroke:#000000;stroke-width:1.0;" x1="516.5" x2="516.5" y1="415.2891" y2="428.2891"/><line style="stroke:#000000;stroke-width:1.0;" x1="475.5" x2="516.5" y1="428.2891" y2="428.2891"/><polygon fill="#000000" points="485.5,424.2891,475.5,428.2891,485.5,432.2891,481.5,428.2891" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="110" x="481.5" y="364.8247">Extract User Info:</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="56" x="481.5" y="379.9575">- User ID</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="36" x="481.5" y="395.0903">- Role</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="76" x="481.5" y="410.2231">- Username</text><polygon fill="#000000" points="725.5,483.6875,735.5,487.6875,725.5,491.6875,729.5,487.6875" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;" x1="474.5" x2="731.5" y1="487.6875" y2="487.6875"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="169" x="481.5" y="452.356">Check Access Permissions</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="244" x="481.5" y="467.4888">requestrAuthentication(path, method)</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="232" x="481.5" y="482.6216">isAccessAllowed(path, method, role)</text><line style="stroke:#000000;stroke-width:1.0;" x1="747.5" x2="789.5" y1="531.9531" y2="531.9531"/><line style="stroke:#000000;stroke-width:1.0;" x1="789.5" x2="789.5" y1="531.9531" y2="544.9531"/><line style="stroke:#000000;stroke-width:1.0;" x1="748.5" x2="789.5" y1="544.9531" y2="544.9531"/><polygon fill="#000000" points="758.5,540.9531,748.5,544.9531,758.5,548.9531,754.5,544.9531" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="125" x="754.5" y="511.7544">Load Security Rules</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="97" x="754.5" y="526.8872">from YAML files</text><line style="stroke:#000000;stroke-width:1.0;" x1="747.5" x2="789.5" y1="589.2188" y2="589.2188"/><line style="stroke:#000000;stroke-width:1.0;" x1="789.5" x2="789.5" y1="589.2188" y2="602.2188"/><line style="stroke:#000000;stroke-width:1.0;" x1="748.5" x2="789.5" y1="602.2188" y2="602.2188"/><polygon fill="#000000" points="758.5,598.2188,748.5,602.2188,758.5,606.2188,754.5,602.2188" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="128" x="754.5" y="569.02">Match Request Path</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="127" x="754.5" y="584.1528">to Security Patterns</text><path d="M45,617.2188 L109,617.2188 L109,624.3516 L99,634.3516 L45,634.3516 L45,617.2188 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="597.7266" style="stroke:#000000;stroke-width:1.0;" width="1299.5" x="45" y="617.2188"/><text fill="#000000" font-family="Verdana" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="60" y="630.2856">alt</text><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="109" x="124" y="629.4292">[Access Allowed]</text><polygon fill="#000000" points="485.5,651.4844,475.5,655.4844,485.5,659.4844,481.5,655.4844" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="479.5" x2="741.5" y1="655.4844" y2="655.4844"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="101" x="491.5" y="650.4185">Access Granted</text><line style="stroke:#000000;stroke-width:1.0;" x1="474.5" x2="516.5" y1="730.0156" y2="730.0156"/><line style="stroke:#000000;stroke-width:1.0;" x1="516.5" x2="516.5" y1="730.0156" y2="743.0156"/><line style="stroke:#000000;stroke-width:1.0;" x1="475.5" x2="516.5" y1="743.0156" y2="743.0156"/><polygon fill="#000000" points="485.5,739.0156,475.5,743.0156,485.5,747.0156,481.5,743.0156" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="87" x="481.5" y="679.5513">Add Headers:</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="91" x="481.5" y="694.6841">X-User-Id: 123</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="125" x="481.5" y="709.8169">X-User-Role: parent</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="195" x="481.5" y="724.9497">X-Username: john@email.com</text><polygon fill="#000000" points="877.5,768.1484,887.5,772.1484,877.5,776.1484,881.5,772.1484" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;" x1="474.5" x2="883.5" y1="772.1484" y2="772.1484"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="173" x="481.5" y="767.0825">Forward Enhanced Request</text><line style="stroke:#000000;stroke-width:1.0;" x1="899.5" x2="941.5" y1="816.4141" y2="816.4141"/><line style="stroke:#000000;stroke-width:1.0;" x1="941.5" x2="941.5" y1="816.4141" y2="829.4141"/><line style="stroke:#000000;stroke-width:1.0;" x1="900.5" x2="941.5" y1="829.4141" y2="829.4141"/><polygon fill="#000000" points="910.5,825.4141,900.5,829.4141,910.5,833.4141,906.5,829.4141" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="135" x="906.5" y="796.2153">Match Route Pattern:</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="249" x="906.5" y="811.3481">/parents-kids/** → parents-kids-service</text><line style="stroke:#000000;stroke-width:1.0;" x1="899.5" x2="941.5" y1="873.6797" y2="873.6797"/><line style="stroke:#000000;stroke-width:1.0;" x1="941.5" x2="941.5" y1="873.6797" y2="886.6797"/><line style="stroke:#000000;stroke-width:1.0;" x1="900.5" x2="941.5" y1="886.6797" y2="886.6797"/><polygon fill="#000000" points="910.5,882.6797,900.5,886.6797,910.5,890.6797,906.5,886.6797" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="81" x="906.5" y="853.481">Apply Filters:</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="83" x="906.5" y="868.6138">StripPrefix(1)</text><polygon fill="#000000" points="1150.5,926.9453,1160.5,930.9453,1150.5,934.9453,1154.5,930.9453" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;" x1="899.5" x2="1156.5" y1="930.9453" y2="930.9453"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="113" x="906.5" y="910.7466">Route to Backend</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="230" x="906.5" y="925.8794">/parents-kids/users/me → /users/me</text><line style="stroke:#000000;stroke-width:1.0;" x1="1172.5" x2="1214.5" y1="975.2109" y2="975.2109"/><line style="stroke:#000000;stroke-width:1.0;" x1="1214.5" x2="1214.5" y1="975.2109" y2="988.2109"/><line style="stroke:#000000;stroke-width:1.0;" x1="1173.5" x2="1214.5" y1="988.2109" y2="988.2109"/><polygon fill="#000000" points="1183.5,984.2109,1173.5,988.2109,1183.5,992.2109,1179.5,988.2109" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="106" x="1179.5" y="955.0122">Process Request</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="153" x="1179.5" y="970.145">Using X-User-* Headers</text><polygon fill="#000000" points="910.5,1013.3438,900.5,1017.3438,910.5,1021.3438,906.5,1017.3438" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="904.5" x2="1166.5" y1="1017.3438" y2="1017.3438"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="62" x="916.5" y="1012.2778">Response</text><polygon fill="#000000" points="485.5,1042.4766,475.5,1046.4766,485.5,1050.4766,481.5,1046.4766" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="479.5" x2="893.5" y1="1046.4766" y2="1046.4766"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="62" x="491.5" y="1041.4106">Response</text><polygon fill="#000000" points="326.5,1071.6094,316.5,1075.6094,326.5,1079.6094,322.5,1075.6094" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="320.5" x2="468.5" y1="1075.6094" y2="1075.6094"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="62" x="332.5" y="1070.5435">Response</text><polygon fill="#000000" points="114.5,1100.7422,104.5,1104.7422,114.5,1108.7422,110.5,1104.7422" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="108.5" x2="309.5" y1="1104.7422" y2="1104.7422"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="95" x="120.5" y="1099.6763">Final Response</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="45" x2="1344.5" y1="1113.7422" y2="1113.7422"/><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="103" x="50" y="1123.9526">[Access Denied]</text><polygon fill="#000000" points="480.5,1144.6797,470.5,1148.6797,480.5,1152.6797,476.5,1148.6797" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="474.5" x2="741.5" y1="1148.6797" y2="1148.6797"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="91" x="486.5" y="1143.6138">403 Forbidden</text><polygon fill="#000000" points="321.5,1173.8125,311.5,1177.8125,321.5,1181.8125,317.5,1177.8125" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="315.5" x2="468.5" y1="1177.8125" y2="1177.8125"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="97" x="327.5" y="1172.7466">Error Response</text><polygon fill="#000000" points="114.5,1202.9453,104.5,1206.9453,114.5,1210.9453,110.5,1206.9453" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="108.5" x2="309.5" y1="1206.9453" y2="1206.9453"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="91" x="120.5" y="1201.8794">403 Forbidden</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="35" x2="1354.5" y1="1222.9453" y2="1222.9453"/><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="82" x="40" y="1233.1558">[JWT Invalid]</text><polygon fill="#000000" points="321.5,1253.8828,311.5,1257.8828,321.5,1261.8828,317.5,1257.8828" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="315.5" x2="468.5" y1="1257.8828" y2="1257.8828"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="114" x="327.5" y="1252.8169">401 Unauthorized</text><polygon fill="#000000" points="114.5,1283.0156,104.5,1287.0156,114.5,1291.0156,110.5,1287.0156" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="108.5" x2="309.5" y1="1287.0156" y2="1287.0156"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="114" x="120.5" y="1281.9497">401 Unauthorized</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="25" x2="1364.5" y1="1303.0156" y2="1303.0156"/><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="197" x="30" y="1313.2261">[No JWT &amp; Protected Endpoint]</text><polygon fill="#000000" points="321.5,1333.9531,311.5,1337.9531,321.5,1341.9531,317.5,1337.9531" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="315.5" x2="468.5" y1="1337.9531" y2="1337.9531"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="114" x="327.5" y="1332.8872">401 Unauthorized</text><polygon fill="#000000" points="114.5,1363.0859,104.5,1367.0859,114.5,1371.0859,110.5,1367.0859" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="108.5" x2="309.5" y1="1367.0859" y2="1367.0859"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="114" x="120.5" y="1362.02">401 Unauthorized</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="15" x2="1374.5" y1="1383.0859" y2="1383.0859"/><text fill="#000000" font-family="Verdana" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="100" x="20" y="1393.2964">[CORS Blocked]</text><polygon fill="#000000" points="114.5,1414.0234,104.5,1418.0234,114.5,1422.0234,110.5,1418.0234" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="108.5" x2="309.5" y1="1418.0234" y2="1418.0234"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="71" x="120.5" y="1412.9575">CORS Error</text><!--MD5=[d86c3e9097b6a5941357cefc04156c53]
+@startuml
+!theme plain
+skinparam backgroundColor white
+
+participant "Frontend" as F
+participant "CORS Filter" as C
+participant "JWT Auth Filter" as J
+participant "Security Rules" as S
+participant "Route Locator" as R
+participant "Backend Service" as B
+
+F -> C: HTTP Request\nAuthorization: Bearer <JWT>
+activate C
+
+C -> C: Check CORS Policy
+alt CORS Allowed
+  C -> J: Continue Processing
+  activate J
+  
+  J -> J: Extract JWT from\nAuthorization Header
+  
+  alt JWT Present
+    J -> J: Validate JWT Signature\n& Expiration
+    
+    alt JWT Valid
+      J -> J: Extract User Info:\n- User ID\n- Role\n- Username
+      
+      J -> S: Check Access Permissions\nrequestrAuthentication(path, method)\nisAccessAllowed(path, method, role)
+      activate S
+      
+      S -> S: Load Security Rules\nfrom YAML files
+      S -> S: Match Request Path\nto Security Patterns
+      
+      alt Access Allowed
+        S - -> J: Access Granted
+        deactivate S
+        
+        J -> J: Add Headers:\nX-User-Id: 123\nX-User-Role: parent\nX-Username: john@email.com
+        
+        J -> R: Forward Enhanced Request
+        activate R
+        
+        R -> R: Match Route Pattern:\n/parents-kids/** → parents-kids-service
+        R -> R: Apply Filters:\nStripPrefix(1)
+        
+        R -> B: Route to Backend\n/parents-kids/users/me → /users/me
+        activate B
+        
+        B -> B: Process Request\nUsing X-User-* Headers
+        B - -> R: Response
+        deactivate B
+        
+        R - -> J: Response
+        deactivate R
+        
+        J - -> C: Response
+        deactivate J
+        
+        C - -> F: Final Response
+        deactivate C
+        
+      else Access Denied
+        S - -> J: 403 Forbidden
+        deactivate S
+        J - -> C: Error Response
+        deactivate J
+        C - -> F: 403 Forbidden
+        deactivate C
+      end
+      
+    else JWT Invalid
+      J - -> C: 401 Unauthorized
+      deactivate J
+      C - -> F: 401 Unauthorized  
+      deactivate C
+    end
+    
+  else No JWT & Protected Endpoint
+    J - -> C: 401 Unauthorized
+    deactivate J
+    C - -> F: 401 Unauthorized
+    deactivate C
+  end
+  
+else CORS Blocked
+  C - -> F: CORS Error
+  deactivate C
+end
+@enduml
+
+@startuml
+
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor white
+    FontColor black
+    FontName Verdana
+    HyperLinkColor blue
+    LineColor black
+    LineThickness 1
+    Margin 5
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  header {
+    LineThickness 0
+  }
+  node {
+    MaximumWidth 300
+  }
+  title {
+    FontSize 22
+    LineThickness 0
+  }
+</style>
+
+skinparam ArrowLollipopColor black
+skinparam BackgroundColor white
+skinparam DefaultFontName Verdana
+skinparam DefaultMonospacedFontName Courier
+skinparam LifelineStrategy nosolid
+skinparam ParticipantPadding 10
+skinparam SequenceLifeLineBorderColor black
+skinparam Shadowing false
+skinparam UseBetaStyle true
+
+skinparam Activity {
+  BackgroundColor white
+  BarColor black
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam Boundary {
+  FontColor black
+}
+skinparam Box {
+  Padding 5
+}
+skinparam CircledCharacter {
+  FontColor black
+  FontName Courier
+  Radius 9
+}
+skinparam Class {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassAttribute {
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassStereotype {
+  FontColor black
+  FontName Verdana
+}
+skinparam Footer {
+  FontColor black
+  FontName Verdana
+}
+skinparam Header {
+  FontColor black
+  FontName Verdana
+}
+skinparam Hyperlink {
+  Color blue
+}
+skinparam IconPackage {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPrivate {
+  Color black
+  BackgroundColor white
+}
+skinparam IconProtected {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPublic {
+  Color black
+  BackgroundColor white
+}
+skinparam Note {
+  FontColor black
+  FontName Verdana
+}
+skinparam Object {
+  BorderColor black
+}
+skinparam Package {
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam State {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeA {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeC {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeE {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeI {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeN {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam UseCaseStereoType {
+  FontColor black
+  FontName Verdana
+}
+skinparam backgroundColor white
+
+participant "Frontend" as F
+participant "CORS Filter" as C
+participant "JWT Auth Filter" as J
+participant "Security Rules" as S
+participant "Route Locator" as R
+participant "Backend Service" as B
+
+F -> C: HTTP Request\nAuthorization: Bearer <JWT>
+activate C
+
+C -> C: Check CORS Policy
+alt CORS Allowed
+  C -> J: Continue Processing
+  activate J
+  
+  J -> J: Extract JWT from\nAuthorization Header
+  
+  alt JWT Present
+    J -> J: Validate JWT Signature\n& Expiration
+    
+    alt JWT Valid
+      J -> J: Extract User Info:\n- User ID\n- Role\n- Username
+      
+      J -> S: Check Access Permissions\nrequestrAuthentication(path, method)\nisAccessAllowed(path, method, role)
+      activate S
+      
+      S -> S: Load Security Rules\nfrom YAML files
+      S -> S: Match Request Path\nto Security Patterns
+      
+      alt Access Allowed
+        S - -> J: Access Granted
+        deactivate S
+        
+        J -> J: Add Headers:\nX-User-Id: 123\nX-User-Role: parent\nX-Username: john@email.com
+        
+        J -> R: Forward Enhanced Request
+        activate R
+        
+        R -> R: Match Route Pattern:\n/parents-kids/** → parents-kids-service
+        R -> R: Apply Filters:\nStripPrefix(1)
+        
+        R -> B: Route to Backend\n/parents-kids/users/me → /users/me
+        activate B
+        
+        B -> B: Process Request\nUsing X-User-* Headers
+        B - -> R: Response
+        deactivate B
+        
+        R - -> J: Response
+        deactivate R
+        
+        J - -> C: Response
+        deactivate J
+        
+        C - -> F: Final Response
+        deactivate C
+        
+      else Access Denied
+        S - -> J: 403 Forbidden
+        deactivate S
+        J - -> C: Error Response
+        deactivate J
+        C - -> F: 403 Forbidden
+        deactivate C
+      end
+      
+    else JWT Invalid
+      J - -> C: 401 Unauthorized
+      deactivate J
+      C - -> F: 401 Unauthorized  
+      deactivate C
+    end
+    
+  else No JWT & Protected Endpoint
+    J - -> C: 401 Unauthorized
+    deactivate J
+    C - -> F: 401 Unauthorized
+    deactivate C
+  end
+  
+else CORS Blocked
+  C - -> F: CORS Error
+  deactivate C
+end
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
