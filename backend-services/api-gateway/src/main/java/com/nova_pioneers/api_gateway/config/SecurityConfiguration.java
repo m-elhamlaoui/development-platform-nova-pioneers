@@ -29,4 +29,5 @@ public class SecurityConfiguration {
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
         return dataSource;
     }
+
 }

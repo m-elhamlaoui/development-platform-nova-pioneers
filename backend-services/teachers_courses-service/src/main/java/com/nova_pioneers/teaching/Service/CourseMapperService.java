@@ -63,7 +63,7 @@ public class CourseMapperService {
         dto.setId(section.getId());
         dto.setSubheading(section.getSubheading());
         dto.setText(section.getText());
-        dto.setImage(section.getImage());
+        dto.setImage(section.getImagePath());
         dto.setFunFact(section.getFunFact());
         dto.setSequenceOrder(section.getSequenceOrder());
         return dto;
@@ -84,7 +84,7 @@ public class CourseMapperService {
         ContentSection section = new ContentSection();
         section.setSubheading(dto.getSubheading());
         section.setText(dto.getText());
-        section.setImage(dto.getImage());
+        section.setImagePath(dto.getImage());
         section.setFunFact(dto.getFunFact());
         section.setSequenceOrder(dto.getSequenceOrder());
         section.setLesson(lesson);

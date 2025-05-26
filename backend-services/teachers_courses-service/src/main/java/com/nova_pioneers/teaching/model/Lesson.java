@@ -24,7 +24,8 @@ public class Lesson {
     private String content;
     @Column(name = "resource_links")
     private String resourceLinks;
-    private String image;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(name = "sequence_order")
     private Integer sequenceOrder;
 
@@ -57,6 +58,27 @@ public class Lesson {
             for (ContentSection section : sections) {
                 addContentSection(section);
             }
+        }
+    }
+    @Transient
+    public String getImageUrl() {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            return "/api/files/" + imagePath;
+        }
+        return null;
+    }
+
+    // Keep backward compatibility
+    @Transient
+    public String getImage() {
+        return getImageUrl();
+    }
+
+    public void setImage(String image) {
+        if (image != null && image.startsWith("/api/files/")) {
+            this.imagePath = image.replace("/api/files/", "");
+        } else if (image != null) {
+            this.imagePath = image;
         }
     }
 

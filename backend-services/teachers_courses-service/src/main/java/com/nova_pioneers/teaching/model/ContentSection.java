@@ -10,8 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "lesson_contents")
-@EqualsAndHashCode(exclude = {"lesson"})
-@ToString(exclude = {"lesson"})
+@EqualsAndHashCode(exclude = { "lesson" })
+@ToString(exclude = { "lesson" })
 public class ContentSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,8 @@ public class ContentSection {
 
     @Column(length = 1000)
     private String text;
-    @Column(name = "image_path")  // Map to image_path column
-    private String image;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(name = "fun_fact", length = 500)
     private String funFact;
 
@@ -32,4 +32,27 @@ public class ContentSection {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lesson_id")
     private Lesson lesson;
+
+    // Add compatibility methods for image handling
+    @Transient
+    public String getImageUrl() {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            return "/api/files/" + imagePath;
+        }
+        return null;
+    }
+
+    // Keep backward compatibility
+    @Transient
+    public String getImage() {
+        return getImageUrl();
+    }
+
+    public void setImage(String image) {
+        if (image != null && image.startsWith("/api/files/")) {
+            this.imagePath = image.replace("/api/files/", "");
+        } else if (image != null) {
+            this.imagePath = image;
+        }
+    }
 }

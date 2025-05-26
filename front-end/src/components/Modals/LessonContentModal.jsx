@@ -1,331 +1,272 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import ImageUpload from '../FileUpload/ImageUpload';
 
 const LessonContentModal = ({ lesson, onSave, onClose }) => {
-  const { register, handleSubmit, control, formState: { errors }, watch } = useForm({
-    defaultValues: {
-      id: lesson.id,
-      title: lesson.title,
-      content: lesson.content || '',
-      resource_links: lesson.resource_links || [],
-      sequence_order: lesson.sequence_order,
-      lesson_contents: lesson.lesson_contents || []
-    }
-  });
-
-  const { fields, append, remove, move, update } = useFieldArray({
-    control,
-    name: "lesson_contents"
-  });
-
-  const [newResourceLink, setNewResourceLink] = useState('');
+  const [editedLesson, setEditedLesson] = useState(lesson);
 
   useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
+    setEditedLesson(lesson);
+  }, [lesson]);
+
+  const handleLessonChange = (field, value) => {
+    setEditedLesson(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const addContent = () => {
+    const newContent = {
+      id: `content-${Date.now()}`,
+      subheading: '',
+      text: '',
+      fun_fact: '',
+      sequence_order: (editedLesson.lesson_contents?.length || 0) + 1,
+      image_file: null
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
+
+    setEditedLesson(prev => ({
+      ...prev,
+      lesson_contents: [...(prev.lesson_contents || []), newContent]
+    }));
+  };
+
+  const updateContent = (contentId, updatedContent) => {
+    setEditedLesson(prev => ({
+      ...prev,
+      lesson_contents: prev.lesson_contents.map(content =>
+        content.id === contentId ? updatedContent : content
+      )
+    }));
+  };
+
+  const removeContent = (contentId) => {
+    setEditedLesson(prev => ({
+      ...prev,
+      lesson_contents: prev.lesson_contents.filter(content => content.id !== contentId)
+    }));
+  };
 
   const addResourceLink = () => {
-    if (newResourceLink.trim() && isValidUrl(newResourceLink)) {
-      const updatedLesson = {
-        ...lesson,
-        resource_links: [...(lesson.resource_links || []), newResourceLink.trim()]
-      };
-      onSave(updatedLesson);
-      setNewResourceLink('');
+    const newLink = prompt('Enter resource link URL:');
+    if (newLink && newLink.trim()) {
+      setEditedLesson(prev => ({
+        ...prev,
+        resource_links: [...(prev.resource_links || []), newLink.trim()]
+      }));
     }
   };
 
   const removeResourceLink = (index) => {
-    const updatedLinks = [...lesson.resource_links];
-    updatedLinks.splice(index, 1);
-    const updatedLesson = {
-      ...lesson,
-      resource_links: updatedLinks
-    };
-    onSave(updatedLesson);
-  };
-
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const addContentSection = () => {
-    append({
-      id: `content-${Date.now()}`,
-      subheading: 'New Section',
-      text: '',
-      image_path: '',
-      fun_fact: '',
-      sequence_order: fields.length + 1
-    });
-  };
-
-  const moveContentSectionUp = (index) => {
-    if (index > 0) {
-      move(index, index - 1);
-    }
-  };
-
-  const moveContentSectionDown = (index) => {
-    if (index < fields.length - 1) {
-      move(index, index + 1);
-    }
-  };
-
-  const handleImageChange = (index, imageData) => {
-    const field = fields[index];
-    update(index, { ...field, image_path: imageData });
-  };
-
-  const onSubmit = (data) => {
-    const updatedContents = data.lesson_contents.map((content, index) => ({
-      ...content,
-      sequence_order: index + 1
+    setEditedLesson(prev => ({
+      ...prev,
+      resource_links: prev.resource_links.filter((_, i) => i !== index)
     }));
-
-    onSave({
-      ...data,
-      lesson_contents: updatedContents
-    });
   };
 
-  const backdropVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 }
-  };
-
-  const modalVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { delay: 0.1 } }
+  const handleSave = () => {
+    onSave(editedLesson);
   };
 
   return (
-    <motion.div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center overflow-y-auto py-8"
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      variants={backdropVariants}
-      onClick={onClose}
-    >
-      <motion.div
-        className="bg-white rounded-xl max-w-3xl w-full mx-4 my-auto"
-        variants={modalVariants}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-marine-blue-700">Edit Lesson: {lesson.title}</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[90vh] overflow-y-auto w-full mx-4">
+        <h2 className="text-2xl font-bold mb-4">Edit Lesson: {lesson.title}</h2>
+        
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Title</label>
+          <input
+            type="text"
+            value={editedLesson.title || ''}
+            onChange={(e) => handleLessonChange('title', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 max-h-[70vh] overflow-y-auto">
-          <div className="space-y-6">
-            {/* Basic Info */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3 text-marine-blue-600">Basic Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Title</label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    {...register("title", { required: "Title is required" })}
-                  />
-                  {errors.title && (
-                    <p className="text-error-600 text-sm mt-1">{errors.title.message}</p>
-                  )}
-                </div>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Content</label>
+          <textarea
+            value={editedLesson.content || ''}
+            onChange={(e) => handleLessonChange('content', e.target.value)}
+            rows="4"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                  <textarea
-                    rows="3"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    {...register("content")}
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            {/* Resource Links */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3 text-marine-blue-600">Resource Links</h3>
-              <div className="mb-3">
-                <div className="flex">
-                  <input
-                    type="text"
-                    value={newResourceLink}
-                    onChange={(e) => setNewResourceLink(e.target.value)}
-                    placeholder="Enter resource URL"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md"
-                  />
-                  <button
-                    type="button"
-                    onClick={addResourceLink}
-                    className="bg-marine-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-marine-blue-700 transition-colors"
-                  >
-                    Add
-                  </button>
-                </div>
-                {newResourceLink && !isValidUrl(newResourceLink) && (
-                  <p className="text-error-600 text-sm mt-1">Please enter a valid URL</p>
-                )}
-              </div>
-
-              {lesson.resource_links && lesson.resource_links.length > 0 ? (
-                <ul className="space-y-2">
-                  {lesson.resource_links.map((link, index) => (
-                    <li key={index} className="flex items-center bg-gray-50 p-2 rounded">
-                      <span className="flex-1 truncate text-blue-600">{link}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeResourceLink(index)}
-                        className="ml-2 text-error-600 hover:text-error-700"
-                      >
-                        ×
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 text-sm">No resource links added yet.</p>
-              )}
-            </div>
-
-            {/* Content Sections */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-lg font-semibold text-marine-blue-600">Content Sections</h3>
-                <button
-                  type="button"
-                  onClick={addContentSection}
-                  className="bg-space-purple-600 text-white px-3 py-1 rounded-md text-sm hover:bg-space-purple-700 transition-colors"
-                >
-                  + Add Section
-                </button>
-              </div>
-
-              {fields.length > 0 ? (
-                <div className="space-y-6">
-                  {fields.map((content, index) => (
-                    <div key={content.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                      <div className="flex justify-between items-center mb-3">
-                        <h4 className="font-medium text-space-purple-700">Section {index + 1}</h4>
-                        <div className="flex space-x-2">
-                          <button
-                            type="button"
-                            onClick={() => moveContentSectionUp(index)}
-                            disabled={index === 0}
-                            className={`${index === 0 ? 'text-gray-400' : 'text-gray-600 hover:text-space-purple-600'}`}
-                          >
-                            ↑
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => moveContentSectionDown(index)}
-                            disabled={index === fields.length - 1}
-                            className={`${index === fields.length - 1 ? 'text-gray-400' : 'text-gray-600 hover:text-space-purple-600'}`}
-                          >
-                            ↓
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="text-cosmic-red-600 hover:text-cosmic-red-700"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Subheading</label>
-                          <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                            {...register(`lesson_contents.${index}.subheading`, { required: "Subheading is required" })}
-                          />
-                          {errors.lesson_contents?.[index]?.subheading && (
-                            <p className="text-error-600 text-sm mt-1">{errors.lesson_contents[index].subheading.message}</p>
-                          )}
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Content Text</label>
-                          <textarea
-                            rows="3"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                            {...register(`lesson_contents.${index}.text`, { required: "Content text is required" })}
-                          ></textarea>
-                          {errors.lesson_contents?.[index]?.text && (
-                            <p className="text-error-600 text-sm mt-1">{errors.lesson_contents[index].text.message}</p>
-                          )}
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Section Image</label>
-                          <ImageUpload
-                            value={watch(`lesson_contents.${index}.image_path`)}
-                            onChange={(imageData) => handleImageChange(index, imageData)}
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Fun Fact</label>
-                          <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                            {...register(`lesson_contents.${index}.fun_fact`)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                  <p className="text-gray-500 mb-3">No content sections added yet.</p>
-                  <button
-                    type="button"
-                    onClick={addContentSection}
-                    className="bg-space-purple-600 text-white px-4 py-2 rounded-md hover:bg-space-purple-700 transition-colors"
-                  >
-                    Add First Section
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-end space-x-3 pt-6">
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-sm font-medium text-gray-700">Resource Links</label>
             <button
               type="button"
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
-              onClick={onClose}
+              onClick={addResourceLink}
+              className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn-primary"
-            >
-              Save Changes
+              Add Link
             </button>
           </div>
-        </form>
-      </motion.div>
-    </motion.div>
+          
+          {editedLesson.resource_links && editedLesson.resource_links.length > 0 ? (
+            <div className="space-y-2">
+              {editedLesson.resource_links.map((link, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    type="url"
+                    value={link}
+                    onChange={(e) => {
+                      const updatedLinks = [...editedLesson.resource_links];
+                      updatedLinks[index] = e.target.value;
+                      handleLessonChange('resource_links', updatedLinks);
+                    }}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                    placeholder="https://example.com"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeResourceLink(index)}
+                    className="px-3 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-sm">No resource links added yet.</p>
+          )}
+        </div>
+
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold">Lesson Contents</h3>
+            <button
+              onClick={addContent}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Add Content Section
+            </button>
+          </div>
+
+          {editedLesson.lesson_contents?.map((content) => (
+            <LessonContentEditor
+              key={content.id}
+              content={content}
+              onUpdate={(updatedContent) => updateContent(content.id, updatedContent)}
+              onRemove={removeContent}
+            />
+          ))}
+        </div>
+
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// LessonContentEditor component
+const LessonContentEditor = ({ content, onUpdate, onRemove }) => {
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(content.image_path || '');
+
+  const handleImageChange = (file) => {
+    setImageFile(file);
+    onUpdate({
+      ...content,
+      image_file: file
+    });
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setImagePreview(e.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFieldChange = (field, value) => {
+    onUpdate({
+      ...content,
+      [field]: value
+    });
+  };
+
+  return (
+    <div className="border p-4 rounded mb-2">
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Subheading</label>
+        <input
+          type="text"
+          value={content.subheading || ''}
+          onChange={(e) => handleFieldChange('subheading', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          placeholder="Enter subheading"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Text Content</label>
+        <textarea
+          value={content.text || ''}
+          onChange={(e) => handleFieldChange('text', e.target.value)}
+          rows="4"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          placeholder="Enter the main content text"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Fun Fact (Optional)</label>
+        <input
+          type="text"
+          value={content.fun_fact || ''}
+          onChange={(e) => handleFieldChange('fun_fact', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          placeholder="Add an interesting fun fact"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Content Image</label>
+        <ImageUpload
+          value={imagePreview}
+          onChange={handleImageChange}
+          acceptFiles={true}
+          className="mb-2"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Sequence Order</label>
+        <input
+          type="number"
+          value={content.sequence_order || 1}
+          onChange={(e) => handleFieldChange('sequence_order', parseInt(e.target.value))}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          min="1"
+        />
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => onRemove(content.id)}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        >
+          Remove Content
+        </button>
+      </div>
+    </div>
   );
 };
 
