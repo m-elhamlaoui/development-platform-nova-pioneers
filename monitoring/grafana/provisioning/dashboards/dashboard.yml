@@ -1,14 +1,26 @@
-# monitoring/grafana/provisioning/dashboards/dashboard.yml
 apiVersion: 1
 
 providers:
-  - name: 'Nova Pioneers Dashboards'
+  # Nova Pioneers Business Dashboards
+  - name: 'nova-pioneers'
     orgId: 1
     folder: 'Nova Pioneers'
-    folderUid: nova_pioneers_folder
+    folderUid: 'nova_pioneers_folder'
     type: file
     disableDeletion: false
-    updateIntervalSeconds: 10
+    updateIntervalSeconds: 30
     allowUiUpdates: true
     options:
-      path: /etc/grafana/provisioning/dashboards
+      path: /var/lib/grafana/dashboards/nova-pioneers
+
+  # Infrastructure and System Dashboards
+  - name: 'infrastructure'
+    orgId: 1
+    folder: 'Infrastructure'
+    folderUid: 'infrastructure_folder'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/infrastructure
