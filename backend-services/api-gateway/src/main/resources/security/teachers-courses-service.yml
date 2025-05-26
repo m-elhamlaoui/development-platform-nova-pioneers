@@ -37,3 +37,5 @@ paths:
   # Public teacher info
   - pattern: "/teachers-courses/api/teachers/*/public"
     authenticated: false
+
+
