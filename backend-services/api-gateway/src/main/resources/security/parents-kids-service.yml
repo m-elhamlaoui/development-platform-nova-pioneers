@@ -1,6 +1,6 @@
 # Security rules for parents-kids-service
 paths:
-  # User profile endpoints - any authenticated user
+  # User profile endpoints - any authenticated user can access their own profile
   - pattern: "/parents-kids/users/me"
     authenticated: true
 
@@ -8,68 +8,81 @@ paths:
   - pattern: "/parents-kids/parents/*/kids"
     roles: ["parent", "admin"]
     authenticated: true
+    methods: ["GET", "POST"]
 
   - pattern: "/parents-kids/parents/*/kids/*"
     roles: ["parent", "admin"]
     authenticated: true
+    methods: ["GET", "PUT", "DELETE"]
 
   - pattern: "/parents-kids/parents/*/kids/*/toggle-restriction"
     roles: ["parent", "admin"]
     authenticated: true
+    methods: ["PATCH"]
 
-  # Kid profile endpoints - kids, parents, and admins
+  # Kid profile endpoints - kids can access their own, parents can access their kids', admins can access all
   - pattern: "/parents-kids/kids/*/profile"
     roles: ["kid", "parent", "admin"]
     authenticated: true
+    methods: ["GET", "PUT"]
 
-  # Kid course access - kids, parents, and admins
+  # Kid course browsing - kids, parents, and admins
   - pattern: "/parents-kids/kids/*/courses"
     roles: ["kid", "parent", "admin"]
     authenticated: true
+    methods: ["GET"]
 
-  # Enrollment endpoints - kids, parents, and admins
+  # Course details - authenticated users only (not public as per documentation)
+  - pattern: "/parents-kids/courses/*"
+    authenticated: true
+    methods: ["GET"]
+
+  # Enrollment endpoints - kids can enroll themselves, parents can manage their kids' enrollments, admins can do both
   - pattern: "/parents-kids/kids/*/enrollments"
     roles: ["kid", "parent", "admin"]
     authenticated: true
+    methods: ["GET", "POST"]
 
   - pattern: "/parents-kids/kids/*/enrollments/*"
     roles: ["kid", "parent", "admin"]
     authenticated: true
+    methods: ["GET"]
 
   - pattern: "/parents-kids/kids/*/enrollments/*/progress"
     roles: ["kid", "parent", "admin"]
     authenticated: true
+    methods: ["PUT"]
 
   - pattern: "/parents-kids/kids/*/enrollments/*/complete"
     roles: ["kid", "parent", "admin"]
     authenticated: true
+    methods: ["PATCH"]
 
-  # Course details - public access
+  # Rating browsing - public access
   - pattern: "/parents-kids/courses/*/ratings"
     authenticated: false
+    methods: ["GET"]
 
   - pattern: "/parents-kids/courses/*/ratings/stats"
     authenticated: false
+    methods: ["GET"]
 
-  - pattern: "/parents-kids/courses/*"
-    authenticated: false
-
-  # Rating management - authenticated users
-  - pattern: "/parents-kids/courses/*/ratings/me"
-    authenticated: true
-
-  # Course rating creation - authenticated users
+  # Rating management - authenticated users only
   - pattern: "/parents-kids/courses/*/ratings"
     authenticated: true
     methods: ["POST"]
 
-  # Test endpoints - public
+  - pattern: "/parents-kids/courses/*/ratings/me"
+    authenticated: true
+    methods: ["PUT", "DELETE"]
+
+  # Test endpoints - public access
   - pattern: "/parents-kids/test"
     authenticated: false
 
   - pattern: "/parents-kids/parents-kids/test"
     authenticated: false
 
-  # Default for unmatched paths - require authentication
+  # Default fallback - require authentication for any unmatched paths
   - pattern: "/parents-kids/**"
     authenticated: true

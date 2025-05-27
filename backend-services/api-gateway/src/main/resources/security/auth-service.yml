@@ -1,31 +1,38 @@
 # Security rules for auth-service
 paths:
-  # Public authentication endpoints
-  - pattern: "/auth/signup/parent"
+  - pattern: "/signup/parent"
     authenticated: false
+    methods: ["POST"]
 
-  - pattern: "/auth/signup/teacher"
+  - pattern: "/signup/teacher"
     authenticated: false
+    methods: ["POST"]
 
+  # Public authentication endpoint - note: this becomes /auth/signin after gateway routing
   - pattern: "/auth/signin"
     authenticated: false
+    methods: ["POST"]
 
-  # Token validation endpoint - public for gateway use
-  - pattern: "/auth/token/validate"
+  # Token validation endpoint - public (used by API Gateway)
+  - pattern: "/token/validate"
     authenticated: false
+    methods: ["POST"]
 
-  # Token revocation requires authentication but any role can access
-  - pattern: "/auth/token/revoke"
+  # Token revocation - requires authentication (any authenticated user)
+  - pattern: "/token/revoke"
     authenticated: true
+    methods: ["POST"]
 
-  # Logout requires authentication but any role can access
+  # Logout endpoint - requires authentication (any authenticated user)
   - pattern: "/auth/logout"
     authenticated: true
+    methods: ["POST"]
 
-  # Test endpoint
-  - pattern: "/auth/api/test"
+  # Test endpoint - public for health checks
+  - pattern: "/api/test"
     authenticated: false
+    methods: ["GET"]
 
-  # Default deny for unmatched auth paths
-  - pattern: "/auth/**"
-    authenticated: false
+  # Default for unmatched paths - require authentication
+  - pattern: "/**"
+    authenticated: true

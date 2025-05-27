@@ -79,3 +79,4 @@ Response: `{"revoked": true}`
 - Teacher accounts require admin approval
 - Tokens expire after 24 hours
 - Login automatically invalidates all previous tokens
+
