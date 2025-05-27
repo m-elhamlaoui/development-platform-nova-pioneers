@@ -1,10 +1,15 @@
 # Security rules for admin-service
 paths:
   # Admin endpoints - only accessible by ADMIN role
-  - pattern: "/admin/**"
+  - pattern: "/admin/api/**"
     roles: ["admin"]
     authenticated: true
 
   # Test endpoint for health checks
   - pattern: "/admin/api/test"
     authenticated: false
+
+  # Default deny for unmatched admin paths
+  - pattern: "/admin/**"
+    roles: ["admin"]
+    authenticated: true

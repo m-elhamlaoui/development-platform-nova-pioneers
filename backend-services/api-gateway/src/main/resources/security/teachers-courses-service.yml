@@ -1,41 +1,146 @@
 # Security rules for teachers-courses-service
 paths:
-  # Teacher-specific endpoints
-  - pattern: "/teachers-courses/api/teachers/profile/**"
+  # Teacher management - authenticated users can view, only admins can create/modify
+  - pattern: "/teachers-courses/api/teachers"
+    authenticated: true
+    methods: ["GET"]
+
+  - pattern: "/teachers-courses/api/teachers/*"
+    authenticated: true
+    methods: ["GET"]
+
+  - pattern: "/teachers-courses/api/teachers"
+    roles: ["admin"]
+    authenticated: true
+    methods: ["POST"]
+
+  - pattern: "/teachers-courses/api/teachers/*"
     roles: ["teacher", "admin"]
     authenticated: true
+    methods: ["PUT"]
 
-  # Course management - only teachers and admins
-  - pattern: "/teachers-courses/api/courses/*/detailed"
-    roles: ["teacher", "admin", "parent", "kid"]
+  - pattern: "/teachers-courses/api/teachers/*/add-xp"
+    roles: ["admin"]
     authenticated: true
 
-  # Course creation/modification - only teachers and admins
-  - pattern: "/teachers-courses/api/courses/detailed"
-    roles: ["teacher", "admin"]
-    authenticated: true
-
-  # Course ratings - any authenticated user
-  - pattern: "/teachers-courses/api/courses/*/ratings"
-    authenticated: true
-
-  # Public course listing endpoints
+  # Course browsing - public access
   - pattern: "/teachers-courses/api/courses"
     authenticated: false
+    methods: ["GET"]
 
-  # Course search and filtering - public
   - pattern: "/teachers-courses/api/courses/search"
     authenticated: false
 
   - pattern: "/teachers-courses/api/courses/filter"
     authenticated: false
 
-  # All teachers listing - accessible by any authenticated user
-  - pattern: "/teachers-courses/api/teachers"
+  - pattern: "/teachers-courses/api/courses/*"
+    authenticated: false
+    methods: ["GET"]
+
+  # Course detailed view - requires authentication
+  - pattern: "/teachers-courses/api/courses/detailed"
+    authenticated: true
+    methods: ["GET"]
+
+  - pattern: "/teachers-courses/api/courses/*/detailed"
+    authenticated: true
+    methods: ["GET"]
+
+  - pattern: "/teachers-courses/api/courses/teacher/*"
     authenticated: true
 
-  # Public teacher info
-  - pattern: "/teachers-courses/api/teachers/*/public"
+  # Course creation/modification - teachers and admins only
+  - pattern: "/teachers-courses/api/courses"
+    roles: ["teacher", "admin"]
+    authenticated: true
+    methods: ["POST", "PUT"]
+
+  - pattern: "/teachers-courses/api/courses/detailed"
+    roles: ["teacher", "admin"]
+    authenticated: true
+    methods: ["POST", "PUT"]
+
+  - pattern: "/teachers-courses/api/courses/*"
+    roles: ["teacher", "admin"]
+    authenticated: true
+    methods: ["PUT", "DELETE"]
+
+  - pattern: "/teachers-courses/api/courses/*/detailed"
+    roles: ["teacher", "admin"]
+    authenticated: true
+    methods: ["PUT"]
+
+  - pattern: "/teachers-courses/api/courses/create-with-files"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  - pattern: "/teachers-courses/api/courses/test-upload"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  # Module management - teachers and admins only
+  - pattern: "/teachers-courses/api/courses/*/modules"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  - pattern: "/teachers-courses/api/courses/*/modules/*"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  # Lesson management - teachers and admins only
+  - pattern: "/teachers-courses/api/modules/*/lessons"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  - pattern: "/teachers-courses/api/modules/*/lessons/*"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  - pattern: "/teachers-courses/api/modules/courses/*/lessons"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  - pattern: "/teachers-courses/api/modules/courses/*/lessons/detailed"
+    roles: ["teacher", "admin"]
+    authenticated: true
+
+  # Rating browsing - public
+  - pattern: "/teachers-courses/api/courses/*/ratings"
+    authenticated: false
+    methods: ["GET"]
+
+  # Rating creation - authenticated users
+  - pattern: "/teachers-courses/api/courses/*/ratings"
+    authenticated: true
+    methods: ["POST"]
+
+  # Rating deletion - teachers and admins only
+  - pattern: "/teachers-courses/api/courses/*/ratings/*"
+    roles: ["teacher", "admin"]
+    authenticated: true
+    methods: ["DELETE"]
+
+  # File serving - public (images, course materials)
+  - pattern: "/teachers-courses/api/files/**"
     authenticated: false
 
+  # Debug endpoints - admin only
+  - pattern: "/teachers-courses/api/debug/config"
+    roles: ["admin"]
+    authenticated: true
 
+  - pattern: "/teachers-courses/api/debug/health"
+    authenticated: false
+
+  - pattern: "/teachers-courses/api/files/check-upload-dir"
+    roles: ["admin"]
+    authenticated: true
+
+  # Test endpoint - public
+  - pattern: "/teachers-courses/api/test"
+    authenticated: false
+
+  # Default for unmatched paths - require authentication
+  - pattern: "/teachers-courses/**"
+    authenticated: true
