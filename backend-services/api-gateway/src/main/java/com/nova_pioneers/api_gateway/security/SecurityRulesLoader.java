@@ -1,82 +1,75 @@
-package com.nova_pioneers.api_gateway.security;
+package com.nova_pioneers.api_gateway.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.nova_pioneers.api_gateway.model.SecurityRule;
-import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import jakarta.annotation.PostConstruct; // JAKARTA not javax
+import java.io.InputStream;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @Component
 public class SecurityRulesLoader {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityRulesLoader.class);
+
+    private Map<String, List<SecurityRule>> serviceRules = new HashMap<>();
     private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
-
-    // Service security rules
-    private final List<SecurityRule> allRules = new ArrayList<>();
-
-    // Security rule files to load
-    private static final String[] SECURITY_FILES = {
-            "security/admin-service.yml",
-            "security/auth-service.yml",
-            "security/parents-kids-service.yml",
-            "security/teachers-courses-service.yml"
-    };
 
     @PostConstruct
     public void loadSecurityRules() {
-        for (String securityFile : SECURITY_FILES) {
+        String[] services = {"admin-service", "auth-service", "parents-kids-service", "teachers-courses-service"};
+
+        for (String service : services) {
             try {
-                List<SecurityRule> rules = loadRulesFromYaml(securityFile);
-                allRules.addAll(rules);
-                logger.info("Loaded {} security rules from {}", rules.size(), securityFile);
-            } catch (IOException e) {
-                // Log warning but continue - missing files shouldn't crash the application
-                logger.warn("Could not load security rules from {}: {}", securityFile, e.getMessage());
+                String filename = "security/" + service + "-security.yml";
+                ClassPathResource resource = new ClassPathResource(filename);
+
+                if (resource.exists()) {
+                    InputStream inputStream = resource.getInputStream();
+                    Map<String, Object> data = yamlMapper.readValue(inputStream, Map.class);
+
+                    List<SecurityRule> rules = parseSecurityRules(data);
+                    serviceRules.put(service, rules);
+
+                    System.out.println("Loaded " + rules.size() + " security rules for " + service);
+                } else {
+                    System.out.println("Security rules file not found: " + filename);
+                }
+            } catch (Exception e) {
+                System.err.println("Error loading security rules for " + service + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
-
-        logger.info("Total security rules loaded: {}", allRules.size());
     }
 
-    /**
-     * Load security rules from a YAML file
-     */
-    private List<SecurityRule> loadRulesFromYaml(String path) throws IOException {
-        Resource resource = new ClassPathResource(path);
-
-        // Use Jackson to parse YAML
-        Map<String, Object> yamlMap = yamlMapper.readValue(resource.getInputStream(), HashMap.class);
-
+    @SuppressWarnings("unchecked")
+    private List<SecurityRule> parseSecurityRules(Map<String, Object> data) {
         List<SecurityRule> rules = new ArrayList<>();
 
-        // Parse paths section
-        if (yamlMap.containsKey("paths")) {
-            List<Map<String, Object>> paths = (List<Map<String, Object>>) yamlMap.get("paths");
+        if (data.containsKey("paths")) {
+            List<Map<String, Object>> paths = (List<Map<String, Object>>) data.get("paths");
 
-            for (Map<String, Object> pathConfig : paths) {
+            for (Map<String, Object> pathData : paths) {
                 SecurityRule rule = new SecurityRule();
-                rule.setPattern((String) pathConfig.get("pattern"));
 
-                if (pathConfig.containsKey("roles")) {
-                    rule.setRoles((List<String>) pathConfig.get("roles"));
+                rule.pattern = (String) pathData.get("pattern");
+                rule.authenticated = (Boolean) pathData.getOrDefault("authenticated", true);
+
+                // Handle roles
+                Object rolesObj = pathData.get("roles");
+                if (rolesObj instanceof List) {
+                    rule.roles = new HashSet<>((List<String>) rolesObj);
                 } else {
-                    rule.setRoles(new ArrayList<>());
+                    rule.roles = new HashSet<>();
                 }
 
-                if (pathConfig.containsKey("authenticated")) {
-                    rule.setAuthenticated((Boolean) pathConfig.get("authenticated"));
+                // Handle methods
+                Object methodsObj = pathData.get("methods");
+                if (methodsObj instanceof List) {
+                    rule.methods = new HashSet<>((List<String>) methodsObj);
+                } else {
+                    rule.methods = new HashSet<>(); // Empty means all methods
                 }
 
                 rules.add(rule);
@@ -86,46 +79,99 @@ public class SecurityRulesLoader {
         return rules;
     }
 
-    /**
-     * Check if a path requires authentication
-     */
-    public boolean requiresAuthentication(String path) {
-        for (SecurityRule rule : allRules) {
-            if (pathMatcher.match(rule.getPattern(), path)) {
-                return rule.isAuthenticated();
-            }
+    public boolean requiresAuthentication(String path, String method) {
+        String service = extractServiceFromPath(path);
+        List<SecurityRule> rules = serviceRules.get(service);
+
+        if (rules == null) {
+            return true;
         }
 
-        // Default: require authentication if no rule matches
+        SecurityRule matchingRule = findMatchingRule(rules, path, method);
+
+        if (matchingRule != null) {
+            return matchingRule.authenticated;
+        }
+
         return true;
     }
 
-    /**
-     * Check if a role is allowed to access a path
-     */
-    public boolean isAccessAllowed(String path, String role) {
-        if (role == null) {
+    public boolean isAccessAllowed(String path, String method, String userRole) {
+        String service = extractServiceFromPath(path);
+        List<SecurityRule> rules = serviceRules.get(service);
+
+        if (rules == null) {
             return false;
         }
 
-        for (SecurityRule rule : allRules) {
-            if (pathMatcher.match(rule.getPattern(), path)) {
-                // If path doesn't require authentication, allow access
-                if (!rule.isAuthenticated()) {
-                    return true;
-                }
+        SecurityRule matchingRule = findMatchingRule(rules, path, method);
 
-                // If no roles specified, any authenticated user can access
-                if (rule.getRoles() == null || rule.getRoles().isEmpty()) {
-                    return true;
-                }
+        if (matchingRule != null) {
+            if (matchingRule.roles.isEmpty()) {
+                return true;
+            }
 
-                // Check if user's role is in the allowed roles
-                return rule.getRoles().contains(role);
+            return matchingRule.roles.contains(userRole);
+        }
+
+        return false;
+    }
+
+    private String extractServiceFromPath(String path) {
+        if (path.startsWith("/admin")) {
+            return "admin-service";
+        } else if (path.startsWith("/auth")) {
+            return "auth-service";
+        } else if (path.startsWith("/parents-kids")) {
+            return "parents-kids-service";
+        } else if (path.startsWith("/teachers-courses")) {
+            return "teachers-courses-service";
+        }
+
+        return "unknown";
+    }
+
+    private SecurityRule findMatchingRule(List<SecurityRule> rules, String path, String method) {
+        SecurityRule bestMatch = null;
+        int bestMatchScore = -1;
+
+        for (SecurityRule rule : rules) {
+            if (pathMatches(rule.pattern, path) && methodMatches(rule.methods, method)) {
+                int score = calculateSpecificityScore(rule.pattern);
+
+                if (score > bestMatchScore) {
+                    bestMatch = rule;
+                    bestMatchScore = score;
+                }
             }
         }
 
-        // Default: deny access if no rule matches
-        return false;
+        return bestMatch;
+    }
+
+    private boolean pathMatches(String pattern, String path) {
+        String regex = pattern
+                .replace("**", ".*")
+                .replace("*", "[^/]*");
+
+        return Pattern.matches(regex, path);
+    }
+
+    private boolean methodMatches(Set<String> allowedMethods, String method) {
+        return allowedMethods.isEmpty() || allowedMethods.contains(method);
+    }
+
+    private int calculateSpecificityScore(String pattern) {
+        int score = 0;
+        score += pattern.length();
+        score -= pattern.split("\\*").length * 10;
+        return score;
+    }
+
+    private static class SecurityRule {
+        String pattern;
+        boolean authenticated;
+        Set<String> roles = new HashSet<>();
+        Set<String> methods = new HashSet<>();
     }
 }
