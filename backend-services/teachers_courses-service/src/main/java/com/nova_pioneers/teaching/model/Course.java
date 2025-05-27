@@ -22,11 +22,10 @@ public class Course {
     private Long id;
 
     @NotBlank(message = "Course title is required")
-    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
+
     private String title;
 
     @NotBlank(message = "Course description is required")
-    @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
     private String description;
 
     @Column(name = "thumbnail_path")
@@ -47,12 +46,9 @@ public class Course {
     private Integer xpValue;
 
     @Column(name = "size_category")
-    @Pattern(regexp = "^[SML]$", message = "Size category must be S, M, or L")
     private String sizeCategory;
 
     @Column(name = "recommended_age")
-    @Min(value = 4, message = "Minimum recommended age is 4")
-    @Max(value = 18, message = "Maximum recommended age is 18")
     private Integer recommendedAge;
 
     @Column(name = "is_active")
