@@ -42,7 +42,7 @@ Our mission is to democratize space education and inspire the next generation of
 - Provide parents with oversight of their children's learning progress
 
 ### 1.4 Use Case Diagram
-![Use case diagram](Report/images/usecase.png)
+![Use case diagram](Report/images/usecase2.svg)
 ## 2. Platform Overview
 
 ### 2.1 Key Features
@@ -69,19 +69,27 @@ The platform employs a microservices architecture with distinct services handlin
 
 ### 3.2 Microservices Breakdown
 
-#### API Gateway
-The API Gateway serves as the single entry point for all client requests, handling routing, load balancing, and security filters. It uses Spring Cloud Gateway to direct traffic to appropriate microservices based on URL paths.
+[//]: # (#### API Gateway)
 
-![API Gateway Architecture](Report/images/gateway.svg)
+[//]: # (The API Gateway serves as the single entry point for all client requests, handling routing, load balancing, and security filters. It uses Spring Cloud Gateway to direct traffic to appropriate microservices based on URL paths.)
 
-Key components:
-- Route predicate factory for path-based service routing
-- JWT authentication filter for token validation
-- CORS filter for cross-origin requests
-- Rate limiting for preventing abuse
+[//]: # (![API Gateway Architecture]&#40;Report/images/gateway.svg&#41;)
 
-#### Auth Service
-The authentication service manages user registration, login, and security token management. It handles both parent and teacher registration flows, including document verification for teachers.
+[//]: # ()
+[//]: # (Key components:)
+
+[//]: # (- Route predicate factory for path-based service routing)
+
+[//]: # (- JWT authentication filter for token validation)
+
+[//]: # (- CORS filter for cross-origin requests)
+
+[//]: # (- Rate limiting for preventing abuse)
+
+[//]: # ()
+[//]: # (#### Auth Service)
+
+[//]: # (The authentication service manages user registration, login, and security token management. It handles both parent and teacher registration flows, including document verification for teachers.)
 
 ![Auth Service Architecture](Report/images/auth.svg)
 
@@ -186,11 +194,16 @@ Key components:
 - **React Router** for client-side routing
 - **Vite** for frontend build and development
 
+
 ### 4.3 DevOps Tools
-- **Docker** for containerization
-- **Docker Compose** for multi-container orchestration
-- **Maven** for Java dependency management and build
-- **npm** for JavaScript dependency management
+- **Docker**: Used for containerization.
+- **Docker Compose**: Used for multi-container orchestration.
+- **Maven**: Used for Java dependency management and build automation.
+- **npm**: Used for JavaScript dependency management.
+- **Ansible**: Used to prepare the Oracle Cloud Infrastructure virtual machine for deployment.
+- **Prometheus and Grafana**: Used for monitoring.
+- **GitHub Actions**: Used for CI/CD pipelines.
+
 
 ### 4.4 External APIs
 - **NASA APIs**: Integration with Astronomy Picture of the Day (APOD) and other space data sources
@@ -200,8 +213,7 @@ Key components:
 ### 5.1 Development Workflow
 The project employs a feature-branch Git workflow with code reviews before merging to the main branch. The microservices architecture allows for parallel development across different system components.
 
-### 5.2 Code Quality Measures
-- Consistent code style across services
-- Comprehensive exception handling
-- Service-specific error handling
-- Containerized development environments for consistency
+
+
+
+
