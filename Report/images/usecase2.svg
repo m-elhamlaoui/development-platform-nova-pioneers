@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="726px" preserveAspectRatio="none" style="width:1958px;height:726px;background:#FFFFFF;" version="1.1" viewBox="0 0 1958 726" width="1958px" zoomAndPan="magnify"><defs/><g><rect fill="#FFFFFF" height="112.4375" id="_title" style="stroke:#FFFFFF;stroke-width:0.0;" width="508" x="720.75" y="10"/><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="498" x="725.75" y="35.4209">Nova Pioneers Space Learning Platform</text><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="227" x="861.25" y="61.0303">Use Case Diagram</text><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="8" x="970.75" y="86.6396"> </text><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="8" x="970.75" y="112.249"> </text><!--MD5=[c8fa3547d5a6f7ce592bf775c61917d9]
+cluster Nova Pioneers Platform--><g id="cluster_Nova Pioneers Platform"><rect fill="#FFFFFF" height="457.5" rx="2.5" ry="2.5" style="stroke:#000080;stroke-width:1.0;" width="1596" x="12" y="257.4375"/><text fill="#000000" font-family="Verdana" font-size="22" font-weight="bold" lengthAdjust="spacing" textLength="296" x="662" y="279.8584">Nova Pioneers Platform</text></g><g id="elem_Register"><ellipse cx="108.1963" cy="507.8768" fill="#F0F8FF" rx="80.1963" ry="18.4393" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="119" x="47.1039" y="511.2354">Register Account</text></g><g id="elem_CreateProfile"><ellipse cx="302.8735" cy="507.7122" fill="#F0F8FF" rx="79.3735" ry="18.2747" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="117" x="242.4676" y="511.1623">Create Kid Profile</text></g><g id="elem_Monitor"><ellipse cx="497.7839" cy="507.7943" fill="#F0F8FF" rx="79.7839" ry="18.3568" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="118" x="437.0356" y="511.1988">Monitor Progress</text></g><g id="elem_ViewReports"><ellipse cx="567.8288" cy="328.2033" fill="#F0F8FF" rx="69.3288" ry="16.2658" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="91" x="519.3288" y="331.9508">View Reports</text></g><g id="elem_Browse"><ellipse cx="965.1551" cy="328.4685" fill="#F0F8FF" rx="78.1551" ry="18.031" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="114" x="905.7659" y="332.0541">Browse Courses</text></g><g id="elem_Complete"><ellipse cx="710.0452" cy="508.032" fill="#F0F8FF" rx="97.0452" ry="49.0945" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="121" x="649.5452" y="486.4334">Complete Course</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="4" x="708.0452" y="502.7303"> </text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="115" x="652.5452" y="519.0271">Extension points</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="84" x="668.0452" y="535.324">Rate course</text></g><g id="elem_ViewAPOD"><ellipse cx="751.8735" cy="328.2122" fill="#F0F8FF" rx="79.3735" ry="18.2747" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="117" x="691.4676" y="331.6623">View NASA APOD</text></g><g id="elem_EarnXP"><ellipse cx="1077.1379" cy="676.9651" fill="#F0F8FF" rx="83.1379" ry="19.0276" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="126" x="1013.5914" y="679.9969">Earn XP &amp; Badges</text></g><g id="elem_CreateContent"><ellipse cx="1180.8356" cy="508.032" fill="#F0F8FF" rx="145.8356" ry="49.0945" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="190" x="1085.8356" y="486.4334">Create Educational Content</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="4" x="1178.8356" y="502.7303"> </text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="115" x="1123.3356" y="519.0271">Extension points</text><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="125" x="1118.3356" y="535.324">Submit verification</text></g><g id="elem_SubmitDocs"><ellipse cx="1438.1802" cy="328.2735" fill="#F0F8FF" rx="122.1802" ry="26.836" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="212" x="1332.1802" y="331.1202">Submit Verification Documents</text></g><g id="elem_RateCourse"><ellipse cx="1175.0233" cy="328.3422" fill="#F0F8FF" rx="67.5233" ry="15.9047" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="86" x="1129.0233" y="332.0897">Rate Course</text></g><g id="elem_ApproveTeacher"><ellipse cx="1477.1614" cy="507.8698" fill="#F0F8FF" rx="115.1614" ry="25.4323" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="197" x="1378.6614" y="510.7165">Approve Teacher Verification</text></g><g id="elem_ManageUsers"><ellipse cx="1477.211" cy="676.8797" fill="#F0F8FF" rx="97.711" ry="21.9422" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="159" x="1397.711" y="679.7264">Manage Platform Users</text></g><g id="elem_Auth"><ellipse cx="399.788" cy="676.7951" fill="#F0F8FF" rx="82.288" ry="18.8576" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="124" x="336.9505" y="679.9213">Authenticate User</text></g><g id="elem_AccessNASA"><ellipse cx="920.9652" cy="508.1305" fill="#F0F8FF" rx="78.9652" ry="18.193" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="116" x="860.9" y="511.6261">Access NASA API</text></g><!--MD5=[174d9f225ba2a322a43f0f82f3551ccd]
+entity Parent--><g id="elem_Parent"><ellipse cx="339" cy="142.4375" fill="#F5F5F5" rx="8" ry="8" style="stroke:#000000;stroke-width:1.0;"/><path d="M339,150.4375 L339,177.4375 M326,158.4375 L352,158.4375 M339,177.4375 L326,192.4375 M339,177.4375 L352,192.4375 " fill="none" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="45" x="316.5" y="207.4326">Parent</text></g><!--MD5=[162803e9e58f22a9ef1262f1a1a64c41]
+entity Kid--><g id="elem_Kid"><ellipse cx="752" cy="142.4375" fill="#F5F5F5" rx="8" ry="8" style="stroke:#000000;stroke-width:1.0;"/><path d="M752,150.4375 L752,177.4375 M739,158.4375 L765,158.4375 M752,177.4375 L739,192.4375 M752,177.4375 L765,192.4375 " fill="none" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="21" x="741.5" y="207.4326">Kid</text></g><!--MD5=[e64da02f5594507ded6bc1fdafafe102]
+entity Teacher--><g id="elem_Teacher"><ellipse cx="1671" cy="142.4375" fill="#F5F5F5" rx="8" ry="8" style="stroke:#000000;stroke-width:1.0;"/><path d="M1671,150.4375 L1671,177.4375 M1658,158.4375 L1684,158.4375 M1671,177.4375 L1658,192.4375 M1671,177.4375 L1684,192.4375 " fill="none" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="57" x="1642.5" y="207.4326">Teacher</text></g><!--MD5=[97ab183161fd5d1db7fba7485cf76add]
+entity Admin--><g id="elem_Admin"><ellipse cx="1930" cy="298.9375" fill="#F5F5F5" rx="8" ry="8" style="stroke:#000000;stroke-width:1.0;"/><path d="M1930,306.9375 L1930,333.9375 M1917,314.9375 L1943,314.9375 M1930,333.9375 L1917,348.9375 M1930,333.9375 L1943,348.9375 " fill="none" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="43" x="1908.5" y="363.9326">Admin</text></g><g id="elem_GMN175"><path d="M1624.5,633.9375 L1624.5,719.6016 L1759.5,719.6016 L1759.5,643.9375 L1749.5,633.9375 L1624.5,633.9375 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><path d="M1749.5,633.9375 L1749.5,643.9375 L1759.5,643.9375 L1749.5,633.9375 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="87" x="1630.5" y="651.0044">*XP System:*</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="91" x="1630.5" y="666.1372">0-199: Newbie</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="113" x="1630.5" y="681.27">200-499: Explorer</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="113" x="1630.5" y="696.4028">500-999: Inventor</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="114" x="1630.5" y="711.5356">1000+: Astronaut</text></g><g id="elem_GMN178"><path d="M1624.5,292.9375 L1624.5,363.4688 L1797.5,363.4688 L1797.5,302.9375 L1787.5,292.9375 L1624.5,292.9375 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><path d="M1787.5,292.9375 L1787.5,302.9375 L1797.5,302.9375 L1787.5,292.9375 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="152" x="1630.5" y="310.0044">*Required Documents:*</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="143" x="1630.5" y="325.1372">• Teaching credentials</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="129" x="1630.5" y="340.27">• Background check</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="132" x="1630.5" y="355.4028">• Identity verification</text></g><!--MD5=[90d623ce0329e6b7c84a00b9dd825fc4]
+link Parent to Register--><g id="link_Parent_Register"><path d="M316.43,205.5675 C269.52,273.3975 162.56,428.0575 123.04,485.1975 " fill="none" id="Parent-to-Register" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="120.09,489.4575,128.497,484.327,122.9323,485.344,121.9154,479.7793,120.09,489.4575" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[346499eb919e5345f6a545c496540f9b]
+link Parent to CreateProfile--><g id="link_Parent_CreateProfile"><path d="M334.94,210.5975 C327.42,280.3475 311.55,427.6375 305.45,484.1775 " fill="none" id="Parent-to-CreateProfile" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="304.89,489.3575,309.8433,480.8449,305.4328,484.387,301.8906,479.9765,304.89,489.3575" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[7a8836000d2fed6c8452860ebb938d45]
+link Parent to Monitor--><g id="link_Parent_Monitor"><path d="M356.93,210.5975 C390.2,280.4875 460.53,428.2375 487.33,484.5175 " fill="none" id="Parent-to-Monitor" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="489.63,489.3575,489.3841,479.5117,487.4859,484.8406,482.157,482.9423,489.63,489.3575" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[f6d57ae96118d88dffd0fbba303447c9]
+link Parent to ViewReports--><g id="link_Parent_ViewReports"><path d="M361.79,188.3175 C404.54,217.1575 496.48,279.1875 541.74,309.7175 " fill="none" id="Parent-to-ViewReports" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="545.97,312.5775,540.7334,304.2362,541.8208,309.7875,536.2694,310.8749,545.97,312.5775" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[30d72640cee7a4672e6a9c747d2e5b39]
+link Kid to Browse--><g id="link_Kid_Browse"><path d="M766.31,183.3175 C801.46,208.8075 892.5,274.8475 938.12,307.9375 " fill="none" id="Kid-to-Browse" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="942.39,311.0375,937.4479,302.5184,938.3408,308.1043,932.7548,308.9971,942.39,311.0375" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[714b6eadf277466d42722f5dfd71788a]
+link Kid to Complete--><g id="link_Kid_Complete"><path d="M737.81,176.9475 C682.05,192.6875 481,249.4375 481,249.4375 C481,249.4375 481,366.9375 481,366.9375 C481,366.9375 512,428.9375 512,428.9375 C512,428.9375 596,458.9375 596,458.9375 C596,458.9375 611.53,465.4775 631.13,473.7275 " fill="none" id="Kid-to-Complete" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="636.19,475.8575,629.4475,468.6784,631.5818,473.9172,626.3431,476.0515,636.19,475.8575" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[081ef6c0498f0f24d1374d4e16fda9aa]
+link Kid to ViewAPOD--><g id="link_Kid_ViewAPOD"><path d="M752,210.7275 C752,240.0875 752,279.8375 752,304.5475 " fill="none" id="Kid-to-ViewAPOD" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="752,309.5775,756,300.5775,752,304.5775,748,300.5775,752,309.5775" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[f02476fbdf7b60324f249b7bf2715c3a]
+link Teacher to CreateContent--><g id="link_Teacher_CreateContent"><path d="M1699.79,188.2375 C1741.82,210.5575 1815,249.4375 1815,249.4375 C1815,249.4375 1815,366.9375 1815,366.9375 C1815,366.9375 1345,458.9375 1345,458.9375 C1345,458.9375 1322.86,465.4175 1294.85,473.6175 " fill="none" id="Teacher-to-CreateContent" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="1289.93,475.0575,1299.69,476.3775,1294.73,473.6575,1297.45,468.6975,1289.93,475.0575" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[c312edd0dcf2633126a053d8acdb8ba4]
+link Teacher to RateCourse--><g id="link_Teacher_RateCourse"><path d="M1642.43,178.8175 C1555.32,196.7275 1299,249.4375 1299,249.4375 C1299,249.4375 1238.23,287.6675 1201.77,310.5975 " fill="none" id="Teacher-to-RateCourse" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="1197.46,313.3075,1207.2086,311.9059,1201.6936,310.6472,1202.9522,305.1322,1197.46,313.3075" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[a964efa6f3ddfb1006e3b3afb83f85b5]
+link Admin to ApproveTeacher--><g id="link_Admin_ApproveTeacher"><path d="M1908.34,365.3575 C1891.15,393.8575 1870,428.9375 1870,428.9375 C1870,428.9375 1681.88,466.2775 1565.95,489.2875 " fill="none" id="Admin-to-ApproveTeacher" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="1560.83,490.2975,1570.4348,492.4763,1565.7351,489.3279,1568.8835,484.6281,1560.83,490.2975" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[fc26a642b145b4db76a180c106645d8f]
+link Admin to ManageUsers--><g id="link_Admin_ManageUsers"><path d="M1920.17,367.0575 C1912.81,395.2275 1904,428.9375 1904,428.9375 C1904,428.9375 1621.02,592.6275 1515.8,653.4975 " fill="none" id="Admin-to-ManageUsers" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="#000000" points="1511.22,656.1375,1521.0115,655.0759,1515.5435,653.6261,1516.9933,648.1582,1511.22,656.1375" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[b9871e403147072021c0e71bf399ee42]
+link Register to Auth--><g id="link_Register_Auth"><path d="M135.87,525.4875 C181.71,552.7075 268,603.9375 268,603.9375 C268,603.9375 325.61,635.3575 364.71,656.6875 " fill="none" id="Register-to-Auth" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="369.38,659.2375,363.3854,651.4231,364.9878,656.8483,359.5626,658.4506,369.38,659.2375" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="269" y="600.0044">«include»</text></g><!--MD5=[3c57a06ef12d360d76986d89f9d5279e]
+link CreateProfile to Auth--><g id="link_CreateProfile_Auth"><path d="M310.89,526.3575 C323.3,553.7875 346,603.9375 346,603.9375 C346,603.9375 367.67,632.8375 383.56,654.0175 " fill="none" id="CreateProfile-to-Auth" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="386.65,658.1375,384.45,648.5375,383.65,654.1375,378.05,653.3375,386.65,658.1375" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="347" y="600.0044">«include»</text></g><!--MD5=[8dbbbdf065f9deff7c5ffabeab8a26e4]
+link Monitor to Auth--><g id="link_Monitor_Auth"><path d="M487.7,526.4975 C469.78,557.0275 432.9,619.8675 413.16,653.5075 " fill="none" id="Monitor-to-Auth" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="410.61,657.8575,418.6259,652.1351,413.1488,653.55,411.7339,648.073,410.61,657.8575" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="453" y="600.0044">«include»</text></g><!--MD5=[b553a49cb326d0ac4c4df5e41297ea37]
+link CreateContent to Auth--><g id="link_CreateContent_Auth"><path d="M1091.9,546.8975 C1029.79,573.3575 958,603.9375 958,603.9375 C958,603.9375 627.85,646.5375 475.45,666.1975 " fill="none" id="CreateContent-to-Auth" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="470.11,666.8875,479.5497,669.6968,475.0685,666.2445,478.5208,661.7633,470.11,666.8875" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="996" y="600.0044">«include»</text></g><!--MD5=[8938ec3913c506b7138cb6b9f745f9a1]
+link Complete to EarnXP--><g id="link_Complete_EarnXP"><path d="M776.37,543.7775 C828.03,570.8875 891,603.9375 891,603.9375 C891,603.9375 976.69,637.1075 1031.74,658.4175 " fill="none" id="Complete-to-EarnXP" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="1036.64,660.3175,1029.6873,653.3419,1031.9762,658.5149,1026.8032,660.8039,1036.64,660.3175" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="892" y="600.0044">«include»</text></g><!--MD5=[4088122069ffb661a29bfa7291e2fa64]
+link ViewAPOD to AccessNASA--><g id="link_ViewAPOD_AccessNASA"><path d="M746.22,347.1675 C739.7,367.1675 730,396.9375 730,396.9375 C730,396.9375 730,428.9375 730,428.9375 C730,428.9375 825,458.9375 825,458.9375 C825,458.9375 857.89,475.3775 885.16,489.0175 " fill="none" id="ViewAPOD-to-AccessNASA" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="889.83,491.3575,883.5593,483.7629,885.355,489.1272,879.9907,490.9229,889.83,491.3575" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="731" y="417.5044">«include»</text></g><!--MD5=[6b39418d554f602badf64ab8ed3723a2]
+link Browse to AccessNASA--><g id="link_Browse_AccessNASA"><path d="M964.83,346.7675 C964.54,375.2775 964,428.9375 964,428.9375 C964,428.9375 945.52,462.4575 932.79,485.5475 " fill="none" id="Browse-to-AccessNASA" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="930.33,490.0175,938.1744,484.0622,932.7412,485.6373,931.1661,480.2042,930.33,490.0175" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="61" x="965" y="417.5044">«include»</text></g><!--MD5=[89f7ee670ade243326eebc23563168fd]
+link RateCourse to Complete--><g id="link_RateCourse_Complete"><path d="M1137.36,341.8175 C1104.15,352.7475 1061,366.9375 1061,366.9375 C1061,366.9375 829,396.9375 829,396.9375 C829,396.9375 797,428.9375 797,428.9375 C797,428.9375 779.78,444.3775 760.66,461.5175 " fill="none" id="RateCourse-to-Complete" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="756.81,464.9675,766.1877,461.9578,760.5399,461.6377,760.8601,455.9899,756.81,464.9675" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="60" x="862.5" y="410.0044">«extend»</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="125" x="830" y="425.1372">[course completed]</text></g><!--MD5=[2c550ae8aa3ffa07545dcbda90984a61]
+link ViewReports to Monitor--><g id="link_ViewReports_Monitor"><path d="M558.49,345.0975 C546.38,365.0375 527,396.9375 527,396.9375 C527,396.9375 512.45,452.1075 503.97,484.3075 " fill="none" id="ViewReports-to-Monitor" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="502.66,489.2675,508.8143,481.5782,503.9297,484.4314,501.0765,479.5468,502.66,489.2675" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="60" x="578.5" y="410.0044">«extend»</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="161" x="528" y="425.1372">[detailed view requested]</text></g><!--MD5=[21230469054fdb8024d059ba8b2052a8]
+link SubmitDocs to CreateContent--><g id="link_SubmitDocs_CreateContent"><path d="M1401.99,354.3075 C1362.15,381.8175 1297.08,426.7675 1247.84,460.7775 " fill="none" id="SubmitDocs-to-CreateContent" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="1243.73,463.6175,1253.4125,461.8149,1247.8502,460.7849,1248.8803,455.2226,1243.73,463.6175" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="60" x="1371" y="410.0044">«extend»</text><text fill="#000000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="120" x="1341" y="425.1372">[first time teacher]</text></g><!--MD5=[73d8a88f826434010d44e578f0b59652]
+link CreateProfile to ManageUsers--><g id="link_CreateProfile_ManageUsers"><path d="M335.3,524.9175 C363.52,538.8875 400,556.9375 400,556.9375 C400,556.9375 1066,586.9375 1066,586.9375 C1066,586.9375 1268.2,630.7175 1388.95,656.8675 " fill="none" id="CreateProfile-to-ManageUsers" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="none" points="1390.6,650.0675,1408.67,661.1375,1387.64,663.7475,1390.6,650.0675" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[816a6daef744e71c7c084182f64a561b]
+link ApproveTeacher to ManageUsers--><g id="link_ApproveTeacher_ManageUsers"><path d="M1477,533.5775 C1477,560.1375 1477,602.8575 1477,634.5775 " fill="none" id="ApproveTeacher-to-ManageUsers" style="stroke:#000000;stroke-width:1.5;"/><polygon fill="none" points="1484,634.8975,1477,654.8975,1470,634.8975,1484,634.8975" style="stroke:#000000;stroke-width:1.5;"/></g><!--MD5=[7b58d4e0985068c5120553728922c8b0]
+link EarnXP to GMN175--><g id="link_EarnXP_GMN175"><path d="M1131.08,662.3675 C1218.09,638.9275 1379.5,595.4375 1379.5,595.4375 C1379.5,595.4375 1590.5,595.4375 1590.5,595.4375 C1590.5,595.4375 1613.93,614.2475 1638.28,633.7975 " fill="none" id="EarnXP-GMN175" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/></g><!--MD5=[9f6c9adc20d1f97f6e7716383a8aa4ed]
+link GMN178 to SubmitDocs--><g id="link_GMN178_SubmitDocs"><path d="M1624.39,328.4375 C1621.61,328.4375 1620,328.4375 1620,328.4375 C1620,328.4375 1586.42,328.4375 1560.06,328.4375 " fill="none" id="GMN178-SubmitDocs" style="stroke:#000000;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/></g><!--MD5=[ab0b82c1e976b0e0b27936c09ec28556]
+@startuml
+!theme plain
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor #F0F8FF
+skinparam actorBackgroundColor #F5F5F5
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #000080
+skinparam arrowThickness 1.5
+skinparam linetype polyline
+
+title Nova Pioneers Space Learning Platform\nUse Case Diagram\n\n
+
+' Actors
+actor "Parent" as Parent
+actor "Kid" as Kid
+actor "Teacher" as Teacher
+actor "Admin" as Admin
+
+' System boundary
+package "Nova Pioneers Platform" {
+
+  ' Use cases with extension points where needed
+  usecase "Register Account" as Register
+  usecase "Create Kid Profile" as CreateProfile
+  usecase "Monitor Progress" as Monitor
+  usecase "View Reports" as ViewReports
+
+  usecase "Browse Courses" as Browse
+  usecase "Complete Course\n\nExtension points\nRate course" as Complete
+  usecase "View NASA APOD" as ViewAPOD
+  usecase "Earn XP & Badges" as EarnXP
+
+  usecase "Create Educational Content\n\nExtension points\nSubmit verification" as CreateContent
+  usecase "Submit Verification Documents" as SubmitDocs
+  usecase "Rate Course" as RateCourse
+
+  usecase "Approve Teacher Verification" as ApproveTeacher
+  usecase "Manage Platform Users" as ManageUsers
+
+  ' System use cases
+  usecase "Authenticate User" as Auth
+  usecase "Access NASA API" as AccessNASA
+
+}
+
+' Actor associations
+Parent - -> Register
+Parent - -> CreateProfile
+Parent - -> Monitor
+Parent - -> ViewReports
+
+Kid - -> Browse
+Kid - -> Complete
+Kid - -> ViewAPOD
+
+Teacher - -> CreateContent
+Teacher - -> RateCourse
+
+Admin - -> ApproveTeacher
+Admin - -> ManageUsers
+
+' Include relationships (mandatory)
+Register ..> Auth : <<include>>
+CreateProfile ..> Auth : <<include>>
+Monitor ..> Auth : <<include>>
+CreateContent ..> Auth : <<include>>
+Complete ..> EarnXP : <<include>>
+ViewAPOD ..> AccessNASA : <<include>>
+Browse ..> AccessNASA : <<include>>
+
+' Extend relationships (optional) - proper direction
+RateCourse ..> Complete : <<extend>>\n[course completed]
+ViewReports ..> Monitor : <<extend>>\n[detailed view requested]
+SubmitDocs ..> CreateContent : <<extend>>\n[first time teacher]
+
+' Generalization
+CreateProfile - -|> ManageUsers
+ApproveTeacher - -|> ManageUsers
+
+' Notes
+note right of EarnXP
+  *XP System:*
+  0-199: Newbie
+  200-499: Explorer
+  500-999: Inventor
+  1000+: Astronaut
+end note
+
+note left of SubmitDocs
+  *Required Documents:*
+  • Teaching credentials
+  • Background check
+  • Identity verification
+end note
+@enduml
+
+@startuml
+
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor white
+    FontColor black
+    FontName Verdana
+    HyperLinkColor blue
+    LineColor black
+    LineThickness 1
+    Margin 5
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  header {
+    LineThickness 0
+  }
+  node {
+    MaximumWidth 300
+  }
+  title {
+    FontSize 22
+    LineThickness 0
+  }
+</style>
+
+skinparam ArrowLollipopColor black
+skinparam BackgroundColor white
+skinparam DefaultFontName Verdana
+skinparam DefaultMonospacedFontName Courier
+skinparam LifelineStrategy nosolid
+skinparam ParticipantPadding 10
+skinparam SequenceLifeLineBorderColor black
+skinparam Shadowing false
+skinparam UseBetaStyle true
+
+skinparam Activity {
+  BackgroundColor white
+  BarColor black
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam Boundary {
+  FontColor black
+}
+skinparam Box {
+  Padding 5
+}
+skinparam CircledCharacter {
+  FontColor black
+  FontName Courier
+  Radius 9
+}
+skinparam Class {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassAttribute {
+  FontColor black
+  FontName Verdana
+}
+skinparam ClassStereotype {
+  FontColor black
+  FontName Verdana
+}
+skinparam Footer {
+  FontColor black
+  FontName Verdana
+}
+skinparam Header {
+  FontColor black
+  FontName Verdana
+}
+skinparam Hyperlink {
+  Color blue
+}
+skinparam IconPackage {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPrivate {
+  Color black
+  BackgroundColor white
+}
+skinparam IconProtected {
+  Color black
+  BackgroundColor white
+}
+skinparam IconPublic {
+  Color black
+  BackgroundColor white
+}
+skinparam Note {
+  FontColor black
+  FontName Verdana
+}
+skinparam Object {
+  BorderColor black
+}
+skinparam Package {
+  BorderColor black
+  FontColor black
+  FontName Verdana
+}
+skinparam State {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeA {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeC {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeE {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeI {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam StereotypeN {
+  BackgroundColor white
+  BorderColor black
+}
+skinparam UseCaseStereoType {
+  FontColor black
+  FontName Verdana
+}
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor #F0F8FF
+skinparam actorBackgroundColor #F5F5F5
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #000080
+skinparam arrowThickness 1.5
+skinparam linetype polyline
+
+title Nova Pioneers Space Learning Platform\nUse Case Diagram\n\n
+
+actor "Parent" as Parent
+actor "Kid" as Kid
+actor "Teacher" as Teacher
+actor "Admin" as Admin
+
+package "Nova Pioneers Platform" {
+
+  usecase "Register Account" as Register
+  usecase "Create Kid Profile" as CreateProfile
+  usecase "Monitor Progress" as Monitor
+  usecase "View Reports" as ViewReports
+
+  usecase "Browse Courses" as Browse
+  usecase "Complete Course\n\nExtension points\nRate course" as Complete
+  usecase "View NASA APOD" as ViewAPOD
+  usecase "Earn XP & Badges" as EarnXP
+
+  usecase "Create Educational Content\n\nExtension points\nSubmit verification" as CreateContent
+  usecase "Submit Verification Documents" as SubmitDocs
+  usecase "Rate Course" as RateCourse
+
+  usecase "Approve Teacher Verification" as ApproveTeacher
+  usecase "Manage Platform Users" as ManageUsers
+
+  usecase "Authenticate User" as Auth
+  usecase "Access NASA API" as AccessNASA
+
+}
+
+Parent - -> Register
+Parent - -> CreateProfile
+Parent - -> Monitor
+Parent - -> ViewReports
+
+Kid - -> Browse
+Kid - -> Complete
+Kid - -> ViewAPOD
+
+Teacher - -> CreateContent
+Teacher - -> RateCourse
+
+Admin - -> ApproveTeacher
+Admin - -> ManageUsers
+
+Register ..> Auth : <<include>>
+CreateProfile ..> Auth : <<include>>
+Monitor ..> Auth : <<include>>
+CreateContent ..> Auth : <<include>>
+Complete ..> EarnXP : <<include>>
+ViewAPOD ..> AccessNASA : <<include>>
+Browse ..> AccessNASA : <<include>>
+
+RateCourse ..> Complete : <<extend>>\n[course completed]
+ViewReports ..> Monitor : <<extend>>\n[detailed view requested]
+SubmitDocs ..> CreateContent : <<extend>>\n[first time teacher]
+
+CreateProfile - -|> ManageUsers
+ApproveTeacher - -|> ManageUsers
+
+note right of EarnXP
+  *XP System:*
+  0-199: Newbie
+  200-499: Explorer
+  500-999: Inventor
+  1000+: Astronaut
+end note
+
+note left of SubmitDocs
+  *Required Documents:*
+  • Teaching credentials
+  • Background check
+  • Identity verification
+end note
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
