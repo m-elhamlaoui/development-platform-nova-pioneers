@@ -7,22 +7,7 @@ import adminApi from '../services/adminApi';
 
 const AdminHome = () => {
   const [stats, setStats] = useState([
-    { 
-      icon: Users, 
-      label: 'Total Users', 
-      value: '0', 
-      color: 'blue',
-      description: 'Active platform users',
-      link: '/admin/manage-users'
-    },
-    { 
-      icon: UserCheck, 
-      label: 'Pending Teachers', 
-      value: '0', 
-      color: 'orange',
-      description: 'Awaiting approval',
-      link: '/admin/confirm-teachers'
-    },
+
    
   ]);
 
@@ -93,24 +78,7 @@ const AdminHome = () => {
       urgent: true,
       gradient: 'from-blue-500 to-blue-600'
     },
-    {
-      title: 'Create New User',
-      description: 'Add new users to the platform',
-      color: 'green',
-      icon: Users,
-      link: '/admin/manage-users',
-      urgent: false,
-      gradient: 'from-green-500 to-green-600'
-    },
-    {
-      title: 'Create Admin User',
-      description: 'Add new administrator accounts',
-      color: 'purple',
-      icon: Shield,
-      link: '/admin/manage-users',
-      urgent: false,
-      gradient: 'from-purple-500 to-purple-600'
-    },
+    
   ];
 
   const getCardGradient = (color) => {

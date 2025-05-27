@@ -278,22 +278,27 @@ export const DataProvider = ({ children }) => {
   
   // Handle images with fallback
   const getImageUrl = (imagePath, type = 'course') => {
+    let finalUrl;
+    
     if (!imagePath) {
-      return FALLBACK_IMAGE;
+      finalUrl = FALLBACK_IMAGE;
+    } else if (imagePath.startsWith('http')) {
+      finalUrl = imagePath;
+    } else if (imagePath.startsWith('/api/')) {
+      finalUrl = imagePath; // Use as-is without baseUrl
+    } else if (imagePath.startsWith('/')) {
+      finalUrl = `${apiConfig.baseUrl}${imagePath}`;
+    } else {
+      finalUrl = `${apiConfig.files}/${type}/${imagePath}`;
     }
     
-    // If path already starts with http or https, it's a full URL
-    if (imagePath.startsWith('http')) {
-      return imagePath;
-    }
+    console.log('Image URL resolution:', { 
+      original: imagePath, 
+      resolved: finalUrl, 
+      type 
+    });
     
-    // If path is relative, construct proper URL
-    if (imagePath.startsWith('/')) {
-      return `${apiConfig.baseUrl}${imagePath}`;
-    }
-    
-    // Otherwise use the specific endpoint for this image type
-    return `${apiConfig.files}/${type}/${imagePath}`;
+    return finalUrl;
   };
   
   const value = {

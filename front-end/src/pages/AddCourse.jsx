@@ -392,7 +392,7 @@ const AddCourse = () => {
           
           {/* Display teacher info for confirmation */}
           <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded mb-4">
-            Creating course for: {teacher.firstName} {teacher.lastName} (ID: {teacher.id})
+            Creating course for: {teacher.firstName} {teacher.lastName} 
           </div>
           
           {/* Tabs */}

@@ -216,11 +216,12 @@ const Sidebar = ({ isOpen, toggleSidebar, openSettings }) => {
             >
               <Settings size={18} className="flex-shrink-0" /> <span className="whitespace-nowrap overflow-visible">Settings</span>
             </button>
-            <button
+            <NavLink
+            to={"/"}
               className="flex items-center gap-2 hover:text-red-600 transition p-2 w-full rounded-lg hover:bg-gray-50 whitespace-nowrap overflow-visible"
             >
               <LogOut size={18} className="flex-shrink-0" /> <span className="whitespace-nowrap overflow-visible">Logout</span>
-            </button>
+            </ NavLink>
           </div>
         </div>
       </motion.div>

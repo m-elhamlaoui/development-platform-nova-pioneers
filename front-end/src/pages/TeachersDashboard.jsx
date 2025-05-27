@@ -52,6 +52,21 @@ const StatCard = ({ title, value, icon, color, gradientFrom, gradientTo }) => (
 // Stylish card for recent courses
 const RecentCourseCard = ({ course, index }) => {
   const { getImageUrl, fallbackImage } = useData();
+  const getProperImageUrl = () => {
+  if (!course.thumbnailUrl && !course.thumbnailPath) {
+    return fallbackImage;
+  }
+  
+  // If we have thumbnailUrl, use it directly
+  if (course.thumbnailUrl && course.thumbnailUrl.startsWith('/api/')) {
+    return `http://localhost:9094${course.thumbnailUrl}`;
+  }
+  
+  // Use the path format directly
+  return `http://localhost:9094/api/files/${course.thumbnailPath}`;
+};
+    const finalImageUrl = getImageUrl(course.thumbnailUrl || course.thumbnailPath, 'courses') || "/placeholders/space1.jpg";
+  console.log(finalImageUrl)
   return (
   <motion.div 
     className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
@@ -62,7 +77,7 @@ const RecentCourseCard = ({ course, index }) => {
   >
     <div className="relative h-32">
       <img 
-        src={getImageUrl(course.thumbnailPath, 'courses') || "/placeholders/space1.jpg"} 
+        src={getProperImageUrl()} 
         alt={course.title} 
         className="w-full h-full object-cover"
           onError={(e) => {
@@ -262,7 +277,7 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 rounded-full border-2 border-blue-500 p-1">
                 <img 
-                  src={safeTeacher.avatar || `https://ui-avatars.com/api/?name=${safeTeacher.firstname}&background=3b82f6&color=fff`} 
+                  src={safeTeacher.avatar || `https://ui-avatars.com/api/?name=${teacher.firstName}&background=3b82f6&color=fff`} 
                   alt={safeTeacher.name}
                   className="w-full h-full rounded-full object-cover"
                   onError={(e) => {

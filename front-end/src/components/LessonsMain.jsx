@@ -175,7 +175,7 @@ export default function ParentsMain({ kidsData, baseUrl = getApiBaseUrl() }) {
       <Course 
         course={course} 
         index={index}
-        onClick={() => navigate(`/course/${course.id}/view`)}
+        onClick={() => navigate(`/parent/course/${course.id}/view`)}
       >
         {/* Child enrollment buttons */}
         {kidsData && kidsData.length > 0 ? (
