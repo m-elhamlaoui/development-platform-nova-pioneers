@@ -1,10 +1,26 @@
 # Security rules for admin-service
 paths:
-  # Admin endpoints - only accessible by ADMIN role
-  - pattern: "/admin/**"
+  # Admin-only endpoints for teacher management
+  - pattern: "/api/admin/teachers/pending"
+    roles: ["admin"]
+    authenticated: true
+    methods: ["GET"]
+
+  - pattern: "/api/admin/teachers/approve/*"
+    roles: ["admin"]
+    authenticated: true
+    methods: ["POST"]
+
+  # Test endpoint - public for health checks
+  - pattern: "/api/test"
+    authenticated: false
+    methods: ["GET"]
+
+  # Default for unmatched admin paths - admin only
+  - pattern: "/api/admin/**"
     roles: ["admin"]
     authenticated: true
 
-  # Test endpoint for health checks
-  - pattern: "/admin/api/test"
-    authenticated: false
+  # Default for any other paths - require authentication
+  - pattern: "/**"
+    authenticated: true

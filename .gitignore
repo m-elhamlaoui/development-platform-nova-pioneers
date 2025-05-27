@@ -2,6 +2,7 @@
 backend-services/admin-service/target
 backend-services/api-gateway/target
 backend-services/auth-service/target
+backend-services/auth-service/src/main/resources/uploads
 backend-services/parents_kids-service/target
 backend-services/teachers_courses-service/target
 backend-services/teachers_courses-service/src/main/resources/uploads
