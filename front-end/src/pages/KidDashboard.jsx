@@ -443,7 +443,19 @@ const KidDashboard = ({ baseUrl = getApiBaseUrl() }) => {
               {displayCourses.map(course => {
                 const progress = courseProgress[course.id]?.progress || 0;
                 const lastAccessed = courseProgress[course.id]?.last_accessed;
-                
+                const getProperImageUrl = () => {
+                    if (!course.thumbnailUrl && !course.thumbnailPath) {
+                      return "/placeholders/space1.jpg";
+                    }
+                    
+                    // If we have thumbnailUrl, use it directly
+                    if (course.thumbnailUrl && course.thumbnailUrl.startsWith('/api/')) {
+                      return `http://localhost:9094${course.thumbnailUrl}`;
+                    }
+                    
+                    // Use the path format directly
+                    return `http://localhost:9094/api/files/${course.thumbnailPath}`;
+                  };
                 return (
                   <div 
                     key={course.id}
@@ -453,7 +465,7 @@ const KidDashboard = ({ baseUrl = getApiBaseUrl() }) => {
                     <div className="h-36 bg-gray-200 overflow-hidden">
                       {course.thumbnail ? (
                         <img 
-                          src={course.thumbnail} 
+                          src={getProperImageUrl()} 
                           alt={course.title} 
                           className="w-full h-full object-cover" 
                         />

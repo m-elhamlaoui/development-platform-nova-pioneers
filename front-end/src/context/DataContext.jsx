@@ -3,71 +3,205 @@ import apiConfig from '../utils/apiConfig';
 
 const DataContext = createContext();
 
+// Single space-themed placeholder image
+const FALLBACK_IMAGE = "/placeholders/space1.jpg";
+
 export const DataProvider = ({ children }) => {
   const [teacher, setTeacher] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Fetch logged in teacher (assuming teacherId in localStorage or similar)
+  // Move fetchCourses outside of useEffect so it can be reused
+  const fetchCourses = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      console.log('Fetching courses - user data:', user);
+      
+      if (!user.id) {
+        console.log('No user ID found for fetching courses');
+        return;
+      }
+      
+      const userRole = user.role ? user.role.toString().toLowerCase().trim() : '';
+      if (userRole !== 'teacher') {
+        console.log(`User role '${userRole}' is not 'teacher' for course fetching`);
+        return;
+      }
+
+      console.log('Fetching courses for teacher user ID:', user.id);
+      
+      // Try different endpoints for fetching courses
+      let response = await fetch(`${apiConfig.courses}/teacher/${user.id}`);
+      
+      if (!response.ok) {
+        // Try by user_id if teacher ID lookup fails
+        response = await fetch(`${apiConfig.courses}/by-teacher-user/${user.id}`);
+      }
+      
+      const responseText = await response.text();
+      console.log('Raw courses response:', responseText);
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          console.log('No courses found for teacher');
+          setCourses([]);
+          return;
+        }
+        throw new Error(`HTTP error! status: ${response.status}, response: ${responseText}`);
+      }
+      
+      if (!responseText.trim()) {
+        console.log('Empty courses response');
+        setCourses([]);
+        return;
+      }
+      
+      let coursesData;
+      try {
+        coursesData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('JSON parsing failed for courses:', parseError);
+        console.error('Response text:', responseText);
+        setCourses([]);
+        return;
+      }
+      
+      console.log('Parsed courses data:', coursesData);
+      
+      // Handle different response formats
+      if (Array.isArray(coursesData)) {
+        setCourses(coursesData);
+      } else if (coursesData.courses && Array.isArray(coursesData.courses)) {
+        setCourses(coursesData.courses);
+      } else if (coursesData.data && Array.isArray(coursesData.data)) {
+        setCourses(coursesData.data);
+      } else if (coursesData.success && coursesData.courses) {
+        setCourses(Array.isArray(coursesData.courses) ? coursesData.courses : []);
+      } else {
+        console.warn('Unexpected courses response format:', coursesData);
+        setCourses([]);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+      setCourses([]);
+    }
+  };
+
+  // Fetch logged in teacher
   useEffect(() => {
     const fetchTeacherData = async () => {
       try {
-        // For demo, using ID 1; in real app, get from auth context/localStorage
-        const teacherId = localStorage.getItem('teacherId') || 1;
-        const response = await fetch(`${apiConfig.teachers}/${teacherId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setTeacher(data);
-        } else {
-          console.error('Failed to fetch teacher data');
-          // Fallback to demo data
-          setTeacher({
-            id: 1,
-            username: "demo_teacher",
-            email: "teacher@example.com",
-            firstName: "Jane",
-            lastName: "Doe",
-            accumulatedXp: 1500,
-            title: "Space Explorer"
-          });
+        const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+        console.log('Session storage user data:', user);
+        console.log('User role:', user.role);
+        console.log('User role type:', typeof user.role);
+        
+        // Debug: Check if user exists and has the right properties
+        if (!user.id) {
+          console.log('No user ID found in session');
+          setLoading(false);
+          return;
         }
+        
+        if (!user.role) {
+          console.log('No role found in session');
+          setLoading(false);
+          return;
+        }
+        
+        // Check for teacher role (case-insensitive and trim whitespace)
+        const userRole = user.role.toString().toLowerCase().trim();
+        console.log('Processed user role:', userRole);
+        
+        if (userRole !== 'teacher') {
+          console.log(`User role '${userRole}' is not 'teacher'`);
+          setLoading(false);
+          return;
+        }
+
+        console.log('Fetching teacher data for user ID:', user.id);
+        
+        // Try the direct approach first
+        let response = await fetch(`${apiConfig.teachers}/${user.id}`);
+        
+        if (!response.ok) {
+          console.log(`Direct teacher lookup failed with status: ${response.status}`);
+          
+          // Try by-user endpoint
+          response = await fetch(`${apiConfig.teachers}/by-user/${user.id}`);
+          
+          if (!response.ok) {
+            console.log(`By-user lookup failed with status: ${response.status}`);
+            
+            // Try by email as last resort
+            if (user.email) {
+              console.log('Trying to fetch teacher by email:', user.email);
+              response = await fetch(`${apiConfig.teachers}/by-email/${user.email}`);
+              
+              if (!response.ok) {
+                console.error(`All teacher lookup methods failed. Last status: ${response.status}`);
+                setLoading(false);
+                return;
+              }
+            } else {
+              console.error('No email available for fallback lookup');
+              setLoading(false);
+              return;
+            }
+          }
+        }
+        
+        const responseText = await response.text();
+        console.log('Raw teacher response:', responseText);
+        
+        if (!responseText.trim()) {
+          console.error('Empty response from server');
+          setLoading(false);
+          return;
+        }
+        
+        let teacherData;
+        try {
+          teacherData = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('JSON parsing failed:', parseError);
+          console.error('Response text:', responseText);
+          setLoading(false);
+          return;
+        }
+        
+        console.log('Parsed teacher data:', teacherData);
+        console.log('Teacher ID from database:', teacherData.id);
+        setTeacher(teacherData);
+        
       } catch (error) {
         console.error('Error fetching teacher:', error);
+      } finally {
+        setLoading(false);
       }
     };
     
     fetchTeacherData();
   }, []);
 
-  // Fetch courses for the current teacher
+  // Fetch courses for the current teacher - use the moved fetchCourses function
   useEffect(() => {
-    const fetchCourses = async () => {
-      if (!teacher?.id) return;
-      
-      try {
-        setLoading(true);
-        const response = await fetch(`${apiConfig.courses}/teacher/${teacher.id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setCourses(data);
-        } else {
-          console.error('Failed to fetch courses');
-        }
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Only fetch courses after teacher data is loaded or if user role is confirmed
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const userRole = user.role ? user.role.toString().toLowerCase().trim() : '';
     
-    fetchCourses();
-  }, [teacher?.id]);
-  
+    if (userRole === 'teacher' && user.id) {
+      fetchCourses();
+    }
+  }, [teacher]); // Depend on teacher so courses fetch after teacher is loaded
+
   // XP level calculation
   const getXpLevel = (xp) => {
     if (xp >= 10000) return { level: "Master Educator", color: "bg-purple-600" };
     if (xp >= 5000) return { level: "Senior Educator", color: "bg-indigo-600" };
     if (xp >= 2000) return { level: "Advanced Educator", color: "bg-blue-600" };
+    if (xp >= 1000) return { level: "Experienced Educator", color: "bg-teal-600" };
     if (xp >= 500) return { level: "Educator", color: "bg-green-600" };
     return { level: "Novice Educator", color: "bg-orange-500" };
   };
@@ -75,20 +209,41 @@ export const DataProvider = ({ children }) => {
   // Add a course
   const addCourse = async (courseData) => {
     try {
-      // API call happens in AddCourse.jsx
-      setCourses([...courses, courseData]);
+      console.log('Adding course to context:', courseData);
+      
+      // Add to local state immediately for optimistic update
+      setCourses(prevCourses => [...prevCourses, courseData]);
+      
+      // Refresh courses from backend to ensure consistency
+      await fetchCourses();
+      
     } catch (error) {
-      console.error('Error adding course:', error);
+      console.error('Error in addCourse:', error);
+      // If there's an error, refresh courses to get the actual state
+      await fetchCourses();
     }
   };
   
   // Update a course
-  const updateCourse = (updatedCourse) => {
-    setCourses(
-      courses.map(course => 
-        course.id === updatedCourse.id ? updatedCourse : course
-      )
-    );
+  const updateCourse = async (updatedCourse) => {
+    try {
+      console.log('Updating course in context:', updatedCourse);
+      
+      // Update local state immediately
+      setCourses(prevCourses => 
+        prevCourses.map(course => 
+          course.id === updatedCourse.id ? updatedCourse : course
+        )
+      );
+      
+      // Refresh courses from backend to ensure consistency
+      await fetchCourses();
+      
+    } catch (error) {
+      console.error('Error in updateCourse:', error);
+      // If there's an error, refresh courses to get the actual state
+      await fetchCourses();
+    }
   };
   
   // Delete a course
@@ -113,18 +268,59 @@ export const DataProvider = ({ children }) => {
     return courses.reduce((total, course) => total + (course.xp_value || 0), 0);
   };
   
+  // Fetch course details - consider using query parameters to limit depth
+  const fetchCourseDetails = async (courseId) => {
+    // Consider using query parameters to limit depth
+    const response = await fetch(`/api/courses/${courseId}?includeDetails=true&depth=1`);
+    // Or specify fields: /api/courses/${courseId}?fields=id,title,description
+    return await response.json();
+  };
+  
+  // Handle images with fallback
+  const getImageUrl = (imagePath, type = 'course') => {
+    let finalUrl;
+    
+    if (!imagePath) {
+      finalUrl = FALLBACK_IMAGE;
+    } else if (imagePath.startsWith('http')) {
+      finalUrl = imagePath;
+    } else if (imagePath.startsWith('/api/')) {
+      finalUrl = imagePath; // Use as-is without baseUrl
+    } else if (imagePath.startsWith('/')) {
+      finalUrl = `${apiConfig.baseUrl}${imagePath}`;
+    } else {
+      finalUrl = `${apiConfig.files}/${type}/${imagePath}`;
+    }
+    
+    console.log('Image URL resolution:', { 
+      original: imagePath, 
+      resolved: finalUrl, 
+      type 
+    });
+    
+    return finalUrl;
+  };
+  
   const value = {
-    teacher,
     courses,
+    teacher,
     loading,
-    getXpLevel,
     addCourse,
     updateCourse,
     deleteCourse,
-    calculateTotalXp
+    getXpLevel,
+    calculateTotalXp,
+    fetchCourses,
+    fetchCourseDetails,
+    getImageUrl,
+    fallbackImage: FALLBACK_IMAGE // Export the fallback image path
   };
-  
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+
+  return (
+    <DataContext.Provider value={value}>
+      {children}
+    </DataContext.Provider>
+  );
 };
 
 export const useData = () => useContext(DataContext);

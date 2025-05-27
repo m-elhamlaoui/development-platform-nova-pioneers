@@ -2,6 +2,8 @@ package com.nova_pioneers.teaching.model;
 
 import lombok.*;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "lessons")
-@EqualsAndHashCode(exclude = {"contentSections", "course", "module"})
-@ToString(exclude = {"contentSections", "course", "module"})
+@EqualsAndHashCode(exclude = { "contentSections", "course", "module" })
+@ToString(exclude = { "contentSections", "course", "module" })
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +35,14 @@ public class Lesson {
     @JoinColumn(name = "module_id")
     private Module module;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequenceOrder ASC")
+    @JsonManagedReference
     private List<ContentSection> contentSections = new ArrayList<>();
 
     // Helper methods to maintain bidirectional relationship
@@ -60,6 +64,7 @@ public class Lesson {
             }
         }
     }
+
     @Transient
     public String getImageUrl() {
         if (imagePath != null && !imagePath.isEmpty()) {

@@ -1,63 +1,59 @@
 package com.nova_pioneers.parenting.entities;
 
+import lombok.Data;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Data
+@Setter
+@Getter
 @Table(name = "teachers")
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "teacher_id")
-    private Integer teacherId;
+    private Long id;
 
-    private String name;
+    private String username;
     private String email;
-    private String bio;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column(name = "profile_picture")
-    private String profilePicture;
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
 
-    // Constructors, getters, setters
-    public Teacher() {
-    }
+    @Column(name = "certification_info")
+    private String certificationInfo;
 
-    public Integer getTeacherId() {
-        return teacherId;
-    }
+    @Column(name = "join_date")
+    private LocalDate joinDate = LocalDate.now();
 
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
-    }
+    // Teacher's accumulated XP
+    @Column(name = "accumulated_xp")
+    private Integer accumulatedXp = 0;
 
+    // Teacher title (Beginner, Super, Great, etc.)
+    private String title;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Course> courses;
+
+    // Add this method to combine first and last name
     public String getName() {
-        return name;
+        if (firstName != null && lastName != null) {
+            return firstName + " " + lastName;
+        } else if (firstName != null) {
+            return firstName;
+        } else if (lastName != null) {
+            return lastName;
+        } else {
+            return username; // fallback to username if no names available
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
 }

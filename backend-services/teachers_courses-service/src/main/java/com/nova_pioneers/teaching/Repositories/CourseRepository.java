@@ -1,6 +1,5 @@
 package com.nova_pioneers.teaching.Repositories;
 
-
 import com.nova_pioneers.teaching.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,32 +10,28 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    List<Course> findByTeacherId(Long teacherId);
 
-    List<Course> findBySubject(String subject);
+        // CORRECT: Use the relationship path - teacher.id
+        List<Course> findByTeacher_Id(Long teacherId);
 
-    List<Course> findByGradeLevel(String gradeLevel);
+        // Additional useful methods
+        List<Course> findByTeacher_IdAndIsActiveTrue(Long teacherId);
 
-    List<Course> findBySizeCategory(String sizeCategory);
+        // Search and filter methods (if you have these)
+        @Query("SELECT c FROM Course c WHERE " +
+                        "LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                        "LOWER(c.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+        List<Course> searchByKeyword(@Param("keyword") String keyword);
 
-    List<Course> findByRecommendedAge(Integer age);
-
-    @Query("SELECT c FROM Course c WHERE c.title LIKE %:keyword% OR c.description LIKE %:keyword%")
-    List<Course> searchByKeyword(@Param("keyword") String keyword);
-
-    @Query("SELECT c FROM Course c WHERE " +
-            "(:subject IS NULL OR c.subject = :subject) AND " +
-            "(:gradeLevel IS NULL OR c.gradeLevel = :gradeLevel) AND " +
-            "(:sizeCategory IS NULL OR c.sizeCategory = :sizeCategory) AND " +
-            "(:minAge IS NULL OR c.recommendedAge >= :minAge) AND " +
-            "(:maxAge IS NULL OR c.recommendedAge <= :maxAge)")
-    List<Course> filterCourses(
-            @Param("subject") String subject,
-            @Param("gradeLevel") String gradeLevel,
-            @Param("sizeCategory") String sizeCategory,
-            @Param("minAge") Integer minAge,
-            @Param("maxAge") Integer maxAge);
-    List<Course> findBySubjectAndGradeLevelAndRecommendedAgeBetween(
-            String subject, String gradeLevel, Integer minAge, Integer maxAge);
-
+        @Query("SELECT c FROM Course c WHERE " +
+                        "(:subject IS NULL OR c.subject = :subject) AND " +
+                        "(:gradeLevel IS NULL OR c.gradeLevel = :gradeLevel) AND " +
+                        "(:sizeCategory IS NULL OR c.sizeCategory = :sizeCategory) AND " +
+                        "(:minAge IS NULL OR c.recommendedAge >= :minAge) AND " +
+                        "(:maxAge IS NULL OR c.recommendedAge <= :maxAge)")
+        List<Course> filterCourses(@Param("subject") String subject,
+                        @Param("gradeLevel") String gradeLevel,
+                        @Param("sizeCategory") String sizeCategory,
+                        @Param("minAge") Integer minAge,
+                        @Param("maxAge") Integer maxAge);
 }

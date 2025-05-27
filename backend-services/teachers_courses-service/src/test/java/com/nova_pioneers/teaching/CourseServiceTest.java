@@ -113,15 +113,15 @@ public class CourseServiceTest {
     @Test
     void shouldGetCoursesByTeacher() {
         // given
-        when(courseRepository.findByTeacherId(1L)).thenReturn(Arrays.asList(testCourse));
+        when(courseRepository.findByTeacher_Id(1L)).thenReturn(Arrays.asList(testCourse));
 
         // when
         List<Course> courses = courseService.getCoursesByTeacher(1L);
 
         // then
         assertThat(courses).hasSize(1);
-        assertThat(courses.get(0).getTeacher().getId()).isEqualTo(1L); // Use getTeacher().getId() instead of getTeacherId()
-        verify(courseRepository, times(1)).findByTeacherId(1L);
+        assertThat(courses.get(0).getTeacher().getId()).isEqualTo(1L);
+        verify(courseRepository, times(1)).findByTeacher_Id(1L);
     }
 
     @Test

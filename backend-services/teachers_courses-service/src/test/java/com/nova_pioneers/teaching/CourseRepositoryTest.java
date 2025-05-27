@@ -48,7 +48,7 @@ public class CourseRepositoryTest {
         course.setDescription("Test Description");
         course.setGradeLevel("Elementary");
         course.setSubject("Space");
-        course.setCreatedDate(LocalDate.now()); // Use LocalDate instead of Date
+        course.setCreatedDate(LocalDate.now());
         course.setXpValue(500);
         course.setSizeCategory("M");
         course.setRecommendedAge(8);
@@ -58,7 +58,7 @@ public class CourseRepositoryTest {
         entityManager.flush();
 
         // when
-        List<Course> found = courseRepository.findByTeacherId(teacher.getId());
+        List<Course> found = courseRepository.findByTeacher_Id(teacher.getId());
 
         // then
         assertThat(found.size()).isEqualTo(1);

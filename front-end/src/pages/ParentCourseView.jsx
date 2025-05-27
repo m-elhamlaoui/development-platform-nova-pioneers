@@ -179,7 +179,19 @@ const ParentCourseView = ({ baseUrl = getApiBaseUrl() }) => {
       </div>
     );
   }
-
+const getProperImageUrl = () => {
+  if (!course.thumbnailUrl && !course.thumbnailPath) {
+    return "/placeholders/space1.jpg";
+  }
+  
+  // If we have thumbnailUrl, use it directly
+  if (course.thumbnailUrl && course.thumbnailUrl.startsWith('/api/')) {
+    return `http://localhost:9094${course.thumbnailUrl}`;
+  }
+  
+  // Use the path format directly
+  return `http://localhost:9094/api/files/${course.thumbnailPath}`;
+};
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Menu baseUrl={baseUrl} />
@@ -199,7 +211,7 @@ const ParentCourseView = ({ baseUrl = getApiBaseUrl() }) => {
           <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
             <div className="relative h-64">
               <img
-                src={course.thumbnail || "https://images.unsplash.com/photo-1501594907352-04cda38ebc29"}
+                src={getProperImageUrl()}
                 alt={course.title}
                 className="w-full h-full object-cover"
               />

@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
-import { Users, UserCheck, AlertTriangle, Home, Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Users, UserCheck, AlertTriangle, Home, Menu, X, LogOut } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import np_logo from "../assets/np-logo.png";
 
 const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear user data from storage
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    localStorage.removeItem('user');
+    
+    // Redirect to login page
+    navigate('/login');
+  };
 
   const menuItems = [
     { icon: Home, label: 'Dashboard', path: '/admin' },
-    { icon: Users, label: 'Manage Users', path: '/admin/manage-users' },
+    // { icon: Users, label: 'Manage Users', path: '/admin/manage-users' },
     { icon: UserCheck, label: 'Confirm Teachers', path: '/admin/confirm-teachers' },
-    { icon: AlertTriangle, label: 'Manage Alerts', path: '/admin/manage-alerts' }
+    // { icon: AlertTriangle, label: 'Manage Alerts', path: '/admin/manage-alerts' }
   ];
 
   return (
@@ -83,6 +94,28 @@ const AdminSidebar = () => {
           );
         })}
       </nav>
+
+      {/* Logout button */}
+      <div className="absolute bottom-16 left-0 right-0 px-2">
+        <button
+          onClick={handleLogout}
+          className={`flex items-center w-full px-4 py-3 mx-2 rounded-lg transition-all duration-200 hover:bg-red-700 hover:shadow-md group`}
+        >
+          <LogOut 
+            size={20} 
+            className="text-red-300 group-hover:scale-110 transition-transform"
+          />
+          {isOpen && (
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="ml-3 font-medium text-white"
+            >
+              Logout
+            </motion.span>
+          )}
+        </button>
+      </div>
 
       {/* Footer */}
       <div className="absolute bottom-4 left-0 right-0 px-4">

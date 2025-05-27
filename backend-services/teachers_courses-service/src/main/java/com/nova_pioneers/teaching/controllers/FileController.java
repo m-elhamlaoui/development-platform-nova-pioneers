@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -29,20 +30,31 @@ public class FileController {
     private String uploadBaseDir;
 
     @GetMapping("/**")
-    public ResponseEntity<Resource> serveFile(@RequestParam String filename) {
+    public ResponseEntity<Resource> serveFile(HttpServletRequest request) {
         try {
-            Path filePath = Paths.get(uploadBaseDir).resolve(filename).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
+            // Extract the file path from the request path
+            String requestURI = request.getRequestURI();
+            String filePath = requestURI.substring(requestURI.indexOf("/api/files/") + "/api/files/".length());
+
+            Path path = Paths.get(uploadBaseDir).resolve(filePath).normalize();
+            Resource resource = new UrlResource(path.toUri());
 
             if (resource.exists() && resource.isReadable()) {
+                // Determine content type dynamically
+                String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+                if (contentType == null) {
+                    contentType = "application/octet-stream";
+                }
+
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                        .contentType(MediaType.IMAGE_JPEG) // You might want to determine this dynamically
+                        .contentType(MediaType.parseMediaType(contentType))
                         .body(resource);
             } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
+            e.printStackTrace(); // Log the error
             return ResponseEntity.notFound().build();
         }
     }

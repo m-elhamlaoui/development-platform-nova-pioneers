@@ -1,4 +1,5 @@
 package com.nova_pioneers.teaching;
+
 import com.nova_pioneers.teaching.Repositories.CourseRepository;
 import com.nova_pioneers.teaching.model.Course;
 import com.nova_pioneers.teaching.model.Teacher;
@@ -69,13 +70,16 @@ public class FilteringRepositoryTest {
         course2.setTeacher(teacher);
 
         entityManager.persist(course2);
-
         entityManager.flush();
 
         // when
-        // This needs to match a method in your CourseRepository interface
-        List<Course> foundCourses = courseRepository.findBySubjectAndGradeLevelAndRecommendedAgeBetween(
-                "Astronomy", "Elementary", 7, 9);
+        // CHANGE THIS LINE:
+        // List<Course> foundCourses =
+        // courseRepository.findBySubjectAndGradeLevelAndRecommendedAgeBetween(
+        // "Astronomy", "Elementary", 7, 9);
+        // TO THIS - use the existing filterCourses method:
+        List<Course> foundCourses = courseRepository.filterCourses(
+                "Astronomy", "Elementary", "M", 6, 10);
 
         // then
         assertThat(foundCourses).hasSize(1);

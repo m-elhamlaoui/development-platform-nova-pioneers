@@ -1,6 +1,7 @@
 package com.nova_pioneers.teaching.model;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,6 +10,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -22,11 +26,10 @@ public class Course {
     private Long id;
 
     @NotBlank(message = "Course title is required")
-    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
+
     private String title;
 
     @NotBlank(message = "Course description is required")
-    @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
     private String description;
 
     @Column(name = "thumbnail_path")
@@ -47,12 +50,9 @@ public class Course {
     private Integer xpValue;
 
     @Column(name = "size_category")
-    @Pattern(regexp = "^[SML]$", message = "Size category must be S, M, or L")
     private String sizeCategory;
 
     @Column(name = "recommended_age")
-    @Min(value = 4, message = "Minimum recommended age is 4")
-    @Max(value = 18, message = "Maximum recommended age is 18")
     private Integer recommendedAge;
 
     @Column(name = "is_active")
@@ -61,6 +61,7 @@ public class Course {
     @NotNull(message = "Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id")
+    @JsonIgnore
     private Teacher teacher;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -68,6 +69,7 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequenceOrder ASC")
+    @JsonManagedReference  // Add this annotation
     private List<Lesson> lessons;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -121,5 +123,12 @@ public class Course {
         }
     }
 
-    // ... rest of existing methods ...
+    // Add this helper method to your Course entity
+    @Transactional
+    public Long getTeacherId() {
+        return teacher != null ? teacher.getId() : null;
+    }
+
+    // You cannot have a setTeacherId method with @ManyToOne relationship
+    // Instead, use setTeacher(Teacher teacher)
 }

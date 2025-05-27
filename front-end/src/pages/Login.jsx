@@ -178,7 +178,7 @@ const Login = () => {
                 )}
               </div>
             </div>
-            
+            {/*             
             <div className="flex justify-center items-center w-full mb-4">
               <div className="w-1/2">
                 <input
@@ -197,7 +197,7 @@ const Login = () => {
                   Forgot your password
                 </Link>
               </div>
-            </div>
+            </div> */}
             
             <button
               type="submit"

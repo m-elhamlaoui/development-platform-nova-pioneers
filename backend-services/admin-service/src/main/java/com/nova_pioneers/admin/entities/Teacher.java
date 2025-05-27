@@ -1,4 +1,4 @@
-package com.nova_pioneers.teaching.model;
+package com.nova_pioneers.admin.entities;
 
 import lombok.Data;
 import jakarta.persistence.*;

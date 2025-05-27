@@ -1,4 +1,4 @@
-package com.nova_pioneers.parenting.entities;
+package com.nova_pioneers.admin.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

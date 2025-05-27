@@ -52,7 +52,7 @@ public class CourseService {
     }
 
     public List<Course> getCoursesByTeacher(Long teacherId) {
-        return courseRepository.findByTeacherId(teacherId);
+        return courseRepository.findByTeacher_Id(teacherId);
     }
 
     public Course saveCourse(Course course) {
@@ -336,7 +336,8 @@ public class CourseService {
      * Get courses by teacher ID in DTO format
      */
     public List<CourseDTO> getCoursesByTeacherDTO(Long teacherId) {
-        List<Course> courses = courseRepository.findByTeacherId(teacherId);
+        List<Course> courses = courseRepository.findByTeacher_Id(teacherId);
+
         return courses.stream()
                 .map(course -> {
                     List<Lesson> lessons = lessonRepository.findByCourseIdOrderBySequenceOrderAsc(course.getId());
@@ -389,50 +390,85 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseDTO createCourseFromFrontend(Map<String, Object> frontendData,
-            MultipartFile thumbnailFile,
-            List<MultipartFile> imageFiles) {
+    public CourseDTO createCourseFromFrontend(Map<String, Object> courseData,
+            MultipartFile thumbnail, List<MultipartFile> images) {
         try {
-            System.out.println("=== createCourseFromFrontend called ===");
-            System.out.println(
-                    "Thumbnail file: " + (thumbnailFile != null ? thumbnailFile.getOriginalFilename() : "null"));
-            System.out.println("Image files count: " + (imageFiles != null ? imageFiles.size() : 0));
+            System.out.println("=== COURSE SERVICE DEBUG ===");
+            System.out.println("Received courseData: " + courseData);
 
-            // Create course entity from frontend data
-            Course course = transformFrontendDataToCourse(frontendData);
+            // Check teacher_id extraction
+            Object teacherIdObj = courseData.get("teacher_id");
+            System.out.println("Raw teacher_id from frontend: " + teacherIdObj);
+            System.out.println("Teacher_id type: " + (teacherIdObj != null ? teacherIdObj.getClass() : "null"));
+
+            if (teacherIdObj == null) {
+                throw new RuntimeException("Teacher ID is missing from course data");
+            }
+
+            Long teacherId = ((Number) teacherIdObj).longValue();
+            System.out.println("Parsed teacher_id: " + teacherId);
+
+            // CRITICAL: Check if this teacher actually exists
+            Optional<Teacher> teacherOpt = teacherRepository.findById(teacherId);
+            if (!teacherOpt.isPresent()) {
+                System.err.println("Teacher with ID " + teacherId + " does not exist!");
+
+                // List all teachers for debugging
+                List<Teacher> allTeachers = teacherRepository.findAll();
+                System.out.println("Available teachers:");
+                for (Teacher t : allTeachers) {
+                    System.out.println("  - Teacher ID: " + t.getId() + ", User ID: " + t.getUserId() + ", Name: "
+                            + t.getFirstName() + " " + t.getLastName());
+                }
+
+                throw new RuntimeException("Teacher with ID " + teacherId + " not found. Available teachers: " +
+                        allTeachers.stream().map(Teacher::getId).collect(Collectors.toList()));
+            }
+
+            Teacher teacher = teacherOpt.get();
+            System.out.println("Found teacher: " + teacher.getFirstName() + " " + teacher.getLastName() + " (ID: "
+                    + teacher.getId() + ")");
+
+            // CREATE THE COURSE USING YOUR EXISTING METHOD
+            Course course = transformFrontendDataToCourse(courseData);
+            System.out.println("Course entity created: " + course.getTitle());
 
             // Handle thumbnail upload
-            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-                System.out.println("Processing thumbnail upload...");
+            if (thumbnail != null && !thumbnail.isEmpty()) {
                 try {
-                    String thumbnailPath = fileUploadService.saveCourseImage(thumbnailFile, "thumbnail");
-                    System.out.println("Thumbnail saved at: " + thumbnailPath);
-                    course.setThumbnail("/api/files/" + thumbnailPath);
+                    // CHANGE THIS LINE:
+                    // String thumbnailPath = fileUploadService.saveCourseThumbnail(thumbnail,
+                    // course.getTitle());
+
+                    // TO THIS:
+                    String thumbnailPath = fileUploadService.saveCourseImage(thumbnail, course.getTitle());
+
+                    course.setThumbnailPath(thumbnailPath);
+                    System.out.println("Thumbnail saved: " + thumbnailPath);
                 } catch (Exception e) {
                     System.err.println("Failed to save thumbnail: " + e.getMessage());
                     e.printStackTrace();
                 }
-            } else {
-                System.out.println("No thumbnail to process");
             }
 
-            // Save course first to get ID
-            System.out.println("Saving course to database...");
+            // Calculate XP and save course
+            calculateXpForCourse(course);
             course = courseRepository.save(course);
             System.out.println("Course saved with ID: " + course.getId());
 
-            // Handle lessons if they exist
-            List<Map<String, Object>> frontendLessons = (List<Map<String, Object>>) frontendData.get("lessons");
-            if (frontendLessons != null && !frontendLessons.isEmpty()) {
-                System.out.println("Processing " + frontendLessons.size() + " lessons...");
-                saveLessonsFromFrontend(course, frontendLessons, imageFiles);
-            } else {
-                System.out.println("No lessons to process");
+            // Handle lessons if provided
+            List<Map<String, Object>> lessonsData = (List<Map<String, Object>>) courseData.get("lessons");
+            if (lessonsData != null && !lessonsData.isEmpty()) {
+                System.out.println("Processing " + lessonsData.size() + " lessons...");
+                saveLessonsFromFrontend(course, lessonsData, images);
             }
 
-            // Reload with lessons and content sections
+            // Load the complete course with lessons and return DTO
             List<Lesson> savedLessons = loadLessonsWithContentSections(course.getId());
-            return mapperService.mapToDTO(course, savedLessons);
+            CourseDTO result = mapperService.mapToDTO(course, savedLessons);
+
+            System.out.println("Course creation completed successfully!");
+            return result;
 
         } catch (Exception e) {
             System.err.println("Error in createCourseFromFrontend: " + e.getMessage());
@@ -539,48 +575,57 @@ public class CourseService {
     // Add this method to your CourseService class
 
     private Course transformFrontendDataToCourse(Map<String, Object> frontendData) {
-        System.out.println("=== transformFrontendDataToCourse called ===");
-        System.out.println("Frontend data: " + frontendData);
-
         Course course = new Course();
 
-        // Basic course fields
-        course.setTitle((String) frontendData.get("title"));
-        course.setDescription((String) frontendData.get("description"));
-        course.setGradeLevel((String) frontendData.get("grade_level"));
-        course.setSubject((String) frontendData.get("subject"));
+        System.out.println("=== transformFrontendDataToCourse ===");
+        System.out.println("Frontend data: " + frontendData);
 
-        // Transform size category from frontend format to backend format
-        String sizeCategory = (String) frontendData.get("size_category");
-        course.setSizeCategory(mapSizeCategory(sizeCategory));
+        try {
+            course.setTitle((String) frontendData.get("title"));
+            course.setDescription((String) frontendData.get("description"));
+            course.setGradeLevel((String) frontendData.get("grade_level"));
+            course.setSubject((String) frontendData.get("subject"));
+            course.setSizeCategory(mapSizeCategory((String) frontendData.get("size_category")));
+            course.setXpValue(((Number) frontendData.get("xp_value")).intValue());
 
-        // Handle XP value
-        Object xpValue = frontendData.get("xp_value");
-        if (xpValue instanceof Number) {
-            course.setXpValue(((Number) xpValue).intValue());
-        } else if (xpValue instanceof String) {
-            try {
-                course.setXpValue(Integer.parseInt((String) xpValue));
-            } catch (NumberFormatException e) {
-                course.setXpValue(100); // Default value
+            // Parse recommended age
+            String ageStr = (String) frontendData.get("recommended_age");
+            if (ageStr != null && !ageStr.trim().isEmpty()) {
+                course.setRecommendedAge(parseRecommendedAge(ageStr));
             }
-        } else {
-            course.setXpValue(100); // Default value
+
+            course.setCreatedDate(LocalDate.now());
+            course.setIsActive(true);
+
+            // CRITICAL FIX: Get the Teacher entity, not just the ID
+            Object teacherIdObj = frontendData.get("teacher_id");
+            if (teacherIdObj != null) {
+                Long teacherId = ((Number) teacherIdObj).longValue();
+                System.out.println("Looking up teacher with ID: " + teacherId);
+
+                // Find the Teacher entity by ID
+                Optional<Teacher> teacherOpt = teacherRepository.findById(teacherId);
+                if (teacherOpt.isPresent()) {
+                    Teacher teacher = teacherOpt.get();
+                    System.out.println("Found teacher: " + teacher.getFirstName() + " " + teacher.getLastName());
+                    course.setTeacher(teacher); // Set the Teacher OBJECT, not the ID
+                } else {
+                    System.err.println("Teacher not found with ID: " + teacherId);
+                    throw new RuntimeException("Teacher not found with ID: " + teacherId);
+                }
+            } else {
+                System.err.println("No teacher_id provided in frontend data");
+                throw new RuntimeException("Teacher ID is required");
+            }
+
+            System.out.println("Course entity created successfully");
+            return course;
+
+        } catch (Exception e) {
+            System.err.println("Error transforming frontend data: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to transform course data: " + e.getMessage(), e);
         }
-
-        // Handle recommended age - parse strings like "11-14" to get first number
-        String recommendedAgeStr = (String) frontendData.get("recommended_age");
-        course.setRecommendedAge(parseRecommendedAge(recommendedAgeStr));
-
-        // Set creation date
-        course.setCreatedDate(LocalDate.now());
-
-        // Get or create a default teacher
-        Teacher teacher = getOrCreateDefaultTeacher();
-        course.setTeacher(teacher);
-
-        System.out.println("Course transformed: " + course.getTitle());
-        return course;
     }
 
     // Helper method to map size category
@@ -643,5 +688,11 @@ public class CourseService {
 
         System.out.println("Creating default teacher...");
         return teacherRepository.save(defaultTeacher);
+    }
+
+    // Helper method to get teacher ID from Course entity
+    @Transactional(readOnly = true)
+    public Long getTeacherIdFromCourse(Course course) {
+        return course.getTeacher() != null ? course.getTeacher().getId() : null;
     }
 }
