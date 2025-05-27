@@ -2,6 +2,22 @@
 server:
   port: 9094
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,env,loggers
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${SPRING_PROFILES_ACTIVE:dev}
+
+
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
