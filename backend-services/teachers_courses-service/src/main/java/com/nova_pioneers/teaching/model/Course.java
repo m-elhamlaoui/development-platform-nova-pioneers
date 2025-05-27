@@ -1,6 +1,7 @@
 package com.nova_pioneers.teaching.model;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,6 +10,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -57,6 +60,7 @@ public class Course {
     @NotNull(message = "Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id")
+    @JsonIgnore
     private Teacher teacher;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -117,5 +121,12 @@ public class Course {
         }
     }
 
-    // ... rest of existing methods ...
+    // Add this helper method to your Course entity
+    @Transactional
+    public Long getTeacherId() {
+        return teacher != null ? teacher.getId() : null;
+    }
+
+    // You cannot have a setTeacherId method with @ManyToOne relationship
+    // Instead, use setTeacher(Teacher teacher)
 }
