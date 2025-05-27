@@ -15,8 +15,9 @@ import {
   Users
 } from 'lucide-react';
 import apiConfig from '../utils/apiConfig';
-
 // Modern stat card with gradient background
+
+
 const StatCard = ({ title, value, icon, color, gradientFrom, gradientTo }) => (
   <motion.div 
     className={`rounded-2xl p-6 shadow-lg relative overflow-hidden`}
@@ -49,7 +50,9 @@ const StatCard = ({ title, value, icon, color, gradientFrom, gradientTo }) => (
 );
 
 // Stylish card for recent courses
-const RecentCourseCard = ({ course, index }) => (
+const RecentCourseCard = ({ course, index }) => {
+  const { getImageUrl, fallbackImage } = useData();
+  return (
   <motion.div 
     className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
     initial={{ y: 20, opacity: 0 }}
@@ -59,12 +62,12 @@ const RecentCourseCard = ({ course, index }) => (
   >
     <div className="relative h-32">
       <img 
-        src={course.thumbnail || "https://via.placeholder.com/400x200?text=Course"} 
+        src={getImageUrl(course.thumbnailPath, 'courses') || "/placeholders/space1.jpg"} 
         alt={course.title} 
         className="w-full h-full object-cover"
-        onError={(e) => {
-          e.target.src = "https://via.placeholder.com/400x200?text=Course";
-        }}
+          onError={(e) => {
+            e.target.src = fallbackImage;
+          }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
       <div className="absolute bottom-3 left-3 right-3">
@@ -72,11 +75,11 @@ const RecentCourseCard = ({ course, index }) => (
         <div className="flex items-center mt-1">
           <span className="bg-white/30 backdrop-blur-sm text-xs text-white rounded-full px-2 py-0.5 inline-flex items-center">
             <Clock size={10} className="mr-1" />
-            {course.created_date ? new Date(course.created_date).toLocaleDateString() : 'N/A'}
+            {course.createdDate ? new Date(course.createdDate).toLocaleDateString() : 'N/A'}
           </span>
           <span className="bg-white/30 backdrop-blur-sm text-xs text-white rounded-full px-2 py-0.5 inline-flex items-center ml-2">
             <Users size={10} className="mr-1" />
-            {course.grade_level || 'All'}
+            {course.gradeLevel || 'All'}
           </span>
         </div>
       </div>
@@ -97,7 +100,8 @@ const RecentCourseCard = ({ course, index }) => (
       </div>
     </div>
   </motion.div>
-);
+  )
+}
 
 // Action card with cool hover effects
 const ActionCard = ({ icon, title, description, color, to }) => (
@@ -165,7 +169,7 @@ const Dashboard = () => {
     xpPoints: 0,
     avatar: null
   };
-  
+  console.log(teacher)
   const [totalXp, setTotalXp] = useState(0);
   const [stats, setStats] = useState({
     totalCourses: 0,
@@ -201,8 +205,8 @@ const Dashboard = () => {
   // Sort courses by created date (most recent first) with safe access
   const recentCourses = [...courses]
     .sort((a, b) => {
-      const dateA = a.created_date ? new Date(a.created_date) : new Date(0);
-      const dateB = b.created_date ? new Date(b.created_date) : new Date(0);
+      const dateA = a.createdDate ? new Date(a.createdDate) : new Date(0);
+      const dateB = b.createdDate ? new Date(b.createdDate) : new Date(0);
       return dateB - dateA;
     })
     .slice(0, 3);
@@ -258,7 +262,7 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 rounded-full border-2 border-blue-500 p-1">
                 <img 
-                  src={safeTeacher.avatar || `https://ui-avatars.com/api/?name=${safeTeacher.name}&background=3b82f6&color=fff`} 
+                  src={safeTeacher.avatar || `https://ui-avatars.com/api/?name=${safeTeacher.firstname}&background=3b82f6&color=fff`} 
                   alt={safeTeacher.name}
                   className="w-full h-full rounded-full object-cover"
                   onError={(e) => {
@@ -267,7 +271,7 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <h1 className="text-3xl font-bold mb-1">Welcome, {safeTeacher.name}</h1>
+                <h1 className="text-3xl font-bold mb-1">Welcome, {teacher.firstName}</h1>
                 <p className="text-gray-600">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
               </div>
             </div>

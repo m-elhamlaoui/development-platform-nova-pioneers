@@ -47,9 +47,12 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
     >
       <div className="relative">
         <img
-          src={course.thumbnail}
+          src={course.thumbnail || "/placeholders/space1.jpg"}
           alt={course.title}
           className="w-full h-48 object-cover"
+          onError={(e) => {
+          e.target.src = "/placeholders/space1.jpg";
+        }}
         />
         <div className="absolute top-3 right-3">
           <div className="bg-white bg-opacity-90 rounded-md px-2 py-1 text-xs font-medium">
@@ -68,7 +71,7 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
           <div className="p-1 bg-[#0b3d91] rounded-full flex-shrink-0">
             <User className="w-4 h-4 text-white" />
           </div>
-          <span className="text-sm font-medium text-gray-700">Teacher: {course.instructor || "Undefined"}</span>
+          <span className="text-sm font-medium text-gray-700">Teacher: {course.instructorName || "Undefined"}</span>
         </div>
 
         {/* Distinctive Badges */}
@@ -83,12 +86,12 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" 
                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span>{course.size_category || "Medium"}</span>
+            <span>{course.sizeCategory || "Medium"}</span>
           </div>
           
           <div className="flex items-center bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-xs font-medium">
             <Award className="w-3 h-3 mr-1" />
-            <span>{course.xp_value || 0} XP</span>
+            <span>{course.xpValue || 0} XP</span>
           </div>
         </div>
 
@@ -96,11 +99,11 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
         <div className="grid grid-cols-3 text-xs text-gray-500">
           <div className="flex flex-col">
             <span className="text-gray-400">Created</span>
-            <span>{new Date(course.created_date).toLocaleDateString()}</span>
+            <span>{new Date(course.createdDate).toLocaleDateString()}</span>
           </div>
           <div className="flex flex-col">
             <span className="text-gray-400">Age</span>
-            <span>{course.recommended_age || "All ages"}</span>
+            <span>{course.recommendedAge || "All ages"}</span>
           </div>
           <div className="flex flex-col">
             <span className="text-gray-400">Lessons</span>
@@ -109,7 +112,7 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
         </div>
 
         {/* Rating */}
-        <div className="rating-kids flex justify-between items-center">
+        {/* <div className="rating-kids flex justify-between items-center">
           <div className="flex items-center gap-1">
             {Array(5)
               .fill(0)
@@ -120,7 +123,7 @@ const CourseCard = ({ course, onEdit, onDelete, index }) => {
               ))}
             <span className="ml-1 text-xs text-slate-400">({course.reviews || 0} reviews)</span>
           </div>
-        </div>
+        </div> */}
 
         {/* Delete confirmation or action buttons */}
         {showConfirmDelete ? (

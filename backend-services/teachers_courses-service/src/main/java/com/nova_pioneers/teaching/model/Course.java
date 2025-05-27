@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -68,6 +69,7 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequenceOrder ASC")
+    @JsonManagedReference  // Add this annotation
     private List<Lesson> lessons;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)

@@ -3,6 +3,9 @@ import apiConfig from '../utils/apiConfig';
 
 const DataContext = createContext();
 
+// Single space-themed placeholder image
+const FALLBACK_IMAGE = "/placeholders/space1.jpg";
+
 export const DataProvider = ({ children }) => {
   const [teacher, setTeacher] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -265,6 +268,34 @@ export const DataProvider = ({ children }) => {
     return courses.reduce((total, course) => total + (course.xp_value || 0), 0);
   };
   
+  // Fetch course details - consider using query parameters to limit depth
+  const fetchCourseDetails = async (courseId) => {
+    // Consider using query parameters to limit depth
+    const response = await fetch(`/api/courses/${courseId}?includeDetails=true&depth=1`);
+    // Or specify fields: /api/courses/${courseId}?fields=id,title,description
+    return await response.json();
+  };
+  
+  // Handle images with fallback
+  const getImageUrl = (imagePath, type = 'course') => {
+    if (!imagePath) {
+      return FALLBACK_IMAGE;
+    }
+    
+    // If path already starts with http or https, it's a full URL
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // If path is relative, construct proper URL
+    if (imagePath.startsWith('/')) {
+      return `${apiConfig.baseUrl}${imagePath}`;
+    }
+    
+    // Otherwise use the specific endpoint for this image type
+    return `${apiConfig.files}/${type}/${imagePath}`;
+  };
+  
   const value = {
     courses,
     teacher,
@@ -274,7 +305,10 @@ export const DataProvider = ({ children }) => {
     deleteCourse,
     getXpLevel,
     calculateTotalXp,
-    fetchCourses // Export fetchCourses so it can be called manually if needed
+    fetchCourses,
+    fetchCourseDetails,
+    getImageUrl,
+    fallbackImage: FALLBACK_IMAGE // Export the fallback image path
   };
 
   return (

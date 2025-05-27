@@ -1,5 +1,6 @@
 package com.nova_pioneers.teaching.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,8 +30,9 @@ public class ContentSection {
     @Column(name = "sequence_order")
     private Integer sequenceOrder;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "lesson_id")
+    @JsonBackReference
     private Lesson lesson;
 
     // Add compatibility methods for image handling
