@@ -1,48 +1,96 @@
-@startuml "Nova Pioneers - Use Case Diagram"
+@startuml Nova_Pioneers_Clean_Fixed
 !theme plain
-skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor #F0F8FF
+skinparam actorBackgroundColor #F5F5F5
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #000080
+skinparam arrowThickness 1.5
+skinparam linetype polyline
 
-actor "Kid" as kid
-actor "Parent" as parent
-actor "Teacher" as teacher
-actor "Admin" as admin
+title Nova Pioneers Space Learning Platform\nUse Case Diagram\n\n
 
-rectangle "Nova Pioneers Platform" {
-  usecase "Browse Space Content" as UC1
-  usecase "Complete Courses" as UC2
-  usecase "Earn XP & Badges" as UC3
-  usecase "Create Kid Account" as UC4
-  usecase "Monitor Kid Progress" as UC5
-  usecase "Rate Courses" as UC6
-  usecase "Create Educational Content" as UC7
-  usecase "Submit Verification Documents" as UC8
-  usecase "Approve Teacher Verification" as UC9
-  usecase "Manage Platform Users" as UC10
-  usecase "View NASA APOD" as UC11
+' Actors
+actor "Parent" as Parent
+actor "Kid" as Kid
+actor "Teacher" as Teacher
+actor "Admin" as Admin
+
+' System boundary
+package "Nova Pioneers Platform" {
+
+  ' Use cases with extension points where needed
+  usecase "Register Account" as Register
+  usecase "Create Kid Profile" as CreateProfile
+  usecase "Monitor Progress" as Monitor
+  usecase "View Reports" as ViewReports
+
+  usecase "Browse Courses" as Browse
+  usecase "Complete Course\n\nExtension points\nRate course" as Complete
+  usecase "View NASA APOD" as ViewAPOD
+  usecase "Earn XP & Badges" as EarnXP
+
+  usecase "Create Educational Content\n\nExtension points\nSubmit verification" as CreateContent
+  usecase "Submit Verification Documents" as SubmitDocs
+  usecase "Rate Course" as RateCourse
+
+  usecase "Approve Teacher Verification" as ApproveTeacher
+  usecase "Manage Platform Users" as ManageUsers
+
+  ' System use cases
+  usecase "Authenticate User" as Auth
+  usecase "Access NASA API" as AccessNASA
+
 }
 
-' Kid relationships
-kid --> UC1
-kid --> UC2
-kid --> UC3
-kid --> UC11
+' Actor associations
+Parent --> Register
+Parent --> CreateProfile
+Parent --> Monitor
+Parent --> ViewReports
 
-' Parent relationships
-parent --> UC4
-parent --> UC5
-parent --> UC6
+Kid --> Browse
+Kid --> Complete
+Kid --> ViewAPOD
 
-' Teacher relationships
-teacher --> UC7
-teacher --> UC8
+Teacher --> CreateContent
+Teacher --> RateCourse
 
-' Admin relationships
-admin --> UC9
-admin --> UC10
+Admin --> ApproveTeacher
+Admin --> ManageUsers
 
-' Use case relationships
-UC2 ..> UC3 : <<includes>>
-UC5 ..> UC6 : <<extends>>
-UC7 ..> UC8 : <<includes>>
+' Include relationships (mandatory)
+Register ..> Auth : <<include>>
+CreateProfile ..> Auth : <<include>>
+Monitor ..> Auth : <<include>>
+CreateContent ..> Auth : <<include>>
+Complete ..> EarnXP : <<include>>
+ViewAPOD ..> AccessNASA : <<include>>
+Browse ..> AccessNASA : <<include>>
+
+' Extend relationships (optional) - proper direction
+RateCourse ..> Complete : <<extend>>\n[course completed]
+ViewReports ..> Monitor : <<extend>>\n[detailed view requested]
+SubmitDocs ..> CreateContent : <<extend>>\n[first time teacher]
+
+' Generalization
+CreateProfile --|> ManageUsers
+ApproveTeacher --|> ManageUsers
+
+' Notes
+note right of EarnXP
+  **XP System:**
+  0-199: Newbie
+  200-499: Explorer
+  500-999: Inventor
+  1000+: Astronaut
+end note
+
+note left of SubmitDocs
+  **Required Documents:**
+  • Teaching credentials
+  • Background check
+  • Identity verification
+end note
 
 @enduml
