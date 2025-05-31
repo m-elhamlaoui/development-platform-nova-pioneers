@@ -1,8 +1,10 @@
+version: '3.8'Add commentMore actions
+
 services:
   # Database
   db:
-    image: postgres:17-alpine
-    container_name: ensias-db-prod
+    image: postgres:15-alpine
+    container_name: nova-db-prod
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -10,7 +12,7 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     networks:
-      - ensias_prod_network
+      - prod_network
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
@@ -18,107 +20,136 @@ services:
       timeout: 10s
       retries: 3
 
-  # Admin Service
-  admin:
-    image: ${DOCKER_USERNAME}/ensias-admin:latest
-    container_name: ensias-admin-prod
+  # API Gateway - exposed to internet
+  api-gateway:
+    image: abderrahmane03/nova-pioneers:api-gateway-latest
+    container_name: nova-gateway-prod
     ports:
-      - "9091:9091"
+      - "9000:9000"  # Exposed to internet via OCI security rule
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_PROFILES_ACTIVE: prod
-      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+      ADMIN_SERVICE_URI: ${ADMIN_SERVICE_URI}
+      AUTH_SERVICE_URI: ${AUTH_SERVICE_URI}
+      PARENTS_KIDS_SERVICE_URI: ${PARENTS_KIDS_SERVICE_URI}
+      TEACHERS_COURSES_SERVICE_URI: ${TEACHERS_COURSES_SERVICE_URI}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       db:
         condition: service_healthy
+      auth-service:
+        condition: service_started
+      admin-service:
+        condition: service_started
+      parents-kids-service:
+        condition: service_started
+      teachers-courses-service:
+        condition: service_started
     networks:
-      - ensias_prod_network
+      - prod_network
     restart: unless-stopped
 
   # Auth Service
-  auth:
-    image: ${DOCKER_USERNAME}/ensias-deps:auth-latest
-    container_name: ensias-auth-prod
+  auth-service:
+    image: abderrahmane03/nova-pioneers:auth-service-latest
+    container_name: nova-auth-prod
     ports:
-      - "9092:9092"
+      - "9092:9092"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRATION: ${JWT_EXPIRATION}
+
       SPRING_PROFILES_ACTIVE: prod
-      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - ensias_prod_network
+      - prod_network
     restart: unless-stopped
 
-  # Chef Department Service
-  chef-dep:
-    image: ${DOCKER_USERNAME}/ensias-deps:chef-dep-latest
-    container_name: ensias-chef-dep-prod
+  # Admin Service
+  admin-service:
+    image: abderrahmane03/nova-pioneers:admin-service-latest
+    container_name: nova-admin-prod
     ports:
-      - "9093:9093"
+      - "9091:9091"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
-      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - ensias_prod_network
+      - prod_network
     restart: unless-stopped
 
-  # Professor Department Service
-  prof-dep:
-    image: ${DOCKER_USERNAME}/ensias-deps:prof-dep-latest
-    container_name: ensias-prof-dep-prod
+  # Parents Kids Service
+  parents-kids-service:
+    image: abderrahmane03/nova-pioneers:parents-kids-service-latest
+    container_name: nova-parents-kids-prod
     ports:
-      - "9094:9094"
+      - "9093:9093"  # Exposed for testing
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
-      FILE_UPLOAD_DIR: ${UPLOAD_DIR}
+
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - ensias_prod_network
+      - prod_network
     restart: unless-stopped
 
-  # Frontend - exposed to internet via public IP
+  # Teachers Courses Service
+  teachers-courses-service:
+    image: abderrahmane03/nova-pioneers:teachers-courses-service-latest
+    container_name: nova-teachers-courses-prod
+    ports:
+      - "9094:9094"  # Exposed for testing
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - prod_network
+    restart: unless-stopped
+
+  # Frontend - exposed to internet
   frontend:
-    image: ${DOCKER_USERNAME}/ensias-deps:frontend-latest
-    container_name: ensias-frontend-prod
+    image: abderrahmane03/nova-pioneers:frontend-latest
+    container_name: nova-frontend-prod
     ports:
-      - "5173:5173"  # Exposed on public IP
+      - "5173:5173"  # Exposed to internet via OCI security rule
     environment:
-      - NODE_ENV=production
-      - VITE_API_BASE_URL=http://${PUBLIC_IP}:9091  # Point to admin service via public IP
+      VITE_API_BASE_URL: http://your-oci-public-ip:9000
+
     depends_on:
-      - admin
-      - auth
-      - chef-dep
-      - prof-dep
+      - api-gateway
+
+
+
     networks:
-      - ensias_prod_network
+      - prod_network
     restart: unless-stopped
 
 networks:
-  ensias_prod_network:
+  prod_network:
     driver: bridge
-    name: ensias_prod_network
+    name: nova_prod_network
 
 volumes:
   postgres_data_prod:
-    name: ensias_postgres_data_prod
+    name: nova_postgres_data_prod
